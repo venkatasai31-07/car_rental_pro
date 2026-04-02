@@ -1,0 +1,9 @@
+flask
+sqlalchemy
+flask-cors
+flask-bcrypt
+razorpay
+google-generativeai
+python-dotenv
+gunicorn
+psycopg2-binary

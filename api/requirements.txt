@@ -1,0 +1,14 @@
+flask
+flask-cors
+flask-bcrypt
+sqlalchemy
+psycopg2-binary
+razorpay
+google-generativeai
+python-dotenv
+chromadb
+pysqlite3-binary
+numpy
+scikit-learn
+joblib
+gunicorn

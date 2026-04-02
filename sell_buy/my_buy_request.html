@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Buy Requests - CarRentalPro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #00c9a7;
+      --secondary: #7f5cff;
+      --accent: #9b7cff;
+      --dark: #0b0a12;
+      --dark-elevated: #151320;
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+    body {
+      background: var(--dark);
+      color: white;
+      padding: 40px 8%;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      background: var(--dark-elevated);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+      padding: 40px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      border-bottom: 1px solid var(--glass-border);
+      padding-bottom: 25px;
+    }
+
+    h2 {
+      font-size: 28px;
+      font-weight: 700;
+      background: linear-gradient(to right, white, var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .btn-back {
+      padding: 10px 20px;
+      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-back:hover { background: rgba(255, 255, 255, 0.1); border-color: var(--primary); }
+
+    .request-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(15px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: 0.3s;
+    }
+    .request-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+
+    .req-info p { font-size: 14px; color: #aaa; margin-bottom: 5px; }
+    .req-info b { color: white; margin-right: 5px; }
+    .offer-price { font-size: 22px; font-weight: 700; color: var(--primary); margin-top: 10px; }
+
+    .status-badge {
+      padding: 6px 15px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+    }
+
+    .actions { display: flex; gap: 12px; }
+
+    .btn-action {
+      padding: 12px 24px;
+      border-radius: 12px;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.3s;
+      font-size: 14px;
+    }
+
+    .btn-accept { background: var(--primary); color: var(--dark); }
+    .btn-reject { background: rgba(255, 107, 107, 0.1); color: #ff6b6b; border: 1px solid rgba(255, 107, 107, 0.2); }
+    .btn-accept:hover { opacity: 0.9; transform: scale(1.05); }
+    .btn-reject:hover { background: rgba(255, 107, 107, 0.2); }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px;
+      color: #777;
+      font-size: 18px;
+    }
+  </style>
+    <link rel="stylesheet" href="../ai_assistant/roadmind.css">
+    <script src="../ai_assistant/roadmind.js" defer></script>
+</head>
+<body>
+
+  <div class="container">
+    <div class="topbar">
+      <h2>Incoming Buy Requests</h2>
+      <a href="../home/home.html" class="btn-back"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+    </div>
+
+    <div id="requests">
+      <div class="empty-state"><i class="fas fa-spinner fa-spin"></i> Loading requests...</div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = "/api";
+    const user = JSON.parse(localStorage.getItem("car_rental_user"));
+
+    if(!user){
+      alert("Please login first ❌");
+      window.location.href="../login/login.html";
+    }
+
+    async function fetchRequests(){
+      try {
+        const res = await fetch(`${API_BASE}/my-buy-requests/${user.email}`);
+        const data = await res.json();
+        const container = document.getElementById("requests");
+
+        if(!data.requests || !data.requests.length){
+          container.innerHTML = `<div class="empty-state">No buy requests yet. Your car listings are still waiting for buyers 🔍</div>`;
+          return;
+        }
+
+        container.innerHTML = "";
+        data.requests.forEach(req => {
+          container.innerHTML += `
+            <div class="request-card">
+              <div class="req-info">
+                <p><b>Request ID:</b> #${req.id}</p>
+                <p><b>Car:</b> ${req.company} ${req.model}</p>
+                <p><b>Buyer:</b> ${req.buyer_name || 'N/A'}</p>
+                <p><b>Contact:</b> ${req.buyer_mobile || 'N/A'}</p>
+                <p><b>Email:</b> ${req.buyer_email}</p>
+                <div class="offer-price">₹${Number(req.offered_price).toLocaleString()}</div>
+                <div style="margin-top:10px">
+                    <span class="status-badge">${req.status}</span>
+                </div>
+              </div>
+
+              <div class="actions">
+                ${req.status === 'Pending' ? `
+                  <button class="btn-action btn-accept" onclick="updateStatus(${req.id}, 'Accepted')">
+                    <i class="fas fa-check"></i> Accept
+                  </button>
+                  <button class="btn-action btn-reject" onclick="updateStatus(${req.id}, 'Rejected')">
+                    <i class="fas fa-times"></i> Reject
+                  </button>
+                ` : `<span style="color:#666">Action Completed</span>`}
+              </div>
+            </div>
+          `;
+        });
+      } catch (err) {
+        document.getElementById("requests").innerHTML = `<div class="empty-state">Error loading requests ❌</div>`;
+      }
+    }
+
+    async function updateStatus(id, status){
+      if(!confirm(`Are you sure you want to ${status.toLowerCase()} this request?`)) return;
+
+      try {
+        await fetch(`${API_BASE}/update-buy-request`, {
+          method:"POST",
+          headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify({
+            request_id: id,
+            status: status
+          })
+        });
+
+        alert(`Request ${status} Successfully! ✅`);
+        fetchRequests();
+      } catch (err) {
+        alert("Failed to update status ❌");
+      }
+    }
+
+    fetchRequests();
+  </script>
+</body>
+</html>

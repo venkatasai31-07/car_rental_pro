@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Car (Rental Only) - CarRentalPro</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #00c9a7;
+      --secondary: #7f5cff;
+      --accent: #9b7cff;
+      --dark: #0b0a12;
+      --dark-elevated: #151320;
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+    body {
+      min-height: 100vh;
+      background: var(--dark);
+      color: white;
+      padding: 40px 8%;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1300px;
+      margin: auto;
+      background: var(--dark-elevated);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+      overflow: hidden;
+      animation: fadeIn 0.8s ease;
+    }
+
+    .topbar {
+      padding: 30px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--glass-border);
+      gap: 20px;
+    }
+
+    .topbar h2 {
+      font-size: 28px;
+      font-weight: 700;
+      background: linear-gradient(to right, white, var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .topbar p { color: #888; font-size: 14px; margin-top: 5px; }
+
+    .btn-back {
+      padding: 12px 24px;
+      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-back:hover { background: rgba(255, 255, 255, 0.1); border-color: var(--primary); }
+
+    .content {
+      padding: 40px;
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 30px;
+    }
+
+    @media(max-width: 1100px) { .content { grid-template-columns: 1fr; } }
+
+    .card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 35px;
+    }
+
+    .card h3 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 25px;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 14px 18px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      color: white;
+      outline: none;
+      font-size: 14px;
+      margin-bottom: 20px;
+      transition: 0.3s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--primary);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    input::placeholder, textarea::placeholder { color: #555; }
+    textarea { resize: none; min-height: 120px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media(max-width: 650px) { .grid { grid-template-columns: 1fr; } }
+
+    .upload-box {
+      border: 2px dashed var(--glass-border);
+      border-radius: 16px;
+      padding: 25px;
+      background: rgba(255, 255, 255, 0.02);
+      margin-top: 5px;
+      text-align: center;
+      transition: 0.3s;
+    }
+    .upload-box:hover { border-color: var(--primary); background: rgba(0, 201, 167, 0.02); }
+
+    .preview {
+      margin-top: 20px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .preview img {
+      width: 100px;
+      height: 75px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .map-box {
+      margin-top: 15px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--glass-border);
+      height: 250px;
+    }
+
+    .summary-item {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 15px;
+      transition: 0.3s;
+    }
+
+    .summary-item p { font-size: 13px; color: #888; margin-bottom: 5px; }
+    .summary-item strong { font-size: 16px; color: white; display: block; }
+
+    .status-badge {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 99px;
+      font-size: 12px;
+      background: rgba(241, 196, 15, 0.1);
+      border: 1px solid rgba(241, 196, 15, 0.3);
+      color: #f1c40f;
+      font-weight: 600;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--primary), #00e0b9);
+      border: none;
+      border-radius: 12px;
+      color: var(--dark);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 10px;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 30px rgba(0, 201, 167, 0.3);
+    }
+
+    .note {
+      margin-top: 20px;
+      padding: 20px;
+      background: rgba(0, 201, 167, 0.05);
+      border: 1px solid rgba(0, 201, 167, 0.1);
+      border-radius: 16px;
+      font-size: 13px;
+      color: #eee;
+      line-height: 1.6;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+  </style>
+    <link rel="stylesheet" href="../ai_assistant/roadmind.css">
+    <script src="../ai_assistant/roadmind.js" defer></script>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="topbar">
+      <div>
+        <h2>Add Car for Rental Only</h2>
+        <p>Company will assign driver. Car will be listed after approval ✅</p>
+      </div>
+      <button class="back-btn" onclick="window.location.href='../home/home.html'">← Back</button>
+    </div>
+
+    <form id="rentalOnlyForm">
+      <div class="content">
+
+        <div class="card">
+          <h3>Car Details</h3>
+
+          <div class="grid">
+            <div>
+              <label>Car Company</label>
+              <input type="text" id="company" placeholder="Ex: Maruti" required>
+            </div>
+
+            <div>
+              <label>Car Model</label>
+              <input type="text" id="model" placeholder="Ex: Swift" required>
+            </div>
+
+            <div>
+              <label>Registration Number</label>
+              <input type="text" id="regNumber" placeholder="Ex: AP 09 AB 1234" required>
+            </div>
+
+            <div>
+              <label>Manufacture Year</label>
+              <input type="number" id="year" placeholder="Ex: 2021" required min="2000" max="2030">
+            </div>
+
+            <div>
+              <label>Fuel Type</label>
+              <select id="fuel" required>
+                <option value="">Select</option>
+                <option>Petrol</option>
+                <option>Diesel</option>
+                <option>Electric</option>
+                <option>CNG</option>
+              </select>
+            </div>
+
+            <div>
+              <label>Transmission</label>
+              <select id="transmission" required>
+                <option value="">Select</option>
+                <option>Manual</option>
+                <option>Automatic</option>
+              </select>
+            </div>
+
+            <div>
+              <label>Seating Capacity</label>
+              <select id="seats" required>
+                <option value="">Select</option>
+                <option>4</option>
+                <option>5</option>
+                <option>6</option>
+                <option>7</option>
+              </select>
+            </div>
+
+            <div>
+              <label>KM Driven</label>
+              <input type="number" id="km" placeholder="Ex: 45000" required min="0">
+            </div>
+          </div>
+
+          <label>Pickup Location</label>
+          <input type="text" id="location" placeholder="Ex: Hyderabad / Tirupati" required>
+
+          <div class="map-box">
+            <iframe id="mapFrame" src="https://www.google.com/maps?q=India&output=embed" loading="lazy"></iframe>
+          </div>
+
+          <label style="margin-top:14px;">Price Per Month (₹)</label>
+          <input type="number" id="priceMonth" placeholder="Ex: 25000" required min="1000">
+
+          <label>Security Deposit (₹)</label>
+          <input type="number" id="deposit" placeholder="Ex: 5000" required min="0">
+
+          <div class="upload-box">
+            <label>Upload Vehicle Images (Max 5)</label>
+            <input type="file" id="carImages" accept="image/*" multiple>
+            <div class="preview" id="preview"></div>
+          </div>
+
+          <label style="margin-top:14px;">Extra Notes</label>
+          <textarea id="notes" placeholder="Car condition, rules, AC, luggage, etc..."></textarea>
+        </div>
+
+        <div class="card">
+          <h3>Live Summary</h3>
+
+          <div class="summary-item">
+            <p>Car</p>
+            <strong id="summaryCar">-</strong>
+          </div>
+
+          <div class="summary-item">
+            <p>Price / Month</p>
+            <strong id="summaryPrice">₹0</strong>
+          </div>
+
+          <div class="summary-item">
+            <p>Pickup Location</p>
+            <strong id="summaryLocation">-</strong>
+          </div>
+
+          <div class="summary-item">
+            <p>Status</p>
+            <strong class="status-badge">Pending Approval</strong>
+          </div>
+
+          <button class="btn" type="submit">Submit for Approval ✅</button>
+
+          <div class="note">
+            ✅ Your car will be saved in SQLite as <b>Pending</b><br>
+            ✅ Admin will approve/reject<br>
+            ✅ Approved cars will appear in booking page.
+          </div>
+        </div>
+
+      </div>
+    </form>
+
+  </div>
+
+  <script>
+    const API_BASE = "/api";
+
+    // ✅ Must be logged in
+    const user = JSON.parse(localStorage.getItem("car_rental_user"));
+    if(!user || !user.loggedIn){
+      alert("Please login first ❌");
+      window.location.href="../login.html";
+    }
+
+    // ✅ Live Summary
+    const company = document.getElementById("company");
+    const model = document.getElementById("model");
+    const priceMonth = document.getElementById("priceMonth");
+    const locationInput = document.getElementById("location");
+
+    function updateSummary(){
+      document.getElementById("summaryCar").innerText =
+        `${company.value || "-"} ${model.value || ""}`.trim();
+
+      document.getElementById("summaryPrice").innerText =
+        priceMonth.value ? `₹${priceMonth.value}` : "₹0";
+
+      document.getElementById("summaryLocation").innerText =
+        locationInput.value || "-";
+    }
+    [company, model, priceMonth, locationInput].forEach(el => el.addEventListener("input", updateSummary));
+
+    // ✅ Google Map Update
+    locationInput.addEventListener("input", () => {
+      const loc = locationInput.value.trim();
+      const mapFrame = document.getElementById("mapFrame");
+      mapFrame.src = loc.length > 2
+        ? `https://www.google.com/maps?q=${encodeURIComponent(loc)}&output=embed`
+        : "https://www.google.com/maps?q=India&output=embed";
+    });
+
+    // ✅ Image Preview (Max 5)
+    const carImages = document.getElementById("carImages");
+    const preview = document.getElementById("preview");
+
+    carImages.addEventListener("change", () => {
+      preview.innerHTML = "";
+      const files = Array.from(carImages.files).slice(0, 5);
+
+      files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = document.createElement("img");
+          img.src = e.target.result;
+          preview.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+
+    // ✅ Submit Form to DATABASE ✅
+    document.getElementById("rentalOnlyForm").addEventListener("submit", async function(e){
+      e.preventDefault();
+
+      const images = Array.from(preview.querySelectorAll("img")).map(img => img.src);
+
+      const payload = {
+        owner_email: user.email,
+        listing_type: "Rental Only",
+
+        company: company.value,
+        model: model.value,
+        reg_number: document.getElementById("regNumber").value,
+        year: document.getElementById("year").value,
+        fuel: document.getElementById("fuel").value,
+        transmission: document.getElementById("transmission").value,
+        seats: document.getElementById("seats").value,
+        km: document.getElementById("km").value,
+        location: locationInput.value,
+
+        price_month: Number(priceMonth.value),
+        deposit: Number(document.getElementById("deposit").value || 0),
+        notes: document.getElementById("notes").value,
+
+        images: images
+      };
+
+      try{
+        const res = await fetch(`${API_BASE}/add-car`, {
+          method:"POST",
+          headers:{"Content-Type":"application/json"},
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        alert(data.message);
+
+       if (!res.ok) {
+    alert(data.message || "Request failed ❌");
+    return;
+}
+
+alert("Car submitted for approval ✅");
+window.location.href = "../home/home.html";
+
+      }catch(err){
+        alert("Backend not running ❌ Please start app.py");
+      }
+    });
+
+    updateSummary();
+  </script>
+
+</body>
+</html>

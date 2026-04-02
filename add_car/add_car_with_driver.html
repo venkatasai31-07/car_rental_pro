@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Car With Driver</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #00c9a7;
+      --secondary: #7f5cff;
+      --accent: #9b7cff;
+      --dark: #0b0a12;
+      --dark-elevated: #151320;
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+    body {
+      background: var(--dark);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 8%;
+      color: white;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1100px;
+      margin: auto;
+      background: var(--dark-elevated);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+      padding: 40px;
+      animation: fadeIn 0.8s ease;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 25px;
+      border-bottom: 1px solid var(--glass-border);
+      gap: 20px;
+    }
+
+    h2 {
+      font-size: 28px;
+      font-weight: 700;
+      background: linear-gradient(to right, white, var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .sub { color: #888; font-size: 14px; margin-top: 5px; }
+
+    .btn {
+      padding: 12px 24px;
+      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .btn:hover { background: rgba(255, 255, 255, 0.1); border-color: var(--primary); }
+
+    fieldset {
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      background: rgba(255, 255, 255, 0.02);
+      backdrop-filter: blur(10px);
+    }
+
+    legend {
+      padding: 0 20px;
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: 1px;
+    }
+
+    .row { display: flex; gap: 20px; flex-wrap: wrap; }
+
+    .group { flex: 1; min-width: 250px; margin-top: 15px; }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 14px 18px;
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      outline: none;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    input:focus, select:focus, textarea:focus { border-color: var(--primary); background: rgba(255, 255, 255, 0.08); }
+
+    textarea { resize: none; min-height: 120px; }
+
+    input::placeholder, textarea::placeholder { color: #555; }
+
+    .preview { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 15px; }
+
+    .preview img {
+      width: 100px;
+      height: 75px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .map-box {
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--glass-border);
+      font-size: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .map-box span { color: #aaa; }
+
+    .map-box button {
+      padding: 12px 20px;
+      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+      background: var(--glass-bg);
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .map-box button:hover { border-color: var(--primary); background: rgba(255, 255, 255, 0.05); }
+
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 16px;
+      background: linear-gradient(135deg, var(--primary), #00e0b9);
+      color: var(--dark);
+      transition: 0.3s;
+    }
+
+    .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0, 201, 167, 0.3); }
+
+    .status {
+      display: none;
+      margin-top: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 15px;
+      color: var(--primary);
+      font-size: 14px;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+  </style>
+    <link rel="stylesheet" href="../ai_assistant/roadmind.css">
+    <script src="../ai_assistant/roadmind.js" defer></script>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="topbar">
+      <div>
+        <h2>Add Car With Driver 🚕</h2>
+        <div class="sub">If you want to drive your car for rental customers.</div>
+      </div>
+
+      <button class="btn" onclick="window.location.href='../home/home.html'">← Back</button>
+    </div>
+
+    <form id="driverCarForm">
+
+      <!-- ✅ Driver Details -->
+      <fieldset>
+        <legend>Driver Details</legend>
+
+        <div class="row">
+          <div class="group">
+            <label>Driver Name</label>
+            <input type="text" id="driverName" placeholder="Enter driver name" required />
+          </div>
+          <div class="group">
+            <label>Driver Age</label>
+            <input type="number" id="driverAge" placeholder="Enter age" required />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="group">
+            <label>Driver Mobile</label>
+            <input type="tel" id="driverMobile" placeholder="10-digit mobile" pattern="[0-9]{10}" required />
+          </div>
+          <div class="group">
+            <label>Driver License No.</label>
+            <input type="text" id="driverLicense" placeholder="Enter license number" required />
+          </div>
+        </div>
+
+      </fieldset>
+
+      <!-- ✅ Car Details -->
+      <fieldset>
+        <legend>Car Details</legend>
+
+        <div class="row">
+          <div class="group">
+            <label>Company</label>
+            <input type="text" id="company" placeholder="Eg: Hyundai, Honda" required />
+          </div>
+
+          <div class="group">
+            <label>Model</label>
+            <input type="text" id="model" placeholder="Eg: Verna, City" required />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="group">
+            <label>Registration Number</label>
+            <input type="text" id="regNumber" placeholder="Eg: TS09AB1234" required />
+          </div>
+
+          <div class="group">
+            <label>Year</label>
+            <input type="text" id="year" placeholder="Eg: 2022" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="group">
+            <label>Fuel</label>
+            <select id="fuel">
+              <option value="">Select</option>
+              <option>Petrol</option>
+              <option>Diesel</option>
+              <option>Electric</option>
+              <option>CNG</option>
+            </select>
+          </div>
+
+          <div class="group">
+            <label>Transmission</label>
+            <select id="transmission">
+              <option value="">Select</option>
+              <option>Manual</option>
+              <option>Automatic</option>
+            </select>
+          </div>
+
+          <div class="group">
+            <label>Seats</label>
+            <input type="text" id="seats" placeholder="Eg: 5" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="group">
+            <label>KM Travelled</label>
+            <input type="text" id="km" placeholder="Eg: 25000" />
+          </div>
+
+          <div class="group">
+            <label>Pickup Location</label>
+            <input type="text" id="location" placeholder="Eg: Hyderabad, Kukatpally" required />
+          </div>
+        </div>
+
+        <div class="map-box">
+          <span id="mapText">📍 Location preview will appear here</span>
+          <button type="button" onclick="openMap()">View on Google Map</button>
+        </div>
+
+        <div class="row">
+          <div class="group">
+            <label>Price Per Month (₹)</label>
+            <input type="number" id="priceMonth" placeholder="Eg: 30000" required />
+          </div>
+
+          <div class="group">
+            <label>Security Deposit (₹)</label>
+            <input type="number" id="deposit" placeholder="Eg: 5000" />
+          </div>
+        </div>
+
+        <div class="group">
+          <label>Vehicle Images (Multiple)</label>
+          <input type="file" id="carImages" accept="image/*" multiple />
+          <div class="preview" id="preview"></div>
+        </div>
+
+        <div class="group">
+          <label>Additional Notes</label>
+          <textarea id="notes" placeholder="Any car / driver info..."></textarea>
+        </div>
+
+      </fieldset>
+
+      <button class="submit-btn" type="submit">Submit For Approval ✅</button>
+      <div class="status" id="statusMsg"></div>
+
+    </form>
+
+  </div>
+
+  <script>
+
+const API_BASE = "/api";
+
+// ✅ Must be logged in
+const user = JSON.parse(localStorage.getItem("car_rental_user"));
+
+if(!user || !user.loggedIn){
+  alert("Please login first ❌");
+  window.location.href = "../login.html";
+}
+
+// ✅ Image preview + base64 storage
+const carImages = document.getElementById("carImages");
+const preview = document.getElementById("preview");
+
+let base64Images = [];
+
+carImages.addEventListener("change", () => {
+
+  base64Images = [];
+  preview.innerHTML = "";
+
+  const files = Array.from(carImages.files).slice(0,2);
+
+  files.forEach(file => {
+
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      base64Images.push(e.target.result);
+
+      const img = document.createElement("img");
+      img.src = e.target.result;
+      preview.appendChild(img);
+    };
+
+    reader.readAsDataURL(file);
+  });
+});
+
+// ✅ Map preview
+const locationInput = document.getElementById("location");
+const mapText = document.getElementById("mapText");
+
+locationInput.addEventListener("input", () => {
+
+  if(locationInput.value.trim()){
+    mapText.innerText = "📍 Location: " + locationInput.value.trim();
+  }else{
+    mapText.innerText = "📍 Location preview will appear here";
+  }
+});
+
+function openMap(){
+
+  const loc = locationInput.value.trim();
+
+  if(!loc){
+    alert("Enter location first ❌");
+    return;
+  }
+
+  window.open(
+    `https://www.google.com/maps?q=${encodeURIComponent(loc)}`,
+    "_blank"
+  );
+}
+
+
+// ✅ SUBMIT
+document.getElementById("driverCarForm")
+.addEventListener("submit", async (e) => {
+
+  e.preventDefault();
+
+  const payload = {
+
+    owner_email: user.email,
+
+    // ⭐⭐⭐⭐⭐ VERY IMPORTANT FIX
+    listing_type: "With Driver",
+
+    // DRIVER
+    driver_name: document.getElementById("driverName").value.trim(),
+    driver_mobile: document.getElementById("driverMobile").value.trim(),
+
+    // CAR
+    company: document.getElementById("company").value.trim(),
+    model: document.getElementById("model").value.trim(),
+    reg_number: document.getElementById("regNumber").value.trim(),
+    year: document.getElementById("year").value.trim(),
+    fuel: document.getElementById("fuel").value,
+    transmission: document.getElementById("transmission").value,
+    seats: document.getElementById("seats").value,
+    km: document.getElementById("km").value,
+    location: document.getElementById("location").value.trim(),
+
+    price_month: Number(document.getElementById("priceMonth").value),
+    deposit: Number(document.getElementById("deposit").value || 0),
+    notes: document.getElementById("notes").value.trim(),
+
+    // IMAGES
+    images: base64Images
+  };
+
+  const statusMsg = document.getElementById("statusMsg");
+  statusMsg.style.display = "none";
+
+  try{
+
+    const res = await fetch(`${API_BASE}/add-car`, {
+
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify(payload)
+
+    });
+
+    const data = await res.json();
+
+    statusMsg.style.display = "block";
+    statusMsg.innerText = data.message;
+
+    if(!res.ok){
+      return;
+    }
+
+    alert("Car submitted for approval ✅");
+
+    window.location.href="../home/home.html";
+
+  }catch(err){
+
+    console.error(err);
+
+    alert("Cannot reach backend ❌ Check if Flask is running");
+
+  }
+
+});
+
+</script>
+
+
+</body>
+</html>

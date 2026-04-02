@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Track Parcels | CarRentalPro</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #00c9a7;
+      --secondary: #7f5cff;
+      --dark: #0b0a12;
+      --dark-elevated: #151320;
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --badge-pending: #f1c40f;
+      --badge-accepted: #3498db;
+      --badge-picked: #9b59b6;
+      --badge-delivered: #2ecc71;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    body { background: var(--dark); color: white; min-height: 100vh; padding-bottom: 50px; }
+
+    header {
+      background: rgba(11, 10, 18, 0.8);
+      backdrop-filter: blur(15px);
+      padding: 20px 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--glass-border);
+      position: sticky; top: 0; z-index: 100;
+    }
+
+    .logo { font-size: 24px; font-weight: 700; color: var(--primary); text-decoration: none; }
+
+    .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
+    
+    h2 { margin-bottom: 30px; display: flex; align-items: center; gap: 15px; }
+
+    .parcel-table-container {
+      background: var(--dark-elevated);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      overflow: hidden;
+      animation: fadeIn 0.8s ease;
+    }
+
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; background: rgba(255, 255, 255, 0.05); padding: 15px 20px; font-size: 13px; color: #888; text-transform: uppercase; }
+    td { padding: 20px; border-bottom: 1px solid var(--glass-border); font-size: 14px; }
+
+    .status-badge {
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .status-Pending { background: rgba(241, 196, 15, 0.2); color: #f1c40f; }
+    .status-Accepted { background: rgba(52, 152, 219, 0.2); color: #3498db; }
+    .status-Picked { background: rgba(155, 89, 182, 0.2); color: #9b59b6; }
+    .status-Delivered { background: rgba(46, 204, 113, 0.2); color: #2ecc71; }
+
+    .track-btn {
+      padding: 8px 15px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      color: white;
+      text-decoration: none;
+      font-size: 12px;
+      transition: 0.3s;
+    }
+
+    .track-btn:hover { background: var(--primary); color: var(--dark); border-color: var(--primary); }
+
+    .empty-state { text-align: center; padding: 60px; color: #666; }
+    .empty-state i { font-size: 50px; margin-bottom: 20px; opacity: 0.3; }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  </style>
+    <link rel="stylesheet" href="../ai_assistant/roadmind.css">
+    <script src="../ai_assistant/roadmind.js" defer></script>
+</head>
+<body>
+
+  <header>
+    <a href="javascript:history.back()" style="color:#aaa; text-decoration:none; margin-right:auto; font-size:16px; display:flex; align-items:center; gap:8px;"><i class="fas fa-arrow-left"></i> Back</a>
+    <a href="../home/home.html" class="logo">CarRentalPro</a>
+  </header>
+
+  <div class="container">
+    <h2><i class="fas fa-shipping-fast"></i> Your Parcels</h2>
+
+    <div class="parcel-table-container">
+      <table id="parcelTable">
+        <thead>
+            <tr>
+            <th>Parcel Details</th>
+            <th>Route</th>
+            <th>Receiver</th>
+            <th>Booking Status</th>
+            <th>Parcel Status</th>
+            <th>Pickup Code</th>
+            <th>Delivery OTP</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="parcelListBody">
+          <!-- Data will be loaded here -->
+        </tbody>
+      </table>
+      <div id="loader" style="padding: 40px; text-align: center;">
+        <i class="fas fa-spinner fa-spin"></i> Loading parcels...
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = "/api";
+    const user = JSON.parse(localStorage.getItem("car_rental_user"));
+
+    if (!user) {
+      window.location.href = "../login/login.html";
+    }
+
+    function shareToWhatsApp(mobile, name, otp, id) {
+      const text = `Hi ${name}, your CarRentalPro parcel (#${id}) is arriving soon! 📦\n\nPlease provide this unique OTP to the driver upon delivery: *${otp}*\n\nThank you for choosing CarRentalPro! 🚗`;
+      const encodedText = encodeURIComponent(text);
+      const url = `https://wa.me/${mobile}?text=${encodedText}`;
+      window.open(url, '_blank');
+    }
+
+    async function loadParcels() {
+      try {
+        const res = await fetch(`${API_BASE}/get-parcel-tracking-user/${user.email}`);
+        const data = await res.json();
+        const tbody = document.getElementById("parcelListBody");
+        const loader = document.getElementById("loader");
+
+        loader.style.display = "none";
+        tbody.innerHTML = "";
+
+        if (data.success && data.parcels.length > 0) {
+          data.parcels.forEach(p => {
+            const statusClass = `status-${p.status.split(' ')[0]}`;
+            tbody.innerHTML += `
+              <tr>
+                <td>
+                  <div style="font-weight: 600;">#${p.id}</div>
+                  <div style="font-size: 12px; color: #888;">${p.parcel_description || 'No description'}</div>
+                </td>
+                <td>
+                  <div style="font-size: 13px;">${p.pickup_location} ➔ ${p.drop_location}</div>
+                </td>
+                <td>
+                  <div style="font-weight: 500;">${p.receiver_name}</div>
+                  <div style="font-size: 11px; color: #888;">${p.receiver_mobile}</div>
+                </td>
+                <td>
+                   <span class="status-badge" style="background: rgba(255,255,255,0.05); color: #ccc;">${p.booking_status}</span>
+                </td>
+                <td>
+                  <span class="status-badge ${statusClass}">${p.status}</span>
+                </td>
+                <td>
+                  <code style="background: rgba(0,201,167,0.1); color: var(--primary); padding: 4px 8px; border-radius: 5px;">${p.pickup_qr_code}</code>
+                </td>
+                <td>
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <code style="background: rgba(127,92,255,0.1); color: var(--secondary); padding: 4px 8px; border-radius: 5px; font-weight:700;">${p.delivery_otp}</code>
+                    <button class="track-btn" style="padding:4px 8px; background:#25D366; color:white; border:none;" onclick="shareToWhatsApp('${p.receiver_mobile}', '${p.receiver_name}', '${p.delivery_otp}', '${p.id}')">
+                      <i class="fab fa-whatsapp"></i> Share
+                    </button>
+                  </div>
+                </td>
+                <td>
+                  <a href="../admin/live-monitoring.html?booking_id=${p.booking_id}" class="track-btn"><i class="fas fa-map-marker-alt"></i> Track</a>
+                </td>
+              </tr>
+            `;
+          });
+        } else {
+          document.getElementById("parcelTable").style.display = "none";
+          document.querySelector(".parcel-table-container").innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-box-open"></i>
+              <p>You haven't sent any parcels yet.</p>
+              <br>
+              <a href="send-parcel.html" style="color: var(--primary); text-decoration: none; font-weight: 600;">Send a parcel now ➔</a>
+            </div>
+          `;
+        }
+      } catch (err) {
+        console.error(err);
+        loader.innerHTML = '<p style="color: #ff6b6b;">Error loading parcels.</p>';
+      }
+    }
+
+    loadParcels();
+  </script>
+
+</body>
+</html>
+

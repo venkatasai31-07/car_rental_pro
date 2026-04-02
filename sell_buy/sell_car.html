@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sell Your Car - CarRentalPro</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #00c9a7;
+      --secondary: #7f5cff;
+      --accent: #9b7cff;
+      --dark: #0b0a12;
+      --dark-elevated: #151320;
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+    body {
+      min-height: 100vh;
+      background: var(--dark);
+      color: white;
+      padding: 40px 8%;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1300px;
+      margin: auto;
+      background: var(--dark-elevated);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+      overflow: hidden;
+      animation: fadeIn 0.8s ease;
+    }
+
+    .topbar {
+      padding: 30px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--glass-border);
+      gap: 20px;
+    }
+
+    .topbar h2 {
+      font-size: 28px;
+      font-weight: 700;
+      background: linear-gradient(to right, white, var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .topbar p { color: #888; font-size: 14px; margin-top: 5px; }
+
+    .btn-back {
+      padding: 12px 24px;
+      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-back:hover { background: rgba(255, 255, 255, 0.1); border-color: var(--primary); }
+
+    .content {
+      padding: 40px;
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 30px;
+    }
+
+    @media(max-width: 1100px) { .content { grid-template-columns: 1fr; } }
+
+    .card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 35px;
+    }
+
+    .card h3 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 25px;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 14px 18px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      color: white;
+      outline: none;
+      font-size: 14px;
+      margin-bottom: 20px;
+      transition: 0.3s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--primary);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    input::placeholder, textarea::placeholder { color: #555; }
+    textarea { resize: none; min-height: 120px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media(max-width: 650px) { .grid { grid-template-columns: 1fr; } }
+
+    .upload-box {
+      border: 2px dashed var(--glass-border);
+      border-radius: 16px;
+      padding: 25px;
+      background: rgba(255, 255, 255, 0.02);
+      margin-top: 5px;
+      text-align: center;
+      transition: 0.3s;
+    }
+    .upload-box:hover { border-color: var(--primary); background: rgba(0, 201, 167, 0.02); }
+
+    .preview {
+      margin-top: 20px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .preview img {
+      width: 100px;
+      height: 75px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .map-box {
+      margin-top: 15px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--glass-border);
+      height: 250px;
+    }
+
+    .summary-item {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 15px;
+      transition: 0.3s;
+    }
+
+    .summary-item p { font-size: 13px; color: #888; margin-bottom: 5px; }
+    .summary-item strong { font-size: 16px; color: white; display: block; }
+
+    .badge {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 99px;
+      font-size: 12px;
+      background: rgba(241, 196, 15, 0.1);
+      border: 1px solid rgba(241, 196, 15, 0.3);
+      color: #f1c40f;
+      font-weight: 600;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--primary), #00e0b9);
+      border: none;
+      border-radius: 12px;
+      color: var(--dark);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 10px;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 30px rgba(0, 201, 167, 0.3);
+    }
+
+    .note {
+      margin-top: 20px;
+      padding: 20px;
+      background: rgba(0, 201, 167, 0.05);
+      border: 1px solid rgba(0, 201, 167, 0.1);
+      border-radius: 16px;
+      font-size: 13px;
+      color: #eee;
+      line-height: 1.6;
+    }
+
+    /* Suggestions UI */
+    .suggestion-box { position: relative; }
+    .suggestions {
+      position: absolute;
+      top: calc(100% - 15px);
+      left: 0;
+      width: 100%;
+      background: var(--dark-elevated);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 999;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+      backdrop-filter: blur(20px);
+    }
+    .suggestions div {
+      padding: 12px 18px;
+      cursor: pointer;
+      color: #ccc;
+      transition: 0.2s;
+    }
+    .suggestions div:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--primary);
+    }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  </style>
+
+  </style>
+    <link rel="stylesheet" href="../ai_assistant/roadmind.css">
+    <script src="../ai_assistant/roadmind.js" defer></script>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="topbar">
+      <div>
+        <h2>Sell Your Car</h2>
+        <p>Add your car details and submit for verification ✅</p>
+      </div>
+      <button class="btn-back" onclick="window.location.href='../home/home.html'">← Back Home</button>
+    </div>
+
+    <form id="sellCarForm">
+      <div class="content">
+
+        <!-- LEFT FORM -->
+        <div class="card">
+          <h3>Car Details</h3>
+
+          <div class="grid">
+            <div class="suggestion-box">
+              <label>Car Company</label>
+              <input type="text" id="company" placeholder="Ex: Honda" autocomplete="off" required>
+              <div id="companySuggestions" class="suggestions"></div>
+            </div>
+
+            <div class="suggestion-box">
+              <label>Car Model</label>
+              <input type="text" id="model" placeholder="Ex: City" autocomplete="off" required>
+              <div id="modelSuggestions" class="suggestions"></div>
+            </div>
+
+            <div>
+              <label>Registration Number</label>
+              <input type="text" id="regNumber" placeholder="Ex: TS 09 AB 1234" required>
+            </div>
+
+            <div>
+              <label>Manufacture Year</label>
+              <input type="number" id="year" placeholder="Ex: 2021" required min="2000" max="2035">
+            </div>
+
+            <div>
+              <label>Fuel Type</label>
+              <select id="fuel" required>
+                <option value="">Select</option>
+                <option>Petrol</option>
+                <option>Diesel</option>
+                <option>Electric</option>
+                <option>CNG</option>
+              </select>
+            </div>
+
+            <div>
+              <label>Transmission</label>
+              <select id="transmission" required>
+                <option value="">Select</option>
+                <option>Manual</option>
+                <option>Automatic</option>
+              </select>
+            </div>
+
+            <div>
+              <label>KM Driven</label>
+              <input type="number" id="km" placeholder="Ex: 45000" required min="0">
+            </div>
+
+            <div>
+              <label>Owner Type</label>
+              <select id="ownerType" required>
+                <option value="">Select</option>
+                <option>1st Owner</option>
+                <option>2nd Owner</option>
+                <option>3rd Owner</option>
+              </select>
+            </div>
+          </div>
+
+          <label>Location</label>
+          <input type="text" id="location" placeholder="Ex: Hyderabad" required>
+
+          <div class="map-box">
+            <iframe id="mapFrame" src="https://www.google.com/maps?q=India&output=embed" loading="lazy"></iframe>
+          </div>
+
+          <div class="summary-item">
+            <p>Estimated Price</p>
+            <strong id="estimatedPrice">₹0</strong>
+          </div>
+
+          <label style="margin-top:14px;">Selling Price (₹)</label>
+          <input type="number" id="sellingPrice" placeholder="Ex: 550000" required min="1000">
+
+          <div class="upload-box">
+            <label>Upload Car Images (Max 5)</label>
+            <input type="file" id="carImages" accept="image/*" multiple>
+            <div class="preview" id="preview"></div>
+          </div>
+
+          <label style="margin-top:14px;">Description</label>
+          <textarea id="description" placeholder="Vehicle condition, service history, insurance, etc..."></textarea>
+        </div>
+
+        <!-- RIGHT SUMMARY -->
+        <div class="card">
+          <h3>Summary</h3>
+
+          <div class="summary-item">
+            <p>Car</p>
+            <strong id="sumCar">-</strong>
+          </div>
+
+          <div class="summary-item">
+            <p>Price</p>
+            <strong id="sumPrice">₹0</strong>
+          </div>
+
+          <div class="summary-item">
+            <p>Location</p>
+            <strong id="sumLocation">-</strong>
+          </div>
+
+          <div class="summary-item">
+            <p>Status</p>
+            <strong class="badge">Pending Verification</strong>
+          </div>
+
+          <button class="btn-submit" type="submit">Submit for Selling ✅</button>
+
+          <div class="note">
+            ✅ Your car will be listed only after verification.<br>
+            ✅ Once approved, it will appear in the <b>Buy Cars</b> page.
+          </div>
+        </div>
+
+      </div>
+    </form>
+
+  </div>
+
+<script>
+
+const API_BASE="/api";
+const ML_API="/ml-api";
+
+// ================= LOGIN =================
+const user=JSON.parse(localStorage.getItem("car_rental_user"));
+
+if(!user||!user.email){
+alert("Please login first ❌");
+window.location.href="../login/login.html";
+}
+
+// ================= DOM =================
+const company=document.getElementById("company");
+const model=document.getElementById("model");
+const year=document.getElementById("year");
+const km=document.getElementById("km");
+const fuel=document.getElementById("fuel");
+const transmission=document.getElementById("transmission");
+const ownerType=document.getElementById("ownerType");
+const sellingPrice=document.getElementById("sellingPrice");
+const locationInput=document.getElementById("location");
+const regNumber=document.getElementById("regNumber");
+const description=document.getElementById("description");
+
+// ================= SUMMARY =================
+function updateSummary(){
+
+document.getElementById("sumCar").innerText=
+`${company.value||"-"} ${model.value||""}`;
+
+document.getElementById("sumPrice").innerText=
+sellingPrice.value
+?`₹${Number(sellingPrice.value).toLocaleString()}`
+:"₹0";
+
+document.getElementById("sumLocation").innerText=
+locationInput.value||"-";
+}
+
+[company,model,sellingPrice,locationInput]
+.forEach(el=>el.addEventListener("input",updateSummary));
+
+// ================= MAP =================
+locationInput.addEventListener("input",()=>{
+
+document.getElementById("mapFrame").src=
+locationInput.value.length>2
+?`https://www.google.com/maps?q=${encodeURIComponent(locationInput.value)}&output=embed`
+:"https://www.google.com/maps?q=India&output=embed";
+
+});
+
+// ================= ML PRICE =================
+async function getEstimatedPrice(){
+
+if(!company.value||!model.value||!year.value||
+!km.value||!fuel.value||!transmission.value||
+!ownerType.value)return;
+
+try{
+
+const res=await fetch(`${ML_API}/predict`,{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+company:company.value,
+model:model.value,
+year:year.value,
+km:km.value,
+fuel:fuel.value,
+transmission:transmission.value,
+ownerType:ownerType.value
+})
+});
+
+const data=await res.json();
+
+if(data.success){
+
+document.getElementById("estimatedPrice").innerText=
+`₹${data.price.toLocaleString()}`;
+
+sellingPrice.value=data.price;
+
+updateSummary();
+}
+
+}catch(err){
+console.log("ML error",err);
+}
+
+}
+
+[
+company,model,year,km,
+fuel,transmission,ownerType
+].forEach(el=>{
+el.addEventListener("change",getEstimatedPrice);
+el.addEventListener("input",getEstimatedPrice);
+});
+
+// ================= COMPANY LIST =================
+const companyInput = document.getElementById("company");
+const suggestionBox = document.getElementById("companySuggestions");
+
+let companies = [];
+
+// Load companies
+async function loadCompanies(){
+  try{
+    const res = await fetch(`${ML_API}/companies`);
+    companies = await res.json();
+    console.log("Companies loaded:", companies);
+  }catch(err){
+    console.log("Company load error", err);
+  }
+}
+
+// Show suggestions
+companyInput.addEventListener("input",()=>{
+
+  const value = companyInput.value.toLowerCase();
+  suggestionBox.innerHTML = "";
+
+  if(!value) return;
+
+  const filtered = companies.filter(c =>
+    c.toLowerCase().includes(value)
+  );
+
+  filtered.forEach(c=>{
+
+    const div = document.createElement("div");
+    div.innerText = c;
+
+    div.onclick = ()=>{
+      companyInput.value = c;
+      suggestionBox.innerHTML="";
+      loadModels(); // keep model loader
+    };
+
+    suggestionBox.appendChild(div);
+  });
+
+});
+
+// Run loader
+loadCompanies();
+
+
+// ================= MODEL LIST =================
+
+const modelInput =
+  document.getElementById("model");
+
+const modelSuggestionBox =
+  document.getElementById("modelSuggestions");
+
+let models = [];
+
+// Load models from API
+async function loadModels(){
+
+  if(!companyInput.value) return;
+
+  const res = await fetch(
+    `${ML_API}/models/${companyInput.value}`
+  );
+
+  models = await res.json();
+}
+
+// Show suggestions
+modelInput.addEventListener("input",()=>{
+
+  const value =
+    modelInput.value.toLowerCase();
+
+  modelSuggestionBox.innerHTML="";
+
+  if(!value) return;
+
+  const filtered =
+    models.filter(m =>
+      m.toLowerCase().includes(value)
+    );
+
+  filtered.forEach(m=>{
+
+    const div =
+      document.createElement("div");
+
+    div.innerText = m;
+
+    div.onclick = ()=>{
+      modelInput.value = m;
+      modelSuggestionBox.innerHTML="";
+      getEstimatedPrice();
+    };
+
+    modelSuggestionBox.appendChild(div);
+  });
+
+});
+
+// Company change → reload models
+companyInput.addEventListener("change", ()=>{
+
+  loadModels();
+
+  modelInput.value="";
+  modelSuggestionBox.innerHTML="";
+
+});
+// ================= IMAGE PREVIEW =================
+const imgInput=document.getElementById("carImages");
+const preview=document.getElementById("preview");
+
+imgInput.addEventListener("change",()=>{
+
+preview.innerHTML="";
+
+Array.from(imgInput.files).slice(0,5)
+.forEach(file=>{
+
+const reader=new FileReader();
+
+reader.onload=e=>{
+const img=document.createElement("img");
+img.src=e.target.result;
+preview.appendChild(img);
+};
+
+reader.readAsDataURL(file);
+
+});
+
+});
+
+// ================= BASE64 =================
+function toBase64(file){
+return new Promise((resolve,reject)=>{
+const reader=new FileReader();
+reader.readAsDataURL(file);
+reader.onload=()=>resolve(reader.result);
+reader.onerror=err=>reject(err);
+});
+}
+
+// ================= SUBMIT =================
+document.getElementById("sellCarForm")
+.addEventListener("submit",async function(e){
+
+e.preventDefault();
+
+try{
+
+const files=Array.from(imgInput.files).slice(0,5);
+const images=[];
+
+for(const file of files){
+images.push(await toBase64(file));
+}
+
+const res=await fetch(`${API_BASE}/sell-car`,{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+
+owner_email:user.email,
+
+company:company.value,
+model:model.value,
+reg_number:regNumber.value,
+year:year.value,
+fuel:fuel.value,
+transmission:transmission.value,
+km:km.value,
+owner_type:ownerType.value,
+
+location:locationInput.value,
+selling_price:sellingPrice.value,
+description:description.value,
+
+images:images
+})
+});
+
+const data=await res.json();
+
+alert(data.message||"Car submitted ✅");
+
+if(data.success){
+e.target.reset();
+preview.innerHTML="";
+updateSummary();
+}
+
+}catch(err){
+alert("Submission failed ❌");
+}
+
+});
+
+updateSummary();
+
+</script>
+
+
+</body>
+</html>

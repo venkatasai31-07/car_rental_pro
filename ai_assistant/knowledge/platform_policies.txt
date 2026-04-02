@@ -1,0 +1,26 @@
+Platform Policies for CarRentalPro (RoadMind AI Knowledge Base)
+
+1. Cancellation Policy:
+- Users can cancel their bookings up to 24 hours before pickup for a full refund.
+- Cancellations within 24 hours of pickup will incur a 20% penalty fee.
+- No-shows without cancellation will be charged the full amount.
+
+2. Driver / Nominee Policy:
+- In "With Driver" bookings, the driver is assigned by CarRentalPro and their details are shared via email before pickup.
+- In "Rental Only", the person who booked the car must be the primary driver and provide driving license details. They can add a nominee driver, but must be present at pickup.
+
+3. Car Listings (Owners):
+- Car owners can list their cars for rental or sale.
+- All listings must be approved by the Admin before they appear on the platform.
+- The Admin reviews verification documents like RC, insurance, and car photos.
+
+4. Parcel Delivery:
+- Users can request a parcel delivery by filling out sender and receiver details.
+- Drivers can accept or reject parcel requests.
+- Once accepted, the sender receives a 12-digit QR code.
+- To successfully deliver a parcel, the driver must ask the receiver for a 4-digit OTP.
+
+5. Payment & Security:
+- Security deposits must be paid during booking for "Rental Only" cars.
+- Deposits are refunded within 24 hours of dropping off the car in good condition.
+- Any damages incurred during rental will be deducted from the security deposit.

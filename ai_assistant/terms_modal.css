@@ -1,0 +1,59 @@
+/* Terms Modal Style */
+:root {
+  --primary: #00c9a7;
+  --dark-elevated: #151320;
+  --glass-border: rgba(255, 255, 255, 0.08);
+}
+
+.terms-modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0; top: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(8px);
+  animation: termsFadeIn 0.3s ease;
+}
+
+.terms-modal-content {
+  background: var(--dark-elevated);
+  margin: 50px auto;
+  padding: 40px;
+  border: 1px solid var(--glass-border);
+  width: 90%;
+  max-width: 800px;
+  border-radius: 24px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+  color: white;
+  font-family: 'Poppins', sans-serif;
+}
+
+.terms-modal-content h1, 
+.terms-modal-content h2, 
+.terms-modal-content h3 { color: var(--primary); margin-top: 20px; }
+
+.terms-modal-content p { color: #ccc; margin-bottom: 15px; line-height: 1.8; font-size: 15px; }
+
+.terms-close-modal {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  color: #777;
+  font-size: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.terms-close-modal:hover { color: white; }
+
+@keyframes termsFadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* Custom Scrollbar */
+.terms-modal-content::-webkit-scrollbar { width: 8px; }
+.terms-modal-content::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+.terms-modal-content::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 10px; }
+.terms-modal-content::-webkit-scrollbar-thumb:hover { background: var(--primary); }

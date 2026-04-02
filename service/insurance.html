@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Insurance Protection - CarRentalPro</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #00c9a7;
+      --secondary: #7f5cff;
+      --accent: #9b7cff;
+      --dark: #0b0a12;
+      --dark-elevated: #151320;
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+    body {
+      background: var(--dark);
+      color: white;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* Header */
+    header {
+      background: rgba(21, 19, 32, 0.8);
+      backdrop-filter: blur(20px);
+      padding: 20px 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--glass-border);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    header h1 {
+      font-size: 24px;
+      font-weight: 800;
+      background: linear-gradient(to right, white, var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    nav a {
+      color: #aaa;
+      text-decoration: none;
+      margin-left: 30px;
+      font-weight: 500;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    nav a:hover { color: var(--primary); }
+
+    /* Page UI */
+    .hero {
+      padding: 100px 8% 60px;
+      text-align: center;
+      background: radial-gradient(circle at top right, rgba(127, 92, 255, 0.05), transparent),
+                  radial-gradient(circle at bottom left, rgba(0, 201, 167, 0.05), transparent);
+    }
+
+    .page-title {
+      font-size: 56px;
+      font-weight: 800;
+      margin-bottom: 15px;
+      background: linear-gradient(to right, white, #888);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .page-subtitle { color: #888; font-size: 20px; max-width: 800px; margin: 0 auto 40px; }
+
+    .stats-container {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      padding: 30px 40px;
+      border-radius: 24px;
+      border: 1px solid var(--glass-border);
+      text-align: center;
+      min-width: 200px;
+    }
+
+    .stat-card strong { font-size: 32px; font-weight: 800; color: var(--primary); display: block; }
+    .stat-card span { color: #888; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+
+    .container {
+      max-width: 1300px;
+      margin: 0 auto 100px;
+      padding: 0 8%;
+      animation: fadeIn 0.8s ease;
+    }
+
+    h3 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 35px;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    /* Grid Layouts */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+      margin-bottom: 80px;
+    }
+
+    .feature-card {
+      background: var(--glass-bg);
+      padding: 40px;
+      border-radius: 24px;
+      border: 1px solid var(--glass-border);
+      transition: 0.4s;
+    }
+
+    .feature-card:hover { transform: translateY(-10px); border-color: var(--primary); }
+
+    .feature-card .icon {
+      width: 60px;
+      height: 60px;
+      background: rgba(0, 201, 167, 0.1);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: var(--primary);
+      margin-bottom: 25px;
+    }
+
+    .feature-card h4 { font-size: 20px; font-weight: 700; margin-bottom: 12px; }
+    .feature-card p { color: #888; font-size: 15px; line-height: 1.7; }
+
+    /* Pricing Section */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+      margin-bottom: 80px;
+    }
+
+    .pricing-card {
+      background: var(--dark-elevated);
+      padding: 50px 40px;
+      border-radius: 24px;
+      border: 1px solid var(--glass-border);
+      position: relative;
+      transition: 0.4s;
+    }
+
+    .pricing-card:hover { transform: scale(1.02); box-shadow: 0 40px 100px rgba(0,0,0,0.4); }
+
+    .pricing-card.featured {
+      border: 2px solid var(--primary);
+      background: radial-gradient(circle at top right, rgba(0, 201, 167, 0.05), transparent);
+    }
+
+    .badge {
+      position: absolute;
+      top: 25px;
+      right: 25px;
+      background: var(--primary);
+      color: var(--dark);
+      padding: 6px 16px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .pricing-card h4 { font-size: 24px; font-weight: 700; margin-bottom: 10px; }
+    .price { font-size: 36px; font-weight: 800; color: white; margin-bottom: 30px; }
+    .price span { font-size: 16px; color: #666; font-weight: 500; }
+
+    .pricing-card ul { list-style: none; margin-bottom: 40px; }
+    .pricing-card li { display: flex; align-items: center; gap: 12px; color: #888; font-size: 15px; margin-bottom: 15px; }
+    .pricing-card i { color: var(--primary); font-size: 14px; }
+
+    .btn-plan {
+      width: 100%;
+      padding: 16px;
+      border-radius: 12px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      transition: 0.3s;
+    }
+
+    .btn-primary { background: linear-gradient(135deg, var(--primary), #00e0b9); color: var(--dark); }
+    .btn-outline { border: 1px solid var(--glass-border); color: white; background: rgba(255, 255, 255, 0.03); }
+    .btn-outline:hover { background: rgba(255, 255, 255, 0.08); border-color: var(--primary); }
+
+    /* Claims Steps */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      margin-bottom: 80px;
+    }
+
+    .step-card {
+      background: var(--glass-bg);
+      padding: 40px;
+      border-radius: 24px;
+      border: 1px solid var(--glass-border);
+      text-align: center;
+      transition: 0.3s;
+    }
+
+    .step-number {
+      width: 45px;
+      height: 45px;
+      background: var(--primary);
+      color: var(--dark);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin: 0 auto 20px;
+    }
+
+    .step-card h4 { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+    .step-card p { color: #888; font-size: 14px; }
+
+    /* Warning Section */
+    .warning-card {
+      background: rgba(255, 107, 107, 0.05);
+      border: 1px solid rgba(255, 107, 107, 0.2);
+      padding: 40px;
+      border-radius: 24px;
+      color: #ff6b6b;
+      margin-bottom: 80px;
+    }
+
+    .warning-card h3 { color: #ff6b6b; margin-bottom: 20px; border-top: none; padding-top: 0; margin-top: 0; }
+    .warning-list { list-style: none; display: flex; flex-wrap: wrap; gap: 20px; }
+    .warning-list li { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; }
+
+    /* CTA */
+    .cta-banner {
+      background: linear-gradient(135deg, var(--dark-elevated), #201b35);
+      padding: 80px;
+      border-radius: 32px;
+      text-align: center;
+      border: 1px solid var(--glass-border);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .cta-banner::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 300px;
+      height: 300px;
+      background: var(--primary);
+      filter: blur(150px);
+      opacity: 0.1;
+    }
+
+    .cta-banner h2 { font-size: 36px; font-weight: 800; margin-bottom: 15px; }
+    .cta-banner p { color: #888; margin-bottom: 40px; font-size: 18px; }
+
+    .btn-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 40px;
+      background: var(--primary);
+      color: var(--dark);
+      text-decoration: none;
+      border-radius: 14px;
+      font-weight: 800;
+      transition: 0.3s;
+    }
+
+    .btn-cta:hover { transform: translateY(-3px); box-shadow: 0 20px 40px rgba(0, 201, 167, 0.3); }
+
+    /* Footer */
+    footer {
+      background: var(--dark-elevated);
+      padding: 60px 8% 40px;
+      text-align: center;
+      border-top: 1px solid var(--glass-border);
+    }
+
+    .footer-links {
+      margin-bottom: 25px;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+    }
+
+    .footer-links a { color: #666; text-decoration: none; font-size: 14px; transition: 0.3s; }
+    .footer-links a:hover { color: var(--primary); }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+      <div class="stat-card"><strong>50K+</strong><span>Trips Insured</span></div>
+      <div class="stat-card"><strong>12K+</strong><span>Parcels Covered</span></div>
+      <div class="stat-card"><strong>98%</strong><span>Claims Approved</span></div>
+    </div>
+  </section>
+
+  <div class="container">
+    <h3><i class="fas fa-layer-group"></i> Coverage Categories</h3>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="icon"><i class="fas fa-car-crash"></i></div>
+        <h4>Vehicle Protection</h4>
+        <p>Comprehensive cover for accident damage, theft, fire incidents, and full on-road breakdown support.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon"><i class="fas fa-user-shield"></i></div>
+        <h4>Passenger Safety</h4>
+        <p>Medical expense coverage and third-party liability protection for all passengers during every trip.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon"><i class="fas fa-box-open"></i></div>
+        <h4>Parcel Protection</h4>
+        <p>Your goods transported along the route are fully insured against loss, theft, or accidental damage.</p>
+      </div>
+    </div>
+
+    <h3 id="plans"><i class="fas fa-shield-alt"></i> Protection Plans</h3>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="badge">Included</div>
+        <h4>Standard Cover</h4>
+        <p class="price">₹0 <span>/ trip</span></p>
+        <ul>
+          <li><i class="fas fa-check"></i> Basic Vehicle Damage</li>
+          <li><i class="fas fa-check"></i> Third-party Liability</li>
+          <li><i class="fas fa-check"></i> 24/7 Roadside Assistance</li>
+          <li style="opacity:0.5"><i class="fas fa-times"></i> No Parcel Coverage</li>
+        </ul>
+        <a href="../book_car/book_car.html" class="btn-plan btn-outline">Keep Standard</a>
+      </div>
+
+      <div class="pricing-card featured">
+        <div class="badge">Most Popular</div>
+        <h4>Elite Protection</h4>
+        <p class="price">₹199 <span>/ trip</span></p>
+        <ul>
+          <li><i class="fas fa-check"></i> Everything in Standard</li>
+          <li><i class="fas fa-check"></i> Full Parcel Protection</li>
+          <li><i class="fas fa-check"></i> Zero Depreciation Cover</li>
+          <li><i class="fas fa-check"></i> Priority Claim Payout</li>
+        </ul>
+        <a href="../book_car/book_car.html" class="btn-plan btn-primary">Add Elite Plan</a>
+      </div>
+    </div>
+
+    <h3><i class="fas fa-file-invoice"></i> Simple Claims Process</h3>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <h4>Report Incident</h4>
+        <p>Notify our 24/7 emergency support team instantly via the app.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <h4>Verify Details</h4>
+        <p>Upload quick photos and necessary trip documents for the case.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <h4>Review & Verify</h4>
+        <p>Our claims experts review your submission within 24 working hours.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">4</div>
+        <h4>Swift Payout</h4>
+        <p>Approved funds are transferred directly to your bank account.</p>
+      </div>
+    </div>
+
+    <div class="warning-card">
+      <h3><i class="fas fa-exclamation-triangle"></i> Not Covered</h3>
+      <ul class="warning-list">
+        <li><i class="fas fa-times-circle"></i> Driving under influence</li>
+        <li><i class="fas fa-times-circle"></i> Unauthorized drivers</li>
+        <li><i class="fas fa-times-circle"></i> Illegal transport items</li>
+        <li><i class="fas fa-times-circle"></i> Rash or negligent driving</li>
+      </ul>
+    </div>
+
+    <div class="cta-banner">
+      <h2>Drive With Peace of Mind</h2>
+      <p>Ensure a total safety net for yourself, your vehicle, and your deliveries.</p>
+      <a href="../book_car/book_car.html" class="btn-cta">
+        <i class="fas fa-car-side"></i>
+        <span>Book Your Safe Trip</span>
+      </a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-links">
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="../login/terms.html">Terms & Conditions</a>
+      <a href="contact.html">Support</a>
+    </div>
+    <p class="copyright">&copy; 2025 CarRentalPro. All Rights Reserved.</p>
+  </footer>
+
+</body>
+</html>

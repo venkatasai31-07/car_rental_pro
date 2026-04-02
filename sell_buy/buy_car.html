@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Buy Cars - CarRentalPro</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #00c9a7;
+      --secondary: #7f5cff;
+      --accent: #9b7cff;
+      --dark: #0b0a12;
+      --dark-elevated: #151320;
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+    body {
+      background: var(--dark);
+      color: white;
+      padding: 40px 8%;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: auto;
+      background: var(--dark-elevated);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+      padding: 30px;
+      animation: fadeIn 0.8s ease;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 25px;
+      border-bottom: 1px solid var(--glass-border);
+      margin-bottom: 30px;
+      gap: 20px;
+    }
+
+    header h1 {
+      font-size: 28px;
+      font-weight: 800;
+      background: linear-gradient(to right, white, var(--primary));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .sub { color: #888; font-size: 14px; margin-top: 5px; }
+
+    .btn {
+      padding: 12px 24px;
+      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--primary);
+    }
+
+    /* Search Bar */
+    .bar {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+      background: rgba(255, 255, 255, 0.02);
+      padding: 20px;
+      border-radius: 18px;
+      border: 1px solid var(--glass-border);
+    }
+
+    input[type="text"], select {
+      flex: 1;
+      min-width: 200px;
+      padding: 14px 18px;
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      outline: none;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    input:focus, select:focus { border-color: var(--primary); background: rgba(255, 255, 255, 0.08); }
+
+    .search-btn {
+      padding: 14px 30px;
+      background: linear-gradient(135deg, var(--primary), #00e0b9);
+      color: var(--dark);
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .search-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0, 201, 167, 0.3); }
+
+    /* Results */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 25px;
+    }
+
+    .car-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: 0.4s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .car-card:hover { transform: translateY(-10px); border-color: var(--primary); }
+
+    .car-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background: #2a2545;
+    }
+
+    .card-body { padding: 25px; flex: 1; display: flex; flex-direction: column; }
+
+    .car-title { font-size: 20px; font-weight: 700; margin-bottom: 15px; }
+
+    .details { font-size: 14px; color: #aaa; line-height: 1.8; margin-bottom: 20px; }
+    .details b { color: #ccc; }
+
+    .price { font-size: 24px; font-weight: 700; color: var(--primary); margin-top: auto; }
+
+    .btn-row { display: flex; gap: 12px; margin-top: 25px; }
+
+    .buy-btn {
+      flex: 2;
+      padding: 15px;
+      background: linear-gradient(135deg, var(--primary), #00e0b9);
+      color: var(--dark);
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .buy-btn:hover { transform: scale(1.02); box-shadow: 0 10px 20px rgba(0, 201, 167, 0.3); }
+
+    .info-btn {
+      flex: 1;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      color: white;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .info-btn:hover { background: rgba(255, 255, 255, 0.1); border-color: var(--primary); }
+
+    .no-results {
+      padding: 60px;
+      border-radius: 20px;
+      border: 2px dashed var(--glass-border);
+      background: rgba(255, 255, 255, 0.01);
+      color: #666;
+      text-align: center;
+      font-size: 18px;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  </style>
+  </style>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <link rel="stylesheet" href="../ai_assistant/roadmind.css">
+    <script src="../ai_assistant/roadmind.js" defer></script>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="topbar">
+      <div>
+        <h2>Buy Cars</h2>
+        <div class="sub">Browse verified cars available for sale ✅</div>
+      </div>
+      <div class="header-actions" style="display:flex; gap:12px;">
+        <button class="btn btn-primary" onclick="window.location.href='my_bids.html'"><i class="fas fa-gavel"></i> My Bids</button>
+        <button class="btn" onclick="window.location.href='../home/home.html'">← Back Home</button>
+      </div>
+    </div>
+
+    <div class="bar">
+      <input type="text" id="searchInput" placeholder="Search by company/model...">
+
+      <select id="fuelFilter">
+        <option value="">Fuel</option>
+        <option>Petrol</option>
+        <option>Diesel</option>
+        <option>Electric</option>
+        <option>CNG</option>
+      </select>
+
+      <select id="transmissionFilter">
+        <option value="">Transmission</option>
+        <option>Manual</option>
+        <option>Automatic</option>
+      </select>
+
+      <button class="search-btn" onclick="applyFilters()">Search</button>
+    </div>
+
+    <!-- Cards -->
+    <div id="results" class="grid"></div>
+    <div id="noResults" class="no-results">No cars found ❌</div>
+
+  </div>
+
+    <!-- Negotiation Modal -->
+    <div id="bidModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); backdrop-filter:blur(10px); z-index:2000; align-items:center; justify-content:center;">
+      <div style="background:var(--dark-elevated); width:500px; padding:40px; border-radius:24px; border:1px solid var(--glass-border); box-shadow:0 0 100px rgba(0,0,0,0.5); position:relative;">
+        <button onclick="closeModal()" style="position:absolute; top:20px; right:20px; background:none; border:none; color:#888; font-size:24px; cursor:pointer;"><i class="fas fa-times"></i></button>
+        <h2 style="margin-bottom:10px; color:var(--primary);">Place Your Bid</h2>
+        <p style="color:#888; font-size:14px; margin-bottom:25px;">The owner will review your offer and details before accepting.</p>
+        
+        <div style="display:grid; gap:20px;">
+          <input type="hidden" id="bidCarId">
+          <div>
+            <label style="font-size:12px; color:#666; display:block; margin-bottom:5px;">Full Legal Name</label>
+            <input type="text" id="buyerName" placeholder="Karthik" required>
+          </div>
+          <div>
+            <label style="font-size:12px; color:#666; display:block; margin-bottom:5px;">Mobile Number</label>
+            <input type="tel" id="buyerMobile" placeholder="9550662993" required>
+          </div>
+          <div>
+            <label style="font-size:12px; color:#666; display:block; margin-bottom:5px;">Identity Proof No. (Aadhar/Passport)</label>
+            <input type="text" id="buyerIdProof" placeholder="4228 0790 1230" required>
+          </div>
+          <div>
+            <label style="font-size:12px; color:#666; display:block; margin-bottom:5px;">Your Offer (₹)</label>
+            <input type="number" id="offeredPrice" required>
+          </div>
+          <button class="buy-btn" id="submitBidBtn" onclick="submitBid()">Send Buy Request</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+<script>
+
+const API_BASE = "/api";
+
+
+// 🔥 LOGIN PROTECTION
+const user = JSON.parse(localStorage.getItem("car_rental_user"));
+
+if(!user || !user.email){
+  alert("Please login first ❌");
+  window.location.href = "../login/login.html";
+}
+
+
+let cars = [];
+
+const resultContainer = document.getElementById("results");
+const noResult = document.getElementById("noResults");
+
+
+// ⭐ Escape HTML (VERY IMPORTANT — prevents XSS)
+function escapeHTML(str){
+  return String(str || "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+
+
+// ✅ Safe image parser
+function getImage(imagesStr){
+  try{
+    const arr = JSON.parse(imagesStr || "[]");
+    return arr.length
+      ? arr[0]
+      : "https://via.placeholder.com/400x200?text=No+Image";
+  }catch{
+    return "https://via.placeholder.com/400x200?text=No+Image";
+  }
+}
+
+
+
+// 🔥 FETCH APPROVED SELLING CARS
+async function fetchSellingCars(){
+
+  resultContainer.innerHTML="";
+  noResult.style.display="none";
+
+  try{
+
+    const res = await fetch(
+      `${API_BASE}/approved-selling/${user.email}`
+    );
+
+    if(!res.ok){
+      throw new Error("API failed");
+    }
+
+    const data = await res.json();
+
+    if(!data.success){
+      throw new Error("Backend returned failure");
+    }
+
+    cars = data.cars || [];
+
+    displayCars(cars);
+
+  }catch(err){
+
+    console.error("FETCH ERROR:", err);
+
+    noResult.style.display = "block";
+    noResult.innerText = "Unable to load cars ❌";
+
+  }
+}
+
+
+
+// 🔥 DISPLAY CARS (SAFER VERSION)
+function displayCars(list){
+
+  resultContainer.innerHTML = "";
+
+  if(list.length === 0){
+    noResult.style.display = "block";
+    return;
+  }
+
+  noResult.style.display = "none";
+
+  list.forEach(car => {
+
+    const img = getImage(car.images);
+
+    const safeCompany = escapeHTML(car.company);
+    const safeModel = escapeHTML(car.model);
+    const safeDesc = escapeHTML(car.description || "No description");
+
+    resultContainer.innerHTML += `
+      <div class="car-card">
+
+        <img src="${img}" alt="${safeCompany}">
+
+        <div class="card-body">
+
+          <div class="car-title">
+            ${safeCompany} ${safeModel}
+          </div>
+
+          <div class="details">
+
+            <b>Year:</b> ${escapeHTML(car.year) || "-"}<br>
+
+            <b>KM:</b> ${escapeHTML(car.km) || "-"}<br>
+
+            <b>Fuel:</b> ${escapeHTML(car.fuel) || "-"}<br>
+
+            <b>Transmission:</b> ${escapeHTML(car.transmission) || "-"}<br>
+
+            <b>Owner Type:</b> ${escapeHTML(car.owner_type) || "-"}<br>
+
+            <b>Location:</b> ${escapeHTML(car.location) || "-"}<br>
+
+            <div class="price">
+              ₹${car.selling_price || 0}
+            </div>
+
+          </div>
+
+          <div class="btn-row">
+
+            <button class="buy-btn"
+              onclick="openBidModal(${car.id}, ${car.selling_price})">
+              Buy / Negotiate
+            </button>
+
+            <button class="info-btn"
+              onclick="showDetails('${safeCompany}','${safeModel}','${safeDesc}')">
+              Details
+            </button>
+
+          </div>
+        </div>
+      </div>
+    `;
+  });
+}
+
+function openBidModal(carId, askingPrice) {
+  document.getElementById('bidCarId').value = carId;
+  document.getElementById('offeredPrice').value = askingPrice;
+  document.getElementById('buyerName').value = user.name || "";
+  document.getElementById('bidModal').style.display = 'flex';
+}
+
+function closeModal() {
+  document.getElementById('bidModal').style.display = 'none';
+}
+
+async function submitBid() {
+  const carId = document.getElementById('bidCarId').value;
+  const name = document.getElementById('buyerName').value;
+  const mobile = document.getElementById('buyerMobile').value;
+  const idProof = document.getElementById('buyerIdProof').value;
+  const price = document.getElementById('offeredPrice').value;
+
+  if(!name || !mobile || !idProof || !price) {
+    alert("Please fill all details ⚠️");
+    return;
+  }
+
+  const btn = document.getElementById('submitBidBtn');
+  btn.disabled = true;
+  btn.innerText = "Sending Request...";
+
+  try {
+    const res = await fetch(`${API_BASE}/create-buy-request`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        car_id: carId,
+        buyer_email: user.email,
+        buyer_name: name,
+        buyer_mobile: mobile,
+        offered_price: price
+      })
+    });
+
+    const data = await res.json();
+    if(data.success) {
+      alert("Request sent! The owner will contact you. ✅");
+      closeModal();
+      window.location.href = "my_buy_request.html"; // Redirect to bids tracking
+    } else {
+      alert(data.message);
+    }
+  } catch (err) {
+    alert("Server error ❌");
+  } finally {
+    btn.disabled = false;
+    btn.innerText = "Send Buy Request";
+  }
+}
+
+
+// SHOW DETAILS
+function showDetails(company,model,desc){
+
+  alert(`Car: ${company} ${model}\n\n${desc}`);
+}
+
+
+
+// FILTERS
+function applyFilters(){
+
+  const search =
+    document.getElementById("searchInput")
+    .value.toLowerCase();
+
+  const fuel =
+    document.getElementById("fuelFilter").value;
+
+  const trans =
+    document.getElementById("transmissionFilter").value;
+
+  const filtered = cars.filter(c => {
+
+    const match =
+      `${c.company} ${c.model}`
+      .toLowerCase()
+      .includes(search);
+
+    const fuelMatch =
+      fuel === "" || c.fuel === fuel;
+
+    const transMatch =
+      trans === "" || c.transmission === trans;
+
+    return match && fuelMatch && transMatch;
+  });
+
+  displayCars(filtered);
+}
+
+
+
+fetchSellingCars();
+
+</script>
+
+
+
+
+</body>
+</html>

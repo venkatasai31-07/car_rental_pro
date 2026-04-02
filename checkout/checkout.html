@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secure Checkout | CarRentalPro</title>
+
+  <!-- External Resources -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+  <style>
+    :root {
+      --primary: #00c9a7;
+      --secondary: #7f5cff;
+      --accent: #9b7cff;
+      --dark: #0b0a12;
+      --dark-elevated: #151320;
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+    body {
+      background: var(--dark);
+      color: white;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    header {
+      background: rgba(11, 10, 18, 0.8);
+      backdrop-filter: blur(20px);
+      padding: 20px 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--glass-border);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    header h1 {
+      font-size: 24px;
+      font-weight: 800;
+      background: linear-gradient(to right, white, var(--primary));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .secure-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 16px;
+      background: rgba(0, 201, 167, 0.1);
+      border-radius: 100px;
+      color: var(--primary);
+      font-size: 13px;
+      font-weight: 600;
+      border: 1px solid rgba(0, 201, 167, 0.2);
+    }
+
+    /* Layout */
+    .checkout-container {
+      max-width: 1400px;
+      margin: 40px auto 100px;
+      padding: 0 8%;
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 40px;
+    }
+
+    /* Steps Tracker */
+    .steps-tracker {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 40px;
+      gap: 60px;
+      position: relative;
+    }
+
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .step-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--dark-elevated);
+      border: 2px solid var(--glass-border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #666;
+      transition: var(--transition);
+    }
+
+    .step.active .step-icon {
+      background: var(--primary);
+      color: var(--dark);
+      border-color: var(--primary);
+      box-shadow: 0 0 20px rgba(0, 201, 167, 0.4);
+    }
+
+    .step.completed .step-icon {
+      background: var(--secondary);
+      color: white;
+      border-color: var(--secondary);
+    }
+
+    .step-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #666;
+    }
+
+    .step.active .step-label { color: white; }
+
+    /* Main Content */
+    .form-card {
+      background: var(--dark-elevated);
+      padding: 50px;
+      border-radius: 32px;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.4);
+    }
+
+    h3 { font-size: 28px; font-weight: 800; margin-bottom: 30px; }
+
+    .form-section {
+      display: none;
+      animation: slideIn 0.5s ease;
+    }
+
+    .form-section.active { display: block; }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+    }
+
+    .form-group { margin-bottom: 25px; }
+    .form-group.full { grid-column: 1 / -1; }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #888;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 16px 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      color: white;
+      font-size: 15px;
+      transition: var(--transition);
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--primary);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 0 4px rgba(0, 201, 167, 0.1);
+    }
+
+    /* Summary Sidebar */
+    .summary-sidebar {
+      position: sticky;
+      top: 120px;
+      height: fit-content;
+    }
+
+    .summary-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      padding: 30px;
+      border-radius: 24px;
+      border: 1px solid var(--glass-border);
+    }
+
+    .car-preview {
+      width: 100%;
+      height: 180px;
+      border-radius: 16px;
+      object-fit: cover;
+      margin-bottom: 20px;
+      background: #2a2545;
+    }
+
+    .car-name { font-size: 20px; font-weight: 700; margin-bottom: 10px; }
+    .rental-type {
+      display: inline-block;
+      padding: 4px 12px;
+      background: var(--secondary);
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .divider { height: 1px; background: var(--glass-border); margin: 25px 0; }
+
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: 15px;
+      color: #aaa;
+    }
+
+    .price-row.total {
+      font-size: 24px;
+      font-weight: 800;
+      color: white;
+      margin-top: 10px;
+    }
+
+    .cta-btn {
+      width: 100%;
+      padding: 18px;
+      border-radius: 16px;
+      border: none;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-top: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #00e0b9);
+      color: var(--dark);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 201, 167, 0.3);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--glass-border);
+      color: white;
+    }
+
+    .btn-outline:hover { background: rgba(255, 255, 255, 0.05); }
+
+    /* Animations */
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      50% { transform: translateX(8px); }
+      75% { transform: translateX(-8px); }
+    }
+
+    @media (max-width: 1024px) {
+      .checkout-container { grid-template-columns: 1fr; }
+      .summary-sidebar { position: static; }
+      .form-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+    <link rel="stylesheet" href="../ai_assistant/roadmind.css">
+    <script src="../ai_assistant/roadmind.js" defer></script>
+</head>
+<body>
+
+  <header>
+    <h1>CarRentalPro</h1>
+    <div class="secure-badge">
+      <i class="fas fa-shield-alt"></i>
+      <span>256-Bit SSL Secure Checkout</span>
+    </div>
+  </header>
+
+  <main class="checkout-container">
+    
+    <!-- Step Tracker -->
+    <div class="steps-tracker">
+      <div class="step active" id="step1-indicator">
+        <div class="step-icon">1</div>
+        <span class="step-label">Verification</span>
+      </div>
+      <div class="step" id="step2-indicator">
+        <div class="step-icon">2</div>
+        <span class="step-label">Add-ons</span>
+      </div>
+      <div class="step" id="step3-indicator">
+        <div class="step-icon">3</div>
+        <span class="step-label">Payment</span>
+      </div>
+    </div>
+
+    <!-- Main Form Area -->
+    <section class="form-card">
+      
+      <!-- Step 1: Verification Details -->
+      <div class="form-section active" id="section1">
+        <h3>Primary Driver Information</h3>
+        <p style="color: #888; margin-bottom: 35px;">Please verify your details for insurance and registration purposes.</p>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Full Legal Name</label>
+            <input type="text" id="custName" placeholder="Enter as per ID">
+          </div>
+          <div class="form-group">
+            <label>Identity Proof No. (Aadhar/Passport)</label>
+            <input type="text" id="idProof" placeholder="For verification on arrival">
+          </div>
+          <div class="form-group">
+            <label>Mobile Number</label>
+            <input type="tel" id="custMobile" placeholder="Contact for delivery">
+          </div>
+          <div class="form-group">
+            <label>Emergency Nominee</label>
+            <input type="text" id="custNominee" placeholder="Relation & Name">
+          </div>
+          
+          <div class="form-group full" id="locationGroup" style="display:none;">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+              <div>
+                <label>Pickup Location</label>
+                <input type="text" id="pickupLoc" placeholder="Search address...">
+              </div>
+              <div>
+                <label>Drop Location</label>
+                <input type="text" id="dropLoc" placeholder="Search address...">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group full" id="dateGroup">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+              <div>
+                <label>Arrival Date & Time</label>
+                <input type="datetime-local" id="pickupDate">
+              </div>
+              <div>
+                <label>Return Date & Time</label>
+                <input type="datetime-local" id="dropDate">
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <button class="cta-btn btn-primary" onclick="nextStep(2)">
+          <span>Continue to Preferences</span>
+          <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+
+      <!-- Step 2: Protection & Add-ons -->
+      <div class="form-section" id="section2">
+        <h3>Protection & Preferences</h3>
+        <p style="color: #888; margin-bottom: 35px;">Enhance your journey with our premium protection plans and optional add-ons.</p>
+        
+        <div class="form-group full">
+          <label>Protection Plan</label>
+          <select id="protectionPlan" onchange="updateTotal()">
+            <option value="0">Standard Liability (Included)</option>
+            <option value="999">Premium Protection (+₹999/day)</option>
+            <option value="1999">Full Coverage Zero-Deductible (+₹1,999/day)</option>
+          </select>
+        </div>
+
+        <div class="form-group full">
+          <label>Add-ons</label>
+          <div style="display: grid; gap: 15px;">
+            <label style="display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; cursor: pointer;">
+              <input type="checkbox" style="width: 20px;" id="addon_gps" onchange="updateTotal()">
+              <span>Pre-installed GPS Navigation (+₹200)</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; cursor: pointer;">
+              <input type="checkbox" style="width: 20px;" id="addon_wifi" onchange="updateTotal()">
+              <span>4G LTE In-Car Wi-Fi Hub (+₹500)</span>
+            </label>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 20px;">
+          <button class="cta-btn btn-outline" onclick="prevStep(1)">Back</button>
+          <button class="cta-btn btn-primary" onclick="nextStep(3)">Review & Pay</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Final Review & Razorpay -->
+      <div class="form-section" id="section3">
+        <h3>Final Confirmation</h3>
+        <p style="color: #888; margin-bottom: 35px;">Once you confirm, we'll process your transaction securely via Razorpay.</p>
+        
+        <div style="background: rgba(0, 201, 167, 0.05); padding: 30px; border-radius: 20px; border: 1px solid rgba(0, 201, 167, 0.1); margin-bottom: 30px;">
+          <div style="display: flex; align-items: center; gap: 20px;">
+            <i class="fas fa-check-circle" style="font-size: 32px; color: var(--primary);"></i>
+            <div>
+              <p style="font-weight: 700; margin-bottom: 5px;">Your vehicle is on hold</p>
+              <p style="font-size: 14px; color: #888;">Complete payment within 15 minutes to secure this rate.</p>
+            </div>
+          </div>
+        </div>
+
+        <button class="cta-btn btn-primary" id="payBtn" onclick="initiatePayment()">
+          <i class="fas fa-lock"></i>
+          <span>Pay Securely Now</span>
+        </button>
+        <button class="cta-btn btn-outline" onclick="prevStep(2)">Modify Options</button>
+      </div>
+
+    </section>
+
+    <!-- Summary Sidebar -->
+    <aside class="summary-sidebar">
+      <div class="summary-card">
+        <img id="carImg" class="car-preview" src="" alt="Car Image">
+        <div class="rental-type" id="carTypeDisplay"></div>
+        <h4 class="car-name" id="carNameDisplay"></h4>
+        
+        <div class="divider"></div>
+        
+        <div class="price-row" id="rateRow">
+          <span id="rateLabel">Rate</span>
+          <span id="displayRate">₹0</span>
+        </div>
+        <div class="price-row" id="durationRow">
+          <span>Duration</span>
+          <span id="duration">0 days</span>
+        </div>
+        <div class="price-row" id="protectionRow" style="display:none;">
+          <span>Protection plan</span>
+          <span id="protectionPrice">₹0</span>
+        </div>
+        <div class="price-row" id="addonRow" style="display:none;">
+          <span>Add-ons</span>
+          <span id="addonPrice">₹0</span>
+        </div>
+        <div class="price-row">
+          <span>Service Tax (5%)</span>
+          <span id="taxAmount">₹0</span>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="price-row total">
+          <span>Total</span>
+          <span id="totalPrice">₹0</span>
+        </div>
+
+        <div style="margin-top: 30px; display: flex; align-items: center; gap: 15px;">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Razorpay_logo.svg" style="height: 20px; opacity: 0.6;" alt="Razorpay">
+          <span style="font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 1px;">Partnered Payment Provider</span>
+        </div>
+      </div>
+    </aside>
+
+  </main>
+
+  <script>
+    const API_BASE = "/api";
+    let bookingData = JSON.parse(localStorage.getItem('pendingBooking')) || {};
+    let currentStep = 1;
+    let finalTotal = 0;
+
+    // Initialization
+    window.onload = () => {
+      const user = JSON.parse(localStorage.getItem("car_rental_user"));
+      if (!user) window.location.href = "../login/login.html";
+
+      if (!bookingData.carId && !bookingData.requestId) {
+        alert("Session expired. Please select a car again.");
+        window.location.href = "../book_car/book_car.html";
+      }
+
+      // Populate UI
+      document.getElementById('carImg').src = bookingData.carImg || "https://via.placeholder.com/400x200?text=No+Image";
+      document.getElementById('carNameDisplay').innerText = bookingData.carName;
+      document.getElementById('carTypeDisplay').innerText = bookingData.type || 'Purchase';
+      document.getElementById('custName').value = user.name || '';
+      document.body.className = bookingData.flowType; // 'rent' or 'buy'
+      
+      if(bookingData.pickupLocMap) document.getElementById('pickupLoc').value = bookingData.pickupLocMap;
+      if(bookingData.dropLocMap) document.getElementById('dropLoc').value = bookingData.dropLocMap;
+
+      if (bookingData.flowType === 'buy') {
+        document.getElementById('step2-indicator').style.display = 'none';
+        document.getElementById('section2').innerHTML = ""; // Clear rental specific content
+        document.getElementById('custNominee').parentNode.style.display = 'none';
+        document.getElementById('dateGroup').style.display = 'none';
+        document.getElementById('step1-indicator').querySelector('.step-label').innerText = "Buyer Info";
+      } else if (bookingData.type === 'With Driver') {
+        document.getElementById('locationGroup').style.display = 'block';
+      }
+      
+      updateTotal();
+    };
+
+    function updateTotal() {
+      const pDate = document.getElementById('pickupDate').value;
+      const dDate = document.getElementById('dropDate').value;
+      const isBuy = bookingData.flowType === 'buy';
+      
+      let basePrice = Number(bookingData.price) || 0;
+      let days = 1;
+
+      if (!isBuy && pDate && dDate) {
+        const diff = new Date(dDate) - new Date(pDate);
+        days = Math.max(1, Math.ceil(diff / (1000 * 60 * 60 * 24)));
+      }
+
+      let subtotal = 0;
+      if (isBuy) {
+        subtotal = basePrice;
+        document.getElementById('rateLabel').innerText = "Sale Price";
+        document.getElementById('displayRate').innerText = `₹${basePrice.toLocaleString()}`;
+        document.getElementById('durationRow').style.display = 'none';
+      } else if (bookingData.type === 'With Driver') {
+        subtotal = basePrice; // Base price is already the calculated mapped fare
+        document.getElementById('rateLabel').innerText = "Distance Fare";
+        document.getElementById('displayRate').innerText = `₹${basePrice.toLocaleString()}`;
+        document.getElementById('durationRow').style.display = 'none'; // Not daily
+      } else {
+        let dailyRate = Math.round(basePrice / 30);
+        subtotal = dailyRate * days;
+        document.getElementById('rateLabel').innerText = "Daily Rate (from Monthly)";
+        document.getElementById('displayRate').innerText = `₹${dailyRate.toLocaleString()}`;
+        document.getElementById('durationRow').style.display = 'flex';
+        document.getElementById('duration').innerText = `${days} Days`;
+      }
+      
+      // Protection & Addons (Only for Rent)
+      let protection = 0;
+      let addons = 0;
+
+      if (!isBuy) {
+        if (bookingData.type === 'With Driver' && (!pDate || !dDate)) {
+           days = 1; // Default to 1 day for With Driver map calculated trips if dates not yet filled
+        }
+        
+        protection = parseInt(document.getElementById('protectionPlan').value) * days;
+        if (document.getElementById('addon_gps').checked) addons += (200 * days);
+        if (document.getElementById('addon_wifi').checked) addons += (500 * days);
+        
+        document.getElementById('protectionRow').style.display = protection > 0 ? 'flex' : 'none';
+        document.getElementById('addonRow').style.display = addons > 0 ? 'flex' : 'none';
+        document.getElementById('protectionPrice').innerText = `₹${protection.toLocaleString()}`;
+        document.getElementById('addonPrice').innerText = `₹${addons.toLocaleString()}`;
+      } else {
+        document.getElementById('protectionRow').style.display = 'none';
+        document.getElementById('addonRow').style.display = 'none';
+        // Hide Step 2 for Buy flow if needed? Or just skip it.
+      }
+
+      let totalBeforeTax = subtotal + protection + addons;
+      let tax = Math.round(totalBeforeTax * 0.05); // 5% tax
+      finalTotal = Math.round(totalBeforeTax + tax);
+
+      document.getElementById('taxAmount').innerText = `₹${tax.toLocaleString()}`;
+      document.getElementById('totalPrice').innerText = `₹${finalTotal.toLocaleString()}`;
+    }
+
+    function nextStep(step) {
+      if (step === 2 && bookingData.flowType === 'buy') {
+        nextStep(3);
+        return;
+      }
+
+      if (step === 2) {
+        if (!document.getElementById('custName').value || !document.getElementById('custMobile').value) {
+          alert("Please fill in contact details ⚠️");
+          return;
+        }
+        if (bookingData.type === 'With Driver') {
+          if (!document.getElementById('pickupLoc').value || !document.getElementById('dropLoc').value) {
+            alert("Please fill in pickup and drop locations ⚠️");
+            return;
+          }
+        }
+      }
+      
+      document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
+      document.getElementById(`section${step}`).classList.add('active');
+      
+      document.querySelectorAll('.step').forEach((s, idx) => {
+        if (idx + 1 < step) s.classList.add('completed');
+        if (idx + 1 === step) {
+          s.classList.add('active');
+          s.classList.remove('completed');
+        }
+        if (idx + 1 > step) {
+          s.classList.remove('active');
+          s.classList.remove('completed');
+        }
+      });
+      
+      currentStep = step;
+      window.scrollTo(0, 0);
+    }
+
+    function prevStep(step) {
+      nextStep(step);
+    }
+
+    async function initiatePayment() {
+      if (!finalTotal || finalTotal <= 0) {
+        alert("Invalid payment amount. Please try again.");
+        return;
+      }
+      const payBtn = document.getElementById('payBtn');
+      payBtn.disabled = true;
+      payBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Checking availability...';
+
+      // ✅ Check availability BEFORE payment for Rental bookings
+      if (bookingData.flowType === 'rent') {
+        const pickup = document.getElementById('pickupDate').value;
+        const drop = document.getElementById('dropDate').value;
+
+        if (pickup && drop) {
+          try {
+            const availRes = await fetch(`${API_BASE}/check-car-availability`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                car_id: bookingData.carId,
+                pickup_datetime: pickup,
+                drop_datetime: drop
+              })
+            });
+            const availData = await availRes.json();
+
+            if (!availData.available) {
+              // Show a clean styled alert
+              payBtn.disabled = false;
+              payBtn.innerHTML = '<i class="fas fa-lock"></i> Pay Securely Now';
+
+              // Show booking conflict info
+              const existingAlert = document.getElementById('bookingConflictAlert');
+              if (existingAlert) existingAlert.remove();
+
+              const alertDiv = document.createElement('div');
+              alertDiv.id = 'bookingConflictAlert';
+              alertDiv.style.cssText = `
+                background: rgba(255, 107, 107, 0.1);
+                border: 1px solid rgba(255, 107, 107, 0.4);
+                border-radius: 14px;
+                padding: 18px 22px;
+                margin-bottom: 20px;
+                color: #ff6b6b;
+                font-size: 14px;
+                line-height: 1.7;
+                animation: shake 0.4s ease;
+              `;
+              alertDiv.innerHTML = `
+                <div style="font-weight:700; font-size:16px; margin-bottom:6px;">
+                  🚫 Car Not Available
+                </div>
+                <div>${availData.message}</div>
+                <div style="margin-top:10px; font-size:12px; color:#aaa;">
+                  Please go back and select different dates to proceed.
+                </div>
+              `;
+              payBtn.parentNode.insertBefore(alertDiv, payBtn);
+              window.scrollTo(0, document.body.scrollHeight);
+              return;
+            }
+          } catch (e) {
+            // If availability check fails, still allow (backend double-checks anyway)
+            console.warn('Availability check failed, proceeding:', e);
+          }
+        }
+      }
+
+      payBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Initializing Security Layer...';
+
+      try {
+        const orderRes = await fetch(`${API_BASE}/create-razorpay-order`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ amount: finalTotal })
+        });
+
+        const orderData = await orderRes.json();
+        if (!orderData.success) throw new Error(orderData.message || "Order creation failed");
+
+        const options = {
+          "key": orderData.key_id,
+          "amount": orderData.amount,
+          "currency": "INR",
+          "name": "CarRentalPro Premium",
+          "description": `Transaction for ${bookingData.carName}`,
+          "order_id": orderData.order_id,
+          "handler": async function (response) {
+            verifyPayment(response);
+          },
+          "prefill": {
+            "name": document.getElementById('custName').value,
+            "contact": document.getElementById('custMobile').value,
+            "email": JSON.parse(localStorage.getItem("car_rental_user")).email
+          },
+          "theme": { "color": "#7f5cff" },
+          "modal": {
+            "ondismiss": function() {
+               payBtn.disabled = false;
+               payBtn.innerHTML = '<i class="fas fa-lock"></i> Pay Securely Now';
+            }
+          }
+        };
+
+        const rzp = new Razorpay(options);
+        rzp.open();
+
+      } catch (err) {
+        console.error("PAYMENT INIT ERROR:", err);
+        alert("Payment initialization failed: " + err.message);
+        payBtn.disabled = false;
+        payBtn.innerHTML = '<i class="fas fa-lock"></i> Pay Securely Now';
+      }
+    }
+
+    async function verifyPayment(response) {
+      try {
+        const verifyRes = await fetch(`${API_BASE}/verify-payment`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature: response.razorpay_signature
+          })
+        });
+
+        const vData = await verifyRes.json();
+        if (vData.success) {
+          finalizeBooking(response.razorpay_payment_id);
+        } else {
+          window.location.href = "payment-failed.html";
+        }
+      } catch (e) {
+        window.location.href = "payment-failed.html";
+      }
+    }
+
+    async function finalizeBooking(paymentId) {
+      // Save to database based on type (rent/buy)
+      const user = JSON.parse(localStorage.getItem("car_rental_user"));
+      const isBuy = bookingData.flowType === 'buy';
+      const endpoint = isBuy ? '/finalize-purchase' : '/book-car';
+      
+      const payload = {
+        payment_id: paymentId,
+        total_cost: finalTotal,
+        customer_email: user.email
+      };
+
+      if (isBuy) {
+        Object.assign(payload, {
+          request_id: bookingData.requestId,
+          car_name: bookingData.carName
+        });
+      } else {
+        Object.assign(payload, {
+          car_id: bookingData.carId,
+          car_name: bookingData.carName,
+          rental_type: bookingData.type,
+          customer_name: document.getElementById('custName').value,
+          customer_mobile: document.getElementById('custMobile').value,
+          nominee: document.getElementById('custNominee').value,
+          pickup_location: document.getElementById('pickupLoc').value,
+          drop_location: document.getElementById('dropLoc').value,
+          pickup_datetime: document.getElementById('pickupDate').value,
+          drop_datetime: document.getElementById('dropDate').value,
+          protection_plan: document.getElementById('protectionPlan').value,
+          driver_name: bookingData.driverName,
+          driver_mobile: bookingData.driverMobile,
+          needs_platform_driver: bookingData.needsDriver || false
+        });
+      }
+
+      const res = await fetch(`${API_BASE}${endpoint}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok) {
+        const flow = bookingData.flowType || 'rent';
+        const car = encodeURIComponent(bookingData.carName || 'Vehicle');
+        localStorage.removeItem('pendingBooking');
+        window.location.href = `payment-success.html?id=${paymentId}&type=${flow}&car=${car}`;
+      } else {
+        window.location.href = "payment-failed.html";
+      }
+    }
+
+    // Listeners
+    document.getElementById('pickupDate').addEventListener('change', updateTotal);
+    document.getElementById('dropDate').addEventListener('change', updateTotal);
+  </script>
+</body>
+</html>

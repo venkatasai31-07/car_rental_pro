@@ -1,0 +1,44 @@
+# Secrets
+backend/.env
+# This ignores all .env files in any subdirectory
+**/.env
+.env
+*.env
+*.key
+*.pem
+
+# Dependencies
+node_modules/
+venv/
+env/
+.venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDE configurations
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker (unless you want to push them)
+# Dockerfile
+# .dockerignore
+# In this case, the user explicitly asked to push them, so they are NOT ignored.
+docker-compose.yml
+
+docker-compose.yml
+
+# SQLite database files
+*.db
+*.db-shm
+*.db-wal
+
+*.pkl
+*.db
+chroma_store/

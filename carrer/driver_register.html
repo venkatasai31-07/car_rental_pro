@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Registration | CarRentalPro</title>
+    
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #00fa9a;
+            --primary-dark: #00c9a7;
+            --secondary: #7f5cff;
+            --dark: #080810;
+            --dark-card: #12121e;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-main: #ffffff;
+            --text-dim: #94a3b8;
+            --grad-main: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .logo { font-family: 'Outfit', sans-serif; }
+
+        /* Navbar */
+        header {
+            width: 100%;
+            padding: 20px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(8, 8, 16, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text-main);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span {
+            background: var(--grad-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .back-nav {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+        }
+
+        .back-nav:hover {
+            color: var(--primary);
+        }
+
+        /* Container */
+        .container {
+            margin: 120px auto 60px;
+            width: 100%;
+            max-width: 900px;
+            padding: 0 20px;
+        }
+
+        .hero-text {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .hero-text h1 {
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+        .hero-text p {
+            color: var(--text-dim);
+            font-size: 16px;
+        }
+
+        /* Form Card */
+        .form-card {
+            background: var(--dark-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            animation: fadeInUp 0.8s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: var(--grad-main);
+        }
+
+        .section-title {
+            font-size: 20px;
+            color: var(--primary);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        .section-title:first-child {
+            margin-top: 0;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .input-group label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dim);
+            margin-left: 5px;
+        }
+
+        .input-group input, 
+        .input-group select, 
+        .input-group textarea {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 14px 18px;
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 15px;
+            transition: 0.3s;
+            outline: none;
+        }
+
+        .input-group input:focus, 
+        .input-group select:focus, 
+        .input-group textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(0, 250, 154, 0.1);
+        }
+
+        .input-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        select option {
+            background: var(--dark-card);
+            color: var(--text-main);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: var(--grad-main);
+            color: var(--dark);
+            border: none;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: 800;
+            font-family: 'Outfit', sans-serif;
+            cursor: pointer;
+            margin-top: 40px;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(0, 250, 154, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Error/Success Messages */
+        .message-box {
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            display: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .message-box.error {
+            background: rgba(255, 71, 87, 0.1);
+            color: #ff4757;
+            border: 1px solid rgba(255, 71, 87, 0.2);
+        }
+
+        .message-box.success {
+            background: rgba(0, 250, 154, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(0, 250, 154, 0.2);
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .form-card { padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="../home/home.html" class="logo">
+            <i class="fas fa-bolt" style="color: var(--primary);"></i>
+            CarRental<span>Pro</span>
+        </a>
+        <a href="../home/home.html" class="back-nav">
+            <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
+    </header>
+
+    <div class="container">
+        <div class="hero-text">
+            <h1>Join Our Driver Fleet</h1>
+            <p>Become a professional driver with CarRentalPro and unlock premium earning opportunities.</p>
+        </div>
+
+        <div class="form-card">
+            <div id="statusMessage" class="message-box"></div>
+
+            <form id="driverForm">
+                <!-- Personal Info -->
+                <div class="section-title"><i class="fas fa-user"></i> Personal Information</div>
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label>Full Name</label>
+                        <input type="text" id="full_name" placeholder="John Doe" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Email Address</label>
+                        <input type="email" id="email" placeholder="john@example.com" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Mobile Number</label>
+                        <input type="tel" id="mobile" placeholder="9876543210" pattern="[0-9]{10}" title="10 digit mobile number" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Date of Birth</label>
+                        <input type="date" id="dob" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Gender</label>
+                        <select id="gender" required>
+                            <option value="" disabled selected>Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group" style="margin-top: 20px;">
+                    <label>Complete Address</label>
+                    <textarea id="address" placeholder="Enter your full residential address" required></textarea>
+                </div>
+
+                <!-- License Info -->
+                <div class="section-title"><i class="fas fa-id-card"></i> License Validation</div>
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label>License Number</label>
+                        <input type="text" id="license_number" placeholder="DL-1420110012345" required>
+                    </div>
+                    <div class="input-group">
+                        <label>License Type</label>
+                        <select id="license_type" required>
+                            <option value="" disabled selected>Select License Type</option>
+                            <option value="LMV">Light Motor Vehicle (LMV)</option>
+                            <option value="HMV">Heavy Motor Vehicle (HMV)</option>
+                            <option value="Commercial">Commercial</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>License Expiry Date</label>
+                        <input type="date" id="license_expiry" required>
+                    </div>
+                </div>
+
+                <!-- Vehicle Info -->
+                <div class="section-title"><i class="fas fa-car-side"></i> Vehicle Capabilities</div>
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label>Primary Vehicle Type</label>
+                        <select id="vehicle_type" required>
+                            <option value="" disabled selected>Select Primary Type</option>
+                            <option value="Sedan">Sedan</option>
+                            <option value="SUV">SUV</option>
+                            <option value="Hatchback">Hatchback</option>
+                            <option value="Luxury">Luxury</option>
+                            <option value="Truck/Carrier">Truck (For Parcels)</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Owned Vehicle Model (If any)</label>
+                        <input type="text" id="vehicle_model" placeholder="E.g., Toyota Innova Crysta">
+                    </div>
+                </div>
+
+                <!-- Bank Info -->
+                <div class="section-title"><i class="fas fa-university"></i> Bank Details (For Payouts)</div>
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label>Account Number</label>
+                        <input type="text" id="account_number" placeholder="Enter Account Number">
+                    </div>
+                    <div class="input-group">
+                        <label>IFSC Code</label>
+                        <input type="text" id="ifsc_code" placeholder="Enter IFSC Code">
+                    </div>
+                    <div class="input-group">
+                        <label>UPI ID (Optional)</label>
+                        <input type="text" id="upi_id" placeholder="username@upi">
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px; display: flex; align-items: flex-start; gap: 10px; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; border: 1px solid var(--glass-border);">
+                    <input type="checkbox" id="terms" required style="margin-top: 4px; accent-color: var(--primary); transform: scale(1.2);">
+                    <label for="terms" style="font-size: 13px; color: var(--text-dim); line-height: 1.6;">
+                        I confirm that the details provided are accurate. I hold a valid driving license and consent to background verification. I agree to maintain professional conduct and follow platform policies.
+                    </label>
+                </div>
+
+                <button type="submit" id="submitBtn" class="submit-btn">
+                    Submit Application <i class="fas fa-check-circle"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('driverForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const btn = document.getElementById('submitBtn');
+            const statusBox = document.getElementById('statusMessage');
+            
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+            btn.disabled = true;
+            statusBox.style.display = 'none';
+
+            const payload = {
+                full_name: document.getElementById('full_name').value,
+                email: document.getElementById('email').value,
+                mobile: document.getElementById('mobile').value,
+                dob: document.getElementById('dob').value,
+                gender: document.getElementById('gender').value,
+                address: document.getElementById('address').value,
+                license_number: document.getElementById('license_number').value,
+                license_type: document.getElementById('license_type').value,
+                license_expiry: document.getElementById('license_expiry').value,
+                vehicle_type: document.getElementById('vehicle_type').value,
+                vehicle_model: document.getElementById('vehicle_model').value,
+                account_number: document.getElementById('account_number').value,
+                ifsc_code: document.getElementById('ifsc_code').value,
+                upi_id: document.getElementById('upi_id').value
+            };
+
+            try {
+                const response = await fetch('/api/register-driver', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    statusBox.className = 'message-box success';
+                    statusBox.innerHTML = '<i class="fas fa-check-circle"></i> ' + data.message;
+                    statusBox.style.display = 'block';
+                    document.getElementById('driverForm').reset();
+                    
+                    // Redirect to home after 3 seconds
+                    setTimeout(() => {
+                        window.location.href = '../home/home.html';
+                    }, 3000);
+                } else {
+                    statusBox.className = 'message-box error';
+                    statusBox.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + (data.message || 'Registration failed.');
+                    statusBox.style.display = 'block';
+                }
+            } catch (err) {
+                console.error(err);
+                statusBox.className = 'message-box error';
+                statusBox.innerHTML = '<i class="fas fa-exclamation-circle"></i> Connection error. Please make sure backend is running.';
+                statusBox.style.display = 'block';
+            } finally {
+                btn.innerHTML = 'Submit Application <i class="fas fa-check-circle"></i>';
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

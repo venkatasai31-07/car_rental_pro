@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Car Rental System - Login</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #00c9a7;
+      --secondary: #7f5cff;
+      --accent: #9b7cff;
+      --dark: #0b0a12;
+      --dark-elevated: #151320;
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+    body {
+      height: 100vh;
+      background: var(--dark);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1000px;
+      height: 600px;
+      display: flex;
+      background: var(--dark-elevated);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--glass-border);
+      animation: fadeInUp 0.8s ease;
+    }
+
+    .left-section {
+      width: 50%;
+      background: linear-gradient(rgba(11, 10, 18, 0.2), rgba(11, 10, 18, 0.6)), 
+                  url('../login/login_car_bg.jpeg') center/cover no-repeat;
+      position: relative;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 40px;
+      background: linear-gradient(to top, var(--dark), transparent);
+    }
+
+    .overlay h2 {
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .right-section {
+      width: 50%;
+      padding: 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .right-section h2 {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      background: linear-gradient(to right, white, var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle { color: #aaa; margin-bottom: 35px; font-size: 15px; }
+
+    form input {
+      width: 100%;
+      padding: 15px 18px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      color: white;
+      margin-bottom: 20px;
+      font-size: 15px;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    form input:focus {
+      border-color: var(--primary);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 15px rgba(0, 201, 167, 0.1);
+    }
+
+    .options {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      margin-bottom: 25px;
+      align-items: center;
+    }
+
+    .options a { color: var(--primary); text-decoration: none; font-weight: 500; }
+
+    .remember-me { display: flex; align-items: center; gap: 8px; cursor: pointer; color: #aaa; }
+    .remember-me input { margin: 0; width: 18px; height: 18px; accent-color: var(--primary); }
+
+    .login-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--primary), #00e0b9);
+      border: none;
+      border-radius: 12px;
+      color: var(--dark);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 25px;
+      transition: 0.3s;
+    }
+
+    .login-btn:hover {
+      transform: scale(1.02);
+      box-shadow: 0 15px 30px rgba(0, 201, 167, 0.3);
+    }
+
+    .signup-link { text-align: center; font-size: 14px; color: #aaa; }
+    .signup-link a { color: var(--primary); text-decoration: none; font-weight: 600; }
+
+    .status {
+      display: none;
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+    <link rel="stylesheet" href="../ai_assistant/roadmind.css">
+    <link rel="stylesheet" href="../ai_assistant/terms_modal.css">
+    <script src="../ai_assistant/roadmind.js" defer></script>
+    <script src="../ai_assistant/terms_modal.js" defer></script>
+</head>
+
+<body>
+
+<div class="container">
+  <div class="left-section">
+    <div class="overlay">
+      <h2>Experience <br> the Elite Way.</h2>
+    </div>
+  </div>
+
+  <div class="right-section">
+    <h2>Welcome Back</h2>
+    <p class="subtitle">Enter your credentials to continue</p>
+
+    <form id="loginForm">
+      <input type="email" id="email" placeholder="Email Address" required>
+      <input type="password" id="password" placeholder="Password" required>
+
+      <div class="options">
+        <label class="remember-me">
+          <input type="checkbox" id="remember">
+          <span>Keep me logged in</span>
+        </label>
+        <a href="forgot_password/forgot_password.html">Forgot password?</a>
+      </div>
+
+      <div class="options" style="margin-bottom: 25px;">
+        <label>
+          <input type="checkbox" required id="termsAgree">
+          <span>I agree to the <a href="terms.html">Terms & Conditions</a></span>
+        </label>
+      </div>
+
+      <button class="login-btn" type="submit">Login</button>
+      <div class="status" id="statusMsg"></div>
+
+      <p class="signup-link">
+        New around here? <a href="signup/signup.html">Create Account</a>
+      </p>
+    </form>
+  </div>
+</div>
+
+<script>
+document.getElementById("loginForm").addEventListener("submit", async (e)=>{
+  e.preventDefault();
+
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const statusMsg = document.getElementById("statusMsg");
+  statusMsg.style.display = "none";
+
+  try{
+    const res = await fetch("/api/login",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({email,password})
+    });
+
+    const text = await res.text();
+    let data;
+
+    try{
+      data = JSON.parse(text);
+    }catch{
+      console.error("Non JSON response:", text);
+      throw new Error("Server returned HTML instead of JSON");
+    }
+    statusMsg.style.display = "block";
+    statusMsg.innerText = data.message;
+
+    if(data.success){
+      localStorage.setItem("car_rental_user", JSON.stringify({
+        loggedIn:true,
+        email:data.user.email,
+        first_name:data.user.first_name,
+        last_name:data.user.last_name,
+        role:data.role
+      }));
+
+      setTimeout(()=>{
+        if(data.role === "admin"){
+          window.location.href = "../admin/admin_choice.html";
+        }else{
+          window.location.href = "../home/home.html";
+        }
+      }, 900);
+    }
+
+  }catch(err){
+    statusMsg.style.display = "block";
+    statusMsg.innerText = "Server error ❌ Backend not running";
+  }
+});
+</script>
+
+</body>
+</html>

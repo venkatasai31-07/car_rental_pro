@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Selling Status - CarRentalPro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #00c9a7;
+      --secondary: #7f5cff;
+      --accent: #9b7cff;
+      --dark: #0b0a12;
+      --dark-elevated: #151320;
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --success: #2ecc71;
+      --warning: #f1c40f;
+      --danger: #e74c3c;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+    body {
+      background: var(--dark);
+      color: white;
+      padding: 40px 8%;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      background: var(--dark-elevated);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+      padding: 40px;
+      animation: fadeIn 0.8s ease;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      border-bottom: 1px solid var(--glass-border);
+      padding-bottom: 25px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    h2 {
+      font-size: 28px;
+      font-weight: 700;
+      background: linear-gradient(to right, white, var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .sub { color: #888; font-size: 14px; margin-top: 5px; }
+
+    .header-actions { display: flex; gap: 15px; align-items: center; }
+
+    .btn {
+      padding: 12px 24px;
+      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .btn:hover { background: rgba(255, 255, 255, 0.1); border-color: var(--primary); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--secondary), var(--accent));
+      border: none;
+      color: white;
+      font-weight: 600;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(127, 92, 255, 0.3); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 25px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: 0.3s;
+      display: flex;
+      flex-direction: column;
+    }
+    .card:hover { transform: translateY(-5px); border-color: var(--primary); }
+
+    .card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .card-content { padding: 25px; flex: 1; }
+
+    .card h3 { font-size: 18px; font-weight: 600; margin-bottom: 12px; }
+
+    .status-badge {
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .status-pending { background: rgba(241, 196, 15, 0.1); color: var(--warning); border: 1px solid rgba(241, 196, 15, 0.2); }
+    .status-approved { background: rgba(46, 204, 113, 0.1); color: var(--success); border: 1px solid rgba(46, 204, 113, 0.2); }
+    .status-rejected { background: rgba(231, 76, 60, 0.1); color: var(--danger); border: 1px solid rgba(231, 76, 60, 0.2); }
+
+    .info-list { font-size: 13px; color: #888; line-height: 1.8; }
+    .info-list b { color: #ccc; }
+    .price-tag { font-size: 20px; font-weight: 700; color: var(--primary); margin-top: 15px; }
+
+    .empty-state {
+      text-align: center;
+      padding: 80px 40px;
+      color: #666;
+      border: 2px dashed var(--glass-border);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.01);
+    }
+    .empty-state i { font-size: 48px; margin-bottom: 20px; color: #444; }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  </style>
+    <link rel="stylesheet" href="../ai_assistant/roadmind.css">
+    <script src="../ai_assistant/roadmind.js" defer></script>
+</head>
+<body>
+
+  <div class="container">
+    <div class="topbar">
+      <div>
+        <h2>My Sell Requests</h2>
+        <div class="sub">Monitor your car listings and verification status</div>
+      </div>
+      <div class="header-actions">
+        <a href="my_buy_request.html" class="btn btn-primary">
+          <i class="fas fa-hand-holding-usd"></i> Manage My Sales (Bids)
+        </a>
+        <a href="../home/home.html" class="btn">
+          <i class="fas fa-home"></i> Home
+        </a>
+      </div>
+    </div>
+
+    <div id="grid" class="grid"></div>
+    
+    <div id="empty" class="empty-state" style="display:none;">
+      <i class="fas fa-car-side"></i>
+      <p>No sell requests yet. Ready to sell your premium vehicle?</p>
+      <a href="sell_car.html" class="btn" style="margin-top:20px">List a Car Now</a>
+    </div>
+  </div>
+
+  <script>
+    const API = "/api";
+    const user = JSON.parse(localStorage.getItem("car_rental_user"));
+
+    if(!user || !user.email){
+      alert("Please login first ❌");
+      window.location.href="../login/login.html";
+    }
+
+    const grid = document.getElementById("grid");
+    const empty = document.getElementById("empty");
+
+    function getImage(imagesStr){
+      try{
+        const arr = JSON.parse(imagesStr || "[]");
+        return arr.length ? arr[0] : "https://via.placeholder.com/400x200?text=No+Image";
+      }catch{
+        return "https://via.placeholder.com/400x200?text=No+Image";
+      }
+    }
+
+    function getStatusClass(status){
+      if(status === "Approved") return "status-approved";
+      if(status === "Rejected") return "status-rejected";
+      return "status-pending";
+    }
+
+    async function loadStatus(){
+      try{
+        const res = await fetch(`${API}/my-selling-status/${user.email}`);
+        const data = await res.json();
+
+        if(!data.success || !data.cars || data.cars.length === 0){
+          empty.style.display="block";
+          return;
+        }
+
+        grid.innerHTML = "";
+        data.cars.forEach(car => {
+          const img = getImage(car.images);
+          grid.innerHTML += `
+            <div class="card">
+              <img src="${img}" alt="${car.company}">
+              <div class="card-content">
+                <span class="status-badge ${getStatusClass(car.status)}">${car.status}</span>
+                <h3>${car.company} ${car.model}</h3>
+                
+                <div class="info-list">
+                  <div><b>Year:</b> ${car.year}</div>
+                  <div><b>KM Driven:</b> ${Number(car.km).toLocaleString()} km</div>
+                  <div><b>Fuel:</b> ${car.fuel}</div>
+                  <div><b>Location:</b> ${car.location}</div>
+                </div>
+
+                <div class="price-tag">₹${Number(car.selling_price).toLocaleString()}</div>
+              </div>
+            </div>
+          `;
+        });
+
+      }catch(err){
+        console.error(err);
+        empty.style.display="block";
+        empty.innerHTML = `<i class="fas fa-exclamation-circle"></i><p>Unable to load status. Please try again later.</p>`;
+      }
+    }
+
+    loadStatus();
+  </script>
+</body>
+</html>

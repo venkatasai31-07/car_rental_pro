@@ -1,0 +1,13 @@
+Add your knowledge .txt files here.
+
+Examples:
+- cancellation_policy.txt   → Cancellation and refund rules
+- booking_guide.txt         → How to book a car
+- owner_guide.txt           → How car owners list and manage cars
+- admin_guide.txt           → Admin approval guidelines
+
+Each file should contain plain English text about your platform's policies.
+RoadMind will use these files to answer user questions about the platform.
+
+After adding or editing any file here, re-run:
+    python ai_assistant/rag/build_index.py

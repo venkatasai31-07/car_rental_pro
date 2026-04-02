@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CarRentalPro | Your Premium Journey Starts Here</title>
+  
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Icons (Simple CSS-based for speed) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #00c9a7;
+      --secondary: #7f5cff;
+      --accent: #9b7cff;
+      --dark: #0b0a12;
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: var(--dark);
+      color: white;
+      overflow-x: hidden;
+    }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      height: 100vh;
+      width: 100%;
+      background: linear-gradient(rgba(11, 10, 18, 0.7), rgba(11, 10, 18, 0.8)), 
+                  url('C:/Users/karth/.gemini/antigravity/brain/2e7cb03f-408e-468f-af69-19760eb55854/hero_car_bg_1773307591728.png');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Navbar */
+    nav {
+      padding: 25px 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      width: 100%;
+      z-index: 100;
+      background: linear-gradient(to bottom, rgba(11, 10, 18, 0.8), transparent);
+    }
+
+    .logo {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+    }
+
+    .nav-links a {
+      color: #ccc;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: white;
+    }
+
+    .login-btn {
+      padding: 10px 28px;
+      background: var(--primary);
+      border-radius: 12px;
+      color: var(--dark);
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .login-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0, 201, 167, 0.3);
+    }
+
+    /* Main Content */
+    .hero-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      padding: 0 8%;
+      margin-top: 50px;
+    }
+
+    .text-container {
+      max-width: 600px;
+      animation: fadeInUp 1s ease;
+    }
+
+    h1 {
+      font-size: clamp(40px, 8vw, 75px);
+      line-height: 1.1;
+      font-weight: 700;
+      margin-bottom: 25px;
+      background: linear-gradient(to right, white, var(--primary));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero h2 {
+      font-size: 84px;
+      font-weight: 800;
+      margin-bottom: 25px;
+      background: linear-gradient(to right, white, #888);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -2px;
+    }
+
+    p {
+      font-size: 18px;
+      color: #cfcfcf;
+      margin-bottom: 40px;
+      line-height: 1.8;
+      max-width: 500px;
+    }
+
+    .cta-container {
+      display: flex;
+      gap: 20px;
+    }
+
+    .cta-primary {
+      padding: 16px 36px;
+      background: linear-gradient(135deg, var(--primary), #00e0b9);
+      border-radius: 12px;
+      color: var(--dark);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+      transition: 0.3s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .cta-secondary {
+      padding: 16px 36px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+
+    .cta-primary:hover {
+      transform: scale(1.05);
+      box-shadow: 0 15px 30px rgba(0, 201, 167, 0.4);
+    }
+
+    .cta-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Trusted Card (Glassmorphism) */
+    .trusted-card {
+      margin-left: auto;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(25px);
+      padding: 40px;
+      border-radius: 30px;
+      border: 1px solid var(--glass-border);
+      width: 450px;
+      animation: fadeInRight 1s ease;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+    }
+
+    .trusted-card h3 {
+      font-size: 28px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: #fff;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .feature-item {
+      text-align: center;
+    }
+
+    .feature-icon {
+      font-size: 22px;
+      color: var(--accent);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .feature-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInRight {
+      from { opacity: 0; transform: translateX(50px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 1024px) {
+      .hero-content {
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+      }
+      .trusted-card {
+        margin: 50px auto 0;
+        width: 100%;
+        max-width: 400px;
+      }
+      .text-container {
+        max-width: 100%;
+      }
+      .cta-container {
+        justify-content: center;
+      }
+      .nav-links {
+        display: none;
+      }
+    }
+  </style>
+    <link rel="stylesheet" href="ai_assistant/roadmind.css">
+    <script src="ai_assistant/roadmind.js" defer></script>
+</head>
+<body>
+
+  <div class="hero">
+    <nav>
+      <div class="logo">CarRentalPro</div>
+      <div class="nav-links">
+        <a href="#">Features</a>
+        <a href="#">Services</a>
+        <a href="#">Contact</a>
+      </div>
+      <a href="login/login.html" class="login-btn">Login</a>
+    </nav>
+
+    <div class="hero-content">
+      <div class="text-container">
+        <h1>Your Premium <br> Journey <br> Starts Here</h1>
+        <p>Experience the road like never before. From luxury rentals to seamless car sales, we've got you covered.</p>
+        <div class="cta-container">
+          <button class="cta-primary" onclick="window.location.href='login/login.html'">Get Started 🚀</button>
+          <button class="cta-secondary">Learn More</button>
+        </div>
+      </div>
+
+      <div class="trusted-card">
+        <h3>Trusted by 10k+ Users</h3>
+        <div class="feature-grid">
+          <div class="feature-item">
+            <span class="feature-icon"><i class="fas fa-bolt"></i></span>
+            <span class="feature-label">Fast</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon"><i class="fas fa-lock"></i></span>
+            <span class="feature-label">Secure</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon"><i class="fas fa-gem"></i></span>
+            <span class="feature-label">Premium</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

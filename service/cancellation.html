@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Easy Cancellations - CarRentalPro</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #00c9a7;
+      --secondary: #7f5cff;
+      --accent: #9b7cff;
+      --dark: #0b0a12;
+      --dark-elevated: #151320;
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+    body {
+      background: var(--dark);
+      color: white;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* Header */
+    header {
+      background: rgba(21, 19, 32, 0.8);
+      backdrop-filter: blur(20px);
+      padding: 20px 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--glass-border);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    header h1 {
+      font-size: 24px;
+      font-weight: 800;
+      background: linear-gradient(to right, white, var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    nav a {
+      color: #aaa;
+      text-decoration: none;
+      margin-left: 30px;
+      font-weight: 500;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    nav a:hover { color: var(--primary); }
+
+    /* Page UI */
+    .hero {
+      padding: 100px 8% 60px;
+      text-align: center;
+      background: radial-gradient(circle at top right, rgba(127, 92, 255, 0.05), transparent);
+    }
+
+    .page-title {
+      font-size: 56px;
+      font-weight: 800;
+      margin-bottom: 15px;
+      background: linear-gradient(to right, white, #888);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .page-subtitle { color: #888; font-size: 20px; max-width: 800px; margin: 0 auto 40px; }
+
+    .stats-container {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      padding: 30px 40px;
+      border-radius: 24px;
+      border: 1px solid var(--glass-border);
+      text-align: center;
+      min-width: 220px;
+    }
+
+    .stat-card strong { font-size: 32px; font-weight: 800; color: var(--primary); display: block; }
+    .stat-card span { color: #888; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+
+    .container {
+      max-width: 1300px;
+      margin: 0 auto 100px;
+      padding: 0 8%;
+      animation: fadeIn 0.8s ease;
+    }
+
+    h3 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 35px;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    /* Grid Layouts */
+    .benefit-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      margin-bottom: 60px;
+    }
+
+    .benefit-card {
+      background: var(--glass-bg);
+      padding: 30px;
+      border-radius: 20px;
+      border: 1px solid var(--glass-border);
+      text-align: center;
+      color: #eee;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .benefit-card:hover { border-color: var(--primary); transform: translateY(-5px); }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-bottom: 80px;
+    }
+
+    .step {
+      background: var(--dark-elevated);
+      padding: 40px;
+      border-radius: 24px;
+      border: 1px solid var(--glass-border);
+      text-align: center;
+      transition: 0.4s;
+    }
+
+    .step:hover { transform: translateY(-10px); border-color: var(--primary); }
+
+    .step span {
+      width: 50px;
+      height: 50px;
+      background: var(--primary);
+      color: var(--dark);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin: 0 auto 25px;
+      font-size: 18px;
+    }
+
+    /* Refund Grid */
+    .refund-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+      margin-bottom: 80px;
+    }
+
+    .refund-card {
+      background: var(--glass-bg);
+      padding: 40px;
+      border-radius: 24px;
+      border: 1px solid var(--glass-border);
+      transition: 0.3s;
+    }
+
+    .refund-card:hover { border-color: var(--primary); background: rgba(255, 255, 255, 0.05); }
+    .refund-card h4 { font-size: 20px; font-weight: 700; margin-bottom: 12px; color: white; }
+    .refund-card p { color: var(--primary); font-weight: 600; font-size: 16px; }
+
+    .parcel-box {
+      background: rgba(127, 92, 255, 0.05);
+      border: 1px solid rgba(127, 92, 255, 0.2);
+      padding: 40px;
+      border-radius: 24px;
+      color: #aaa;
+      margin-bottom: 80px;
+      font-size: 16px;
+      line-height: 1.8;
+    }
+
+    /* Tracker */
+    .refund-tracker {
+      display: flex;
+      justify-content: space-between;
+      margin: 60px 0 80px;
+      position: relative;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .refund-tracker::before {
+      content: "";
+      position: absolute;
+      top: 25px;
+      left: 10%;
+      width: 80%;
+      height: 2px;
+      background: var(--glass-border);
+      z-index: 0;
+    }
+
+    .track-step {
+      flex: 1;
+      text-align: center;
+      z-index: 1;
+      min-width: 150px;
+    }
+
+    .track-step .circle {
+      width: 50px;
+      height: 50px;
+      background: var(--dark-elevated);
+      border: 2px solid var(--glass-border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 15px;
+      color: #666;
+      font-weight: 800;
+      transition: 0.3s;
+    }
+
+    .track-step.active .circle {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: var(--dark);
+      box-shadow: 0 0 20px rgba(0, 201, 167, 0.3);
+    }
+
+    .track-step.active { color: white; font-weight: 600; }
+    .track-step:not(.active) { color: #555; }
+
+    /* CTA */
+    .cta-banner {
+      background: linear-gradient(135deg, var(--dark-elevated), #201b35);
+      padding: 80px;
+      border-radius: 32px;
+      text-align: center;
+      border: 1px solid var(--glass-border);
+    }
+
+    .cta-banner h3 { font-size: 32px; font-weight: 800; margin-bottom: 15px; color: white; border: none; padding: 0; display: block; }
+    .cta-banner p { color: #888; margin-bottom: 40px; font-size: 18px; }
+
+    .btn-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 40px;
+      background: var(--primary);
+      color: var(--dark);
+      text-decoration: none;
+      border-radius: 14px;
+      font-weight: 800;
+      transition: 0.3s;
+    }
+
+    .btn-cta:hover { transform: translateY(-3px); box-shadow: 0 20px 40px rgba(0, 201, 167, 0.3); }
+
+    /* Footer */
+    footer {
+      background: var(--dark-elevated);
+      padding: 60px 8% 40px;
+      text-align: center;
+      border-top: 1px solid var(--glass-border);
+    }
+
+    .footer-links {
+      margin-bottom: 25px;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+    }
+
+    .footer-links a { color: #666; text-decoration: none; font-size: 14px; transition: 0.3s; }
+    .footer-links a:hover { color: var(--primary); }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media(max-width: 900px) {
+      .refund-tracker::before { display: none; }
+      .refund-tracker { flex-direction: column; align-items: flex-start; gap: 30px; }
+      .track-step { display: flex; align-items: center; gap: 20px; text-align: left; width: 100%; }
+      .track-step .circle { margin: 0; }
+      .page-title { font-size: 36px; }
+    }
+    @media(max-width:900px){
+      .cancel-hero{
+        flex-direction:column;
+        text-align:center;
+      }
+      .hero-right{
+        flex-direction:row;
+        justify-content:center;
+      }
+      .hero-points{
+        justify-content:center;
+        flex-wrap:wrap;
+      }
+      .benefit-grid,
+      .timeline{
+        grid-template-columns:1fr;
+      }
+    }
+
+    /* Footer Override */
+    footer{
+      background:#1c1830;
+      color:#aaa;
+      text-align:center;
+      padding:16px;
+      font-size:14px;
+      border-top:1px solid #2a2545;
+    }
+
+    footer a{
+      color:#9b7cff;
+      text-decoration:none;
+      margin:0 5px;
+    }
+
+    footer a:hover{
+      text-decoration:underline;
+    }
+  </style>
+    <link rel="stylesheet" href="../ai_assistant/roadmind.css">
+    <link rel="stylesheet" href="../ai_assistant/terms_modal.css">
+    <script src="../ai_assistant/roadmind.js" defer></script>
+    <script src="../ai_assistant/terms_modal.js" defer></script>
+</head>
+
+<body>
+
+  <header>
+    <h1>CarRentalPro</h1>
+    <nav>
+      <a href="../home/home.html">Home</a>
+      <a href="../book_car/book_car.html">Book a Car</a>
+      <a href="../service/services.html">Services</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h2 class="page-title">Easy Cancellations</h2>
+    <p class="page-subtitle">Flexible plans for your changing travel needs. Clear, transparent, and hassle-free.</p>
+    
+    <div class="stats-container">
+      <div class="stat-card"><strong>95%</strong><span>Refunded in 24h</span></div>
+      <div class="stat-card"><strong>100%</strong><span>Transparent Policy</span></div>
+      <div class="stat-card"><strong>24/7</strong><span>Support Assistance</span></div>
+    </div>
+  </section>
+
+  <div class="container">
+    <h3><i class="fas fa-check-circle"></i> Why You'll Love Our Policy</h3>
+    <div class="benefit-grid">
+      <div class="benefit-card">No Hidden Service Fees</div>
+      <div class="benefit-card">Single-Click Cancellation</div>
+      <div class="benefit-card">Live Refund Tracking</div>
+    </div>
+
+    <h3><i class="fas fa-stream"></i> 3-Step Process</h3>
+    <div class="timeline">
+      <div class="step">
+        <span>1</span>
+        <h4>Dashboard</h4>
+        <p>Visit your booking dashboard and select your trip.</p>
+      </div>
+      <div class="step">
+        <span>2</span>
+        <h4>Cancel</h4>
+        <p>Click the cancel button and confirm your request.</p>
+      </div>
+      <div class="step">
+        <span>3</span>
+        <h4>Refund</h4>
+        <p>Your refund is initiated automatically and instantly.</p>
+      </div>
+    </div>
+
+    <h3><i class="fas fa-undo-alt"></i> Refund Windows</h3>
+    <div class="refund-grid">
+      <div class="refund-card">
+        <h4>24+ Hours Before</h4>
+        <p>100% Refund, No Hidden Fees</p>
+      </div>
+      <div class="refund-card">
+        <h4>Within 24 Hours</h4>
+        <p>Partial Refund (Advance Terms Apply)</p>
+      </div>
+    </div>
+
+    <h3><i class="fas fa-box"></i> Parcel Cancellations</h3>
+    <div class="parcel-box">
+      <p><i class="fas fa-info-circle"></i> Parcel bookings can be cancelled for a full refund anytime before pickup. If already in transit, the refund is calculated based on the delivery stage and the distance covered by the driver.</p>
+    </div>
+
+    <h3><i class="fas fa-exchange-alt"></i> Refund Status Tracker</h3>
+    <div class="refund-tracker">
+      <div class="track-step active">
+        <div class="circle">1</div>
+        <span>Submitted</span>
+      </div>
+      <div class="track-step active">
+        <div class="circle">2</div>
+        <span>Reviewing</span>
+      </div>
+      <div class="track-step">
+        <div class="circle">3</div>
+        <span>Approved</span>
+      </div>
+      <div class="track-step">
+        <div class="circle">4</div>
+        <span>Credited</span>
+      </div>
+    </div>
+
+    <div class="cta-banner">
+      <h3>Book With Total Confidence</h3>
+      <p>Enjoy the freedom to change your plans without any unnecessary stress.</p>
+      <a href="../book_car/book_car.html" class="btn-cta">
+        <i class="fas fa-calendar-check"></i>
+        <span>Start Your Booking</span>
+      </a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-links">
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="../login/terms.html">Terms & Conditions</a>
+      <a href="contact.html">Support</a>
+    </div>
+    <p class="copyright">&copy; 2025 CarRentalPro. All Rights Reserved.</p>
+  </footer>
+
+</body>
+</html>

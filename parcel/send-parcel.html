@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Send Parcel | CarRentalPro</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #00c9a7;
+      --secondary: #7f5cff;
+      --dark: #0b0a12;
+      --dark-elevated: #151320;
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    body { background: var(--dark); color: white; min-height: 100vh; padding-bottom: 50px; }
+
+    header {
+      background: rgba(11, 10, 18, 0.8);
+      backdrop-filter: blur(15px);
+      padding: 20px 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--glass-border);
+      position: sticky; top: 0; z-index: 100;
+    }
+
+    .logo { font-size: 24px; font-weight: 700; color: var(--primary); text-decoration: none; }
+
+    .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+    
+    .parcel-card {
+      background: var(--dark-elevated);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 40px;
+      margin-bottom: 30px;
+      animation: fadeInUp 0.8s ease;
+    }
+
+    h2 { margin-bottom: 25px; color: var(--primary); display: flex; align-items: center; gap: 10px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .form-group { margin-bottom: 20px; }
+    .full-width { grid-column: span 2; }
+
+    label { display: block; font-size: 13px; color: #aaa; margin-bottom: 8px; font-weight: 500; }
+    input, textarea {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      padding: 12px 15px;
+      color: white;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    input:focus, textarea:focus { border-color: var(--primary); background: rgba(255, 255, 255, 0.08); }
+
+    .search-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--primary), #00e0b9);
+      border: none;
+      border-radius: 12px;
+      color: var(--dark);
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 10px;
+    }
+
+    .search-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0, 201, 167, 0.3); }
+
+    /* Results */
+    #searchResults { margin-top: 30px; display: none; }
+    .car-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--glass-border);
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: 0.3s;
+    }
+
+    .car-card:hover { border-color: var(--primary); background: rgba(255, 255, 255, 0.05); }
+    .car-info h4 { color: var(--primary); margin-bottom: 5px; }
+    .car-info p { font-size: 13px; color: #ccc; }
+
+    .select-btn {
+      padding: 10px 20px;
+      background: var(--primary);
+      border: none;
+      border-radius: 8px;
+      color: var(--dark);
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+    <link rel="stylesheet" href="../ai_assistant/roadmind.css">
+    <script src="../ai_assistant/roadmind.js" defer></script>
+</head>
+<body>
+
+  <header>
+    <a href="javascript:history.back()" style="color:#aaa; text-decoration:none; margin-right:auto; font-size:16px; display:flex; align-items:center; gap:8px;"><i class="fas fa-arrow-left"></i> Back</a>
+    <a href="../home/home.html" class="logo">CarRentalPro</a>
+  </header>
+
+  <div class="container" id="parcelFormSection">
+    <div class="parcel-card">
+      <h2><i class="fas fa-box"></i> Send a Parcel</h2>
+      <p style="color: #ccc; margin-bottom: 25px; font-size: 14px;">Find cars already travelling to your destination and send your parcel securely.</p>
+      
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Pickup Location</label>
+          <input type="text" id="pickup_location" placeholder="e.g. Hyderabad">
+        </div>
+        <div class="form-group">
+          <label>Destination Location</label>
+          <input type="text" id="drop_location" placeholder="e.g. Bangalore">
+        </div>
+        <div class="form-group full-width">
+          <label>Parcel Description</label>
+          <textarea id="parcel_description" rows="3" placeholder="What are you sending? (e.g. Documents, Electronics)"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Parcel Weight (Approx)</label>
+          <input type="text" id="parcel_weight" placeholder="e.g. 2kg">
+        </div>
+        <div class="form-group">
+          <label>Receiver Name</label>
+          <input type="text" id="receiver_name" placeholder="Name of person receiving">
+        </div>
+        <div class="form-group">
+          <label>Receiver Mobile</label>
+          <input type="text" id="receiver_mobile" placeholder="10-digit mobile number">
+        </div>
+      </div>
+
+      <button class="search-btn" onclick="searchCars()"><i class="fas fa-search"></i> Search Available Cars</button>
+    </div>
+
+    <div id="searchResults">
+      <h3 style="margin-bottom: 20px;">Available Cars for your Route</h3>
+      <div id="carList"></div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = "/api";
+    const user = JSON.parse(localStorage.getItem("car_rental_user"));
+
+    if (!user) {
+      window.location.href = "../login/login.html";
+    }
+
+    async function searchCars() {
+      const pickup = document.getElementById("pickup_location").value;
+      const drop = document.getElementById("drop_location").value;
+
+      if (!pickup || drop === "") {
+        alert("Please enter both pickup and destination ❌");
+        return;
+      }
+
+      const btn = document.querySelector(".search-btn");
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Searching...';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch(`${API_BASE}/search-cars-for-parcel`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ pickup_location: pickup, drop_location: drop })
+        });
+
+        const data = await res.json();
+        const carList = document.getElementById("carList");
+        const resultsDiv = document.getElementById("searchResults");
+
+        carList.innerHTML = "";
+        
+        if (data.success && data.cars.length > 0) {
+          data.cars.forEach(car => {
+            carList.innerHTML += `
+              <div class="car-card">
+                <div class="car-info">
+                  <h4>${car.car_name} | ${car.driver_name}</h4>
+                  <p><i class="fas fa-map-marker-alt"></i> Route: ${car.pickup_location} ➔ ${car.drop_location}</p>
+                  <p><i class="fas fa-clock"></i> Departs approx: ${new Date(car.pickup_datetime).toLocaleString()}</p>
+                </div>
+                <button class="select-btn" onclick="requestParcel(${car.id})">Send with this car</button>
+              </div>
+            `;
+          });
+          resultsDiv.style.display = "block";
+        } else {
+          carList.innerHTML = '<p style="text-align: center; color: #aaa;">No cars found for this route yet. 🚗💨</p>';
+          resultsDiv.style.display = "block";
+        }
+      } catch (err) {
+        alert("Server error ❌");
+        console.error(err);
+      } finally {
+        btn.innerHTML = '<i class="fas fa-search"></i> Search Available Cars';
+        btn.disabled = false;
+      }
+    }
+
+    async function requestParcel(bookingId) {
+      const parcelData = {
+        sender_email: user.email,
+        pickup_location: document.getElementById("pickup_location").value,
+        drop_location: document.getElementById("drop_location").value,
+        parcel_description: document.getElementById("parcel_description").value,
+        parcel_weight: document.getElementById("parcel_weight").value,
+        receiver_name: document.getElementById("receiver_name").value,
+        receiver_mobile: document.getElementById("receiver_mobile").value,
+        booking_id: bookingId
+      };
+
+      if (!parcelData.receiver_name || !parcelData.receiver_mobile) {
+        alert("Please fill receiver details ❌");
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/create-parcel-request`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(parcelData)
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          alert("Parcel request sent! Driver will be notified. ✅");
+          window.location.href = "track-parcel.html";
+        } else {
+          alert(data.message);
+        }
+      } catch (err) {
+        alert("Error sending request ❌");
+        console.error(err);
+      }
+    }
+  </script>
+
+</body>
+</html>
+

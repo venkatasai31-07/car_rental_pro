@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Support | CarRentalPro</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #00c9a7;
+      --secondary: #7f5cff;
+      --accent: #9b7cff;
+      --dark: #0b0a12;
+      --dark-elevated: #151320;
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: var(--dark);
+      color: white;
+      min-height: 100vh;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    header {
+      background: rgba(11, 10, 18, 0.8);
+      backdrop-filter: blur(20px);
+      padding: 20px 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--glass-border);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    header h1 {
+      font-size: 24px;
+      font-weight: 800;
+      background: linear-gradient(to right, white, var(--primary));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    nav a {
+      color: #aaa;
+      text-decoration: none;
+      margin-left: 30px;
+      font-weight: 500;
+      font-size: 14px;
+      transition: var(--transition);
+    }
+
+    nav a:hover { color: var(--primary); }
+
+    /* Page Header */
+    .page-header {
+      padding: 120px 8% 60px;
+      text-align: center;
+      background: radial-gradient(circle at top right, rgba(0, 201, 167, 0.05), transparent);
+      position: relative;
+    }
+
+    .back-btn {
+      position: absolute;
+      top: 40px;
+      right: 8%;
+      background: var(--glass-bg);
+      color: white;
+      padding: 10px 24px;
+      border-radius: 12px;
+      text-decoration: none;
+      border: 1px solid var(--glass-border);
+      font-weight: 600;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: var(--transition);
+    }
+
+    .back-btn:hover {
+      background: var(--primary);
+      color: var(--dark);
+      border-color: var(--primary);
+      transform: translateX(-5px);
+    }
+
+    .page-header h2 {
+      font-size: 56px;
+      font-weight: 800;
+      margin-bottom: 20px;
+      background: linear-gradient(to right, white, #888);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .page-header p {
+      color: #888;
+      font-size: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* Content */
+    .content {
+      max-width: 1000px;
+      margin: 0 auto 100px;
+      padding: 0 8%;
+    }
+
+    .email-box {
+      background: var(--dark-elevated);
+      padding: 80px 40px;
+      border-radius: 40px;
+      border: 1px solid var(--glass-border);
+      text-align: center;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 50px;
+    }
+
+    .email-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 50% 50%, rgba(127, 92, 255, 0.03), transparent);
+    }
+
+    .email-box i {
+      font-size: 80px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 40px;
+      display: inline-block;
+    }
+
+    .email-box h3 {
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 20px;
+    }
+
+    .email-id {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 20px 0 30px;
+      display: block;
+      text-decoration: none;
+      transition: var(--transition);
+      letter-spacing: 1px;
+    }
+
+    .email-id:hover {
+      color: white;
+      transform: scale(1.02);
+      text-shadow: 0 0 20px rgba(0, 201, 167, 0.4);
+    }
+
+    .email-box p {
+      color: #888;
+      font-size: 18px;
+    }
+
+    .response-tag {
+      margin-top: 30px;
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 10px 25px;
+      border-radius: 100px;
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--accent);
+      border: 1px solid var(--glass-border);
+    }
+
+    /* Sample Mail Wrapper */
+    .sample-mail {
+      background: var(--glass-bg);
+      padding: 50px;
+      border-radius: 32px;
+      border: 1px solid var(--glass-border);
+      position: relative;
+    }
+
+    .sample-mail strong {
+      color: white;
+      font-weight: 700;
+    }
+
+    .format-header {
+      color: var(--primary);
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 30px;
+      display: block;
+    }
+
+    .mail-content {
+      color: #888;
+      font-size: 16px;
+      line-height: 2;
+      font-family: 'Courier New', Courier, monospace;
+      padding: 30px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 16px;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--dark-elevated);
+      padding: 60px 8% 40px;
+      text-align: center;
+      border-top: 1px solid var(--glass-border);
+      color: #666;
+    }
+
+    footer a { color: var(--primary); text-decoration: none; font-weight: 600; }
+
+    @media (max-width: 768px) {
+      .page-header h2 { font-size: 40px; }
+      .email-id { font-size: 20px; }
+      .sample-mail { padding: 30px 20px; }
+      .back-btn { top: 20px; position: relative; display: inline-flex; margin-bottom: 30px; }
+    }
+  </style>
+    <link rel="stylesheet" href="../../ai_assistant/roadmind.css">
+    <link rel="stylesheet" href="../../ai_assistant/terms_modal.css">
+    <script src="../../ai_assistant/roadmind.js" defer></script>
+    <script src="../../ai_assistant/terms_modal.js" defer></script>
+</head>
+
+<body>
+
+  <header>
+    <h1>CarRentalPro</h1>
+    <nav>
+      <a href="../../home/home.html">Home</a>
+      <a href="../../book_car/book_car.html">Book a Car</a>
+      <a href="../services.html">Services</a>
+      <a href="../contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <section class="page-header">
+    <a href="customer-support.html" class="back-btn">
+      <i class="fas fa-arrow-left"></i>
+      <span>Back</span>
+    </a>
+    <h2>Digital Support</h2>
+    <p>
+      For non-urgent inquiries, documentation submissions, or detailed feedback, 
+      our digital support channel provides a comprehensive and trackable way to reach us.
+    </p>
+  </section>
+
+  <section class="content">
+
+    <div class="email-box">
+      <i class="fas fa-paper-plane"></i>
+      <h3>Official Concierge Email</h3>
+
+      <a class="email-id"
+        href="https://mail.google.com/mail/?view=cm&fs=1&to=carrentalpro01@gmail.com&su=CarRentalPro%20Support%20Request&body=Hello%20CarRentalPro%20Support%20Team,%0A%0AI%20need%20assistance%20regarding%20my%20car%20booking.%0ABooking%20ID:%20CRP1023%0AIssue:%0A%0AThank%20you,%0ACustomer%20Name"
+        target="_blank">
+        carrentalpro01@gmail.com
+      </a>
+
+      <p>
+        Use this channel for verified documentation, refund claims, 
+        and partnership inquiries.
+      </p>
+      
+      <div class="response-tag">
+        <i class="fas fa-clock"></i>
+        Typical Response: Under 2 Hours
+      </div>
+    </div>
+
+    <div class="sample-mail">
+      <span class="format-header">Recommended Protocol</span>
+      <div class="mail-content">
+        <strong>Subject:</strong> [CRP-ID] Assistance Request - [Issue Type]<br><br>
+        
+        Greetings Support Team,<br><br>
+        
+        I am formally requesting assistance regarding my reservation.<br>
+        <strong>Reference ID:</strong> CRP1023<br>
+        <strong>Focus Area:</strong> Billing/Logistics/Technical<br><br>
+        
+        [Brief description of your requirements or feedback here]<br><br>
+        
+        Regards,<br>
+        <strong>[Your Full Name]</strong><br>
+        Registered Contact: [Mobile Number]
+      </div>
+    </div>
+
+  </section>
+
+  <footer>
+    <div class="footer-links">
+      <a href="../privacy.html">Privacy Policy</a>
+      <a href="../../login/terms.html">Terms & Conditions</a>
+      <a href="../contact.html">Support</a>
+    </div>
+    <p class="copyright">&copy; 2025 CarRentalPro. All Rights Reserved.</p>
+  </footer>
+
+</body>
+</html>

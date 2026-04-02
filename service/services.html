@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Services</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #00c9a7;
+      --secondary: #7f5cff;
+      --accent: #9b7cff;
+      --dark: #0b0a12;
+      --dark-elevated: #151320;
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+    body {
+      background: var(--dark);
+      color: white;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* Header */
+    header {
+      background: rgba(21, 19, 32, 0.8);
+      backdrop-filter: blur(20px);
+      padding: 20px 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--glass-border);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    header h1 {
+      font-size: 24px;
+      font-weight: 800;
+      background: linear-gradient(to right, white, var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    nav a {
+      color: #aaa;
+      text-decoration: none;
+      margin-left: 30px;
+      font-weight: 500;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    nav a:hover, nav a.active { color: var(--primary); }
+
+    /* Services Section */
+    .hero {
+      padding: 100px 8% 60px;
+      text-align: center;
+      background: radial-gradient(circle at top right, rgba(127, 92, 255, 0.05), transparent),
+                  radial-gradient(circle at bottom left, rgba(0, 201, 167, 0.05), transparent);
+    }
+
+    h2 {
+      font-size: 48px;
+      font-weight: 800;
+      margin-bottom: 15px;
+      background: linear-gradient(to right, white, #888);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      color: #888;
+      font-size: 18px;
+      max-width: 700px;
+      margin: 0 auto 40px;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+      padding: 0 8% 100px;
+      max-width: 1400px;
+      margin: auto;
+    }
+
+    .service-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      padding: 40px;
+      border-radius: 24px;
+      border: 1px solid var(--glass-border);
+      text-align: left;
+      transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+    }
+
+    .service-card:hover {
+      transform: translateY(-10px);
+      border-color: var(--primary);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .service-icon {
+      width: 60px;
+      height: 60px;
+      background: rgba(0, 201, 167, 0.1);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: var(--primary);
+      margin-bottom: 25px;
+      transition: 0.3s;
+    }
+
+    .service-card:hover .service-icon {
+      background: var(--primary);
+      color: var(--dark);
+    }
+
+    .service-card h3 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .service-card p {
+      color: #888;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .learn-more {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: 0;
+      transform: translateX(-10px);
+      transition: 0.3s;
+    }
+
+    .service-card:hover .learn-more {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--dark-elevated);
+      padding: 60px 8% 40px;
+      text-align: center;
+      border-top: 1px solid var(--glass-border);
+    }
+
+    .footer-links {
+      margin-bottom: 25px;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+    }
+
+    .footer-links a {
+      color: #666;
+      text-decoration: none;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    .footer-links a:hover { color: var(--primary); }
+
+    .copyright { color: #444; font-size: 13px; }
+
+    /* Animations */
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media(max-width: 768px) {
+      h2 { font-size: 32px; }
+      .services-grid { grid-template-columns: 1fr; }
+      header { padding: 20px 5%; }
+    }
+  </style>
+    <link rel="stylesheet" href="../ai_assistant/roadmind.css">
+    <link rel="stylesheet" href="../ai_assistant/terms_modal.css">
+    <script src="../ai_assistant/roadmind.js" defer></script>
+    <script src="../ai_assistant/terms_modal.js" defer></script>
+</head>
+
+<body>
+
+  <header>
+    <h1>CarRentalPro</h1>
+    <nav>
+      <a href="../home/home.html">Home</a>
+      <a href="../book_car/book_car.html">Book a Car</a>
+      <a href="../service/services.html">Services</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <h2>Our Services</h2>
+
+  <div class="services-grid">
+    <a href="rental_info.html" class="service-card">
+      <div class="service-icon"><i class="fas fa-calendar-alt"></i></div>
+      <h3>Daily & Weekly Rentals</h3>
+      <p>Flexible rental plans for short and long-term travel.</p>
+    </a>
+
+    
+      <a href="./Luxury-vehicles/luxury-vehicles.html" class="service-card">
+      <div class="service-icon"><i class="fas fa-car-side"></i></div>
+      <h3>Luxury Vehicles</h3>
+      <p>Choose from a wide range of premium cars.</p>
+      </a>
+    
+
+    <a href="./Customer support/customer-support.html" class="service-card">
+      <div class="service-icon"><i class="fas fa-headset"></i></div>
+      <h3>24/7 Customer Support</h3>
+      <p>We're always here to help. Click to contact us.</p>
+    </a>
+
+    <a href="insurance.html" class="service-card">
+      <div class="service-icon"><i class="fas fa-shield-alt"></i></div>
+      <h3>Insurance Protection</h3>
+      <p>Peace of mind included with every rental.</p>
+    </a>
+
+    <a href="cancellation.html" class="service-card">
+      <div class="service-icon"><i class="fas fa-times-circle"></i></div>
+      <h3>Easy Cancellations</h3>
+      <p>Cancel or modify bookings with flexibility.</p>
+    </a>
+
+    <a href="./Doorstep Delivery/doorstep-delivery.html" class="service-card">
+      <div class="service-icon"><i class="fas fa-truck-moving"></i></div>
+      <h3>Doorstep Delivery</h3>
+      <p>Get your vehicle delivered to your location.</p>
+    </a>
+  </div>
+
+  <footer>
+    &copy; 2025 CarRentalPro. All Rights Reserved. |
+    <a href="privacy.html">Privacy Policy</a> |
+    <a href="../login/terms.html">Terms & Conditions</a>
+  </footer>
+
+</body>
+</html>

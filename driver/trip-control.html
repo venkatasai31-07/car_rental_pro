@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Driver Trip Control - CarRentalPro</title>
+  <link rel="stylesheet" href="../design_system.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    body {
+      background-color: var(--dark);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      margin-top: 40px;
+    }
+
+    .trip-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 30px;
+      text-align: center;
+      animation: fadeInUp 0.8s ease;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .status-offline { background: rgba(255, 255, 255, 0.1); color: #888; }
+    .status-online { background: rgba(0, 201, 167, 0.2); color: var(--primary); border: 1px solid var(--primary); }
+
+    .car-info {
+      margin-bottom: 30px;
+    }
+
+    .car-info h2 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .car-info p {
+      color: #aaa;
+      font-size: 16px;
+    }
+
+    .control-btn {
+      width: 100%;
+      padding: 18px;
+      border-radius: 12px;
+      border: none;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .start-btn {
+      background: linear-gradient(135deg, var(--primary), #00a88a);
+      color: var(--dark);
+    }
+
+    .end-btn {
+      background: rgba(255, 71, 87, 0.1);
+      color: #ff4757;
+      border: 1px solid #ff4757;
+      display: none;
+    }
+
+    .tracking-indicator {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #888;
+      display: none;
+    }
+
+    .pulse {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: var(--primary);
+      border-radius: 50%;
+      margin-right: 5px;
+      box-shadow: 0 0 0 rgba(0, 201, 167, 0.4);
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(0, 201, 167, 0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(0, 201, 167, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(0, 201, 167, 0); }
+    }
+
+    .log-container {
+      margin-top: 30px;
+      font-family: monospace;
+      font-size: 12px;
+      color: #666;
+      text-align: left;
+      height: 100px;
+      overflow-y: auto;
+      background: rgba(0,0,0,0.2);
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    /* Parcel Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1001;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.8);
+      backdrop-filter: blur(5px);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: var(--dark-elevated);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 30px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      animation: zoomIn 0.3s ease;
+    }
+
+    .modal-content h3 { color: var(--primary); margin-bottom: 20px; }
+    .modal-content p { color: #ccc; margin-bottom: 25px; font-size: 14px; }
+    
+    .parcel-input {
+      width: 100%;
+      padding: 12px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      color: white;
+      margin-bottom: 20px;
+      text-align: center;
+      font-size: 20px;
+      letter-spacing: 5px;
+    }
+
+    .btn-group { display: flex; gap: 10px; }
+    .modal-btn { flex: 1; padding: 12px; border-radius: 10px; border: none; font-weight: 600; cursor: pointer; }
+    .btn-accept { background: var(--primary); color: var(--dark); }
+    .btn-reject { background: rgba(255, 71, 87, 0.1); color: #ff4757; border: 1px solid #ff4757; }
+    .btn-cancel { background: rgba(255,255,255,0.1); color: white; }
+
+    @keyframes zoomIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    /* Parcel Badge */
+    #parcelSection {
+      margin-top: 20px;
+      background: rgba(0, 201, 167, 0.1);
+      border: 1px dashed var(--primary);
+      border-radius: 15px;
+      padding: 15px;
+      display: none;
+    }
+  </style>
+    <link rel="stylesheet" href="../ai_assistant/roadmind.css">
+    <script src="../ai_assistant/roadmind.js" defer></script>
+</head>
+<body>
+
+  <div class="container">
+    <div class="trip-card">
+      <div id="statusBadge" class="status-badge status-offline">Offline</div>
+      
+      <div class="car-info">
+        <i class="fas fa-car-side fa-3x" style="color: var(--primary); margin-bottom: 20px;"></i>
+        <h2 id="carName">Loading Trip...</h2>
+        <p id="customerName">Customer: --</p>
+        <p id="bookingIdText">Booking ID: #--</p>
+      </div>
+
+      <button id="startBtn" class="control-btn start-btn" onclick="startTrip()">
+        <i class="fas fa-play"></i> Start Trip & Share Location
+      </button>
+
+      <button id="endBtn" class="control-btn end-btn" onclick="endTrip()">
+        <i class="fas fa-stop"></i> End Trip
+      </button>
+
+      <div id="trackingIndicator" class="tracking-indicator">
+        <span class="pulse"></span> Real-time tracking active
+      </div>
+
+      <div id="log" class="log-container">
+        > Waiting for action...
+      </div>
+
+    <!-- 📦 Parcel Tasks -->
+    <div id="parcelSection" style="display:none; margin-top: 30px;">
+      <h3 style="margin-bottom:15px; display:flex; align-items:center; gap:10px;">
+        <i class="fas fa-box" style="color:var(--primary);"></i> Parcel Delivery Requests
+      </h3>
+      
+      <div id="pendingParcelsList" style="margin-bottom: 20px;">
+          <!-- Pending parcels will be listed here -->
+      </div>
+
+      <div id="activeParcel" style="display:none; background:rgba(0,201,167,0.1); border:1px solid var(--primary); border-radius:15px; padding:20px; text-align:left;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <strong style="color:var(--primary);">📦 Active Parcel Task</strong>
+          <span id="parcelStatus" class="status-badge status-online" style="margin-bottom:0; font-size:12px;">Accepted</span>
+        </div>
+        <div id="activeParcelInfo" style="font-size:14px; line-height:1.6;">
+          <!-- Active parcel details here -->
+        </div>
+        
+        <div id="parcelActions" style="margin-top:15px; display:flex; gap:10px;">
+          <button class="control-btn" style="padding:10px; font-size:14px; background:var(--primary); color:var(--dark);" onclick="showPickupModal()">
+            <i class="fas fa-qrcode"></i> Scan Pickup
+          </button>
+          <button class="control-btn" style="padding:10px; font-size:14px; background:white; color:var(--dark);" onclick="showDeliverModal()">
+            <i class="fas fa-key"></i> Deliver (OTP)
+          </button>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <!-- Parcel Request Modal -->
+  <div id="parcelRequestModal" class="modal">
+    <div class="modal-content">
+      <h3>📦 New Parcel Request</h3>
+      <p id="requestDetails">A user wants to send a parcel on your route.</p>
+      <div class="btn-group">
+        <button class="modal-btn btn-reject" onclick="handleParcelRequest(false)">Reject</button>
+        <button class="modal-btn btn-accept" onclick="handleParcelRequest(true)">Accept & Notify</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pickup Modal (Simulated Scan) -->
+  <div id="pickupModal" class="modal">
+    <div class="modal-content">
+      <h3>📸 Scan QR Code</h3>
+      <p>Enter the 12-digit code provided by the sender to confirm pickup.</p>
+      <input type="text" id="pickupCodeInput" class="parcel-input" maxlength="12" placeholder="XXXXXXXXXXXX">
+      <div class="btn-group">
+        <button class="modal-btn btn-cancel" onclick="closeModals()">Cancel</button>
+        <button class="modal-btn btn-accept" onclick="confirmPickup()">Confirm Pickup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delivery Modal (OTP) -->
+  <div id="deliverModal" class="modal">
+    <div class="modal-content">
+      <h3>🏁 Deliver Parcel</h3>
+      <p>Enter the 4-digit OTP from the receiver to complete delivery.</p>
+      <input type="text" id="deliveryOtpInput" class="parcel-input" maxlength="4" placeholder="0000" style="letter-spacing: 15px;">
+      <div class="btn-group">
+        <button class="modal-btn btn-cancel" onclick="closeModals()">Cancel</button>
+        <button class="modal-btn btn-accept" onclick="confirmDelivery()">Verify & Deliver</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = "/api";
+    let watchId = null;
+    let currentBookingId = new URLSearchParams(window.location.search).get('id');
+    let currentParcel = null;
+    let driverMobile = "";
+
+    // Load booking and driver details
+    async function loadBooking() {
+      if (!currentBookingId) {
+        log("No Booking ID provided in URL! Use ?id=XYZ", "error");
+        return;
+      }
+      
+      try {
+        const res = await fetch(`${API_BASE}/get-booking-details/${currentBookingId}`);
+        const data = await res.json();
+
+        if(!data.success){
+            log("Booking not found ❌", "error");
+            return;
+        }
+
+        const b = data.booking;
+        driverMobile = b.driver_mobile;
+
+        document.getElementById('bookingIdText').innerText = `Booking ID: #${b.id}`;
+        document.getElementById('carName').innerText = `${b.car_name} (Ongoing Trip)`;
+        document.getElementById('customerName').innerText = `Customer: ${b.customer_name}`;
+        
+        log("Trip data loaded. Driver: " + b.driver_name);
+
+        // Start polling for parcels
+        setInterval(checkParcelRequests, 5000);
+      } catch (err) {
+        log("Load Error: " + err.message, "error");
+      }
+    }
+
+    async function checkParcelRequests() {
+      if (!driverMobile) return;
+
+      try {
+        const res = await fetch(`${API_BASE}/get-parcel-requests-for-driver/${driverMobile}`);
+        const data = await res.json();
+        
+        if (data.parcels && data.parcels.length > 0) {
+          const pendingParcels = data.parcels.filter(p => p.status === 'Pending');
+          const acceptedParcel = data.parcels.find(p => p.status === 'Accepted' || p.status === 'Picked Up');
+
+          renderPendingParcels(pendingParcels);
+
+          if (acceptedParcel) {
+            currentParcel = acceptedParcel;
+            document.getElementById('parcelSection').style.display = 'block';
+            document.getElementById('parcelStatus').innerText = acceptedParcel.status;
+            document.getElementById('activeParcelInfo').innerHTML = `
+                <b>Package:</b> ${acceptedParcel.item_details}<br>
+                <b>Pickup:</b> ${acceptedParcel.pickup_location}<br>
+                <b>Receiver:</b> ${acceptedParcel.receiver_name} (${acceptedParcel.receiver_mobile})
+            `;
+            document.getElementById('activeParcel').style.display = 'block';
+            
+            // Show/hide pickup/deliver buttons based on status
+            const pickupBtn = document.querySelector('#activeParcel #parcelActions button:nth-child(1)');
+            const deliverBtn = document.querySelector('#activeParcel #parcelActions button:nth-child(2)');
+            
+            if (acceptedParcel.status === 'Accepted') {
+                pickupBtn.style.display = 'flex';
+                deliverBtn.style.display = 'none';
+            } else {
+                pickupBtn.style.display = 'none';
+                deliverBtn.style.display = 'flex';
+            }
+          } else {
+            document.getElementById('activeParcel').style.display = 'none';
+            if (pendingParcels.length === 0) {
+                document.getElementById('parcelSection').style.display = 'none';
+            } else {
+                document.getElementById('parcelSection').style.display = 'block';
+            }
+          }
+        } else {
+            document.getElementById('pendingParcelsList').innerHTML = "";
+            document.getElementById('activeParcel').style.display = 'none';
+            document.getElementById('parcelSection').style.display = 'none';
+        }
+      } catch (err) {
+        log("Parcel check error: " + err.message, "error");
+      }
+    }
+
+    function renderPendingParcels(parcels) {
+        const list = document.getElementById('pendingParcelsList');
+        list.innerHTML = "";
+        
+        if (parcels.length > 0) {
+            parcels.forEach(p => {
+                const div = document.createElement('div');
+                div.style.background = "rgba(255,255,255,0.05)";
+                div.style.padding = "15px";
+                div.style.borderRadius = "10px";
+                div.style.marginBottom = "10px";
+                div.style.fontSize = "14px";
+                div.style.border = "1px solid rgba(255,255,255,0.1)";
+                
+                div.innerHTML = `
+                    <div style="margin-bottom:10px; text-align:left;">
+                        <b>New Request:</b> ${p.item_details}<br>
+                        <span style="font-size:12px; color:#888;">${p.pickup_location} ➔ ${p.drop_location}</span>
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <button class="control-btn" style="padding:8px; font-size:12px; background:var(--primary); color:var(--dark);" onclick="handleParcelAction(${p.id}, 'Accepted')">
+                            <i class="fas fa-check"></i> Accept
+                        </button>
+                        <button class="control-btn" style="padding:8px; font-size:12px; border:1px solid #ff4757; color:#ff4757; background:none;" onclick="handleParcelAction(${p.id}, 'Rejected')">
+                            <i class="fas fa-times"></i> Reject
+                        </button>
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+        }
+    }
+
+    async function handleParcelAction(parcelId, status) {
+      if(!confirm(`Are you sure you want to ${status.toLowerCase()} this parcel request?`)) return;
+      try {
+        const res = await fetch(`${API_BASE}/update-parcel-status`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ parcel_id: parcelId, status: status })
+        });
+        const data = await res.json();
+        if (data.success) {
+          log(`Parcel ${status}!`);
+          checkParcelRequests();
+        }
+      } catch (err) {
+        log("Status update error", "error");
+      }
+    }
+
+    function showPickupModal() { document.getElementById('pickupModal').style.display = 'flex'; }
+    function showDeliverModal() { document.getElementById('deliverModal').style.display = 'flex'; }
+    function closeModals() {
+      document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
+    }
+
+    async function confirmPickup() {
+      if (!currentParcel) return;
+      const code = document.getElementById('pickupCodeInput').value;
+      if (code !== currentParcel.pickup_qr_code) {
+        alert("Invalid Pickup Code! ❌");
+        return;
+      }
+
+      try {
+        await fetch(`${API_BASE}/update-parcel-status`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ parcel_id: currentParcel.id, status: 'Picked Up' })
+        });
+
+        closeModals();
+        log("Parcel PICKED UP successfully! 📦", "success");
+        checkParcelRequests();
+      } catch (err) {
+        alert("Server error confirming pickup ❌");
+      }
+    }
+
+    async function confirmDelivery() {
+      if (!currentParcel) return;
+      const otp = document.getElementById('deliveryOtpInput').value;
+      
+      try {
+        const res = await fetch(`${API_BASE}/deliver-parcel`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ parcel_id: currentParcel.id, otp: otp })
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          closeModals();
+          log("Parcel DELIVERED successfully! ✅", "success");
+          currentParcel = null;
+          checkParcelRequests();
+        } else {
+          alert(data.message);
+        }
+      } catch (err) {
+        alert("Server error during delivery OTP verification ❌");
+      }
+    }
+
+    function log(msg, type = "info") {
+      const logger = document.getElementById('log');
+      const time = new Date().toLocaleTimeString();
+      const color = type === "error" ? "#ff4757" : type === "success" ? "var(--primary)" : "#888";
+      logger.innerHTML += `<div style="color: ${color}">[${time}] ${msg}</div>`;
+      logger.scrollTop = logger.scrollHeight;
+    }
+
+    async function startTrip() {
+      if (!currentBookingId) return;
+      if (!navigator.geolocation) {
+        alert("Geolocation not supported!");
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/update-booking-status`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ booking_id: currentBookingId, status: 'Ongoing' })
+        });
+
+        if (res.ok) {
+          log("Trip status: ONGOING ✅", "success");
+          watchId = navigator.geolocation.watchPosition(
+            async (pos) => {
+              const { latitude, longitude } = pos.coords;
+              await fetch(`${API_BASE}/update-trip-location`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ booking_id: currentBookingId, latitude, longitude })
+              });
+            },
+            (err) => log(`Location error: ${err.message}`, "error"),
+            { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+          );
+
+          document.getElementById('startBtn').style.display = 'none';
+          document.getElementById('endBtn').style.display = 'flex';
+          document.getElementById('trackingIndicator').style.display = 'block';
+          document.getElementById('statusBadge').innerText = "In Trip";
+          document.getElementById('statusBadge').className = "status-badge status-online";
+        }
+      } catch (err) { log("Start Error: " + err.message, "error"); }
+    }
+
+    async function endTrip() {
+      if (watchId !== null) navigator.geolocation.clearWatch(watchId);
+      try {
+        await fetch(`${API_BASE}/update-booking-status`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ booking_id: currentBookingId, status: 'Completed' })
+        });
+        log("Trip ended ✅");
+        location.reload(); 
+      } catch (err) { log("End Error: " + err.message, "error"); }
+    }
+
+    window.onload = loadBooking;
+  </script>
+</body>
+</html>

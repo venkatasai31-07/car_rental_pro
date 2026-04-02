@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Car Rental System - Signup</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #00c9a7;
+      --secondary: #7f5cff;
+      --accent: #9b7cff;
+      --dark: #0b0a12;
+      --dark-elevated: #151320;
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+    body {
+      height: 100vh;
+      background: var(--dark);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1000px;
+      height: 600px;
+      display: flex;
+      background: var(--dark-elevated);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--glass-border);
+      animation: fadeInUp 0.8s ease;
+    }
+
+    .left-section {
+      width: 50%;
+      background: linear-gradient(rgba(11, 10, 18, 0.2), rgba(11, 10, 18, 0.6)), 
+                  url('../login_car_bg.jpeg') center/cover no-repeat;
+      position: relative;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 40px;
+      background: linear-gradient(to top, var(--dark), transparent);
+    }
+
+    .overlay h2 {
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .right-section {
+      width: 50%;
+      padding: 40px 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .right-section h2 {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      background: linear-gradient(to right, white, var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle { color: #aaa; margin-bottom: 30px; font-size: 15px; }
+
+    form .name-row { display: flex; gap: 15px; }
+
+    form input {
+      width: 100%;
+      padding: 14px 18px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      color: white;
+      margin-bottom: 15px;
+      font-size: 14px;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    form input:focus {
+      border-color: var(--primary);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 15px rgba(0, 201, 167, 0.1);
+    }
+
+    .terms { font-size: 13px; margin-bottom: 25px; color: #aaa; }
+    .terms label { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .terms input { width: 16px; height: 16px; accent-color: var(--primary); margin: 0; }
+
+    .signup-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--primary), #00e0b9);
+      border: none;
+      border-radius: 12px;
+      color: var(--dark);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 20px;
+      transition: 0.3s;
+    }
+
+    .signup-btn:hover {
+      transform: scale(1.02);
+      box-shadow: 0 15px 30px rgba(0, 201, 167, 0.3);
+    }
+
+    .login-link { text-align: center; font-size: 14px; color: #aaa; }
+    .login-link a { color: var(--primary); text-decoration: none; font-weight: 600; }
+
+    .status {
+      display: none;
+      text-align: center;
+      margin-top: 15px;
+      font-size: 13px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid var(--glass-border);
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+    <link rel="stylesheet" href="../../ai_assistant/roadmind.css">
+    <link rel="stylesheet" href="../../ai_assistant/terms_modal.css">
+    <script src="../../ai_assistant/roadmind.js" defer></script>
+    <script src="../../ai_assistant/terms_modal.js" defer></script>
+</head>
+
+<body>
+
+<div class="container">
+  <div class="left-section">
+    <div class="overlay">
+      <h2>Join the <br> Elite Journey.</h2>
+    </div>
+  </div>
+
+  <div class="right-section">
+    <h2>Create Account</h2>
+    <p class="subtitle">Join the premium community ✅</p>
+
+    <form id="signupForm">
+      <div class="name-row">
+        <input type="text" id="first_name" placeholder="First Name" required>
+        <input type="text" id="last_name" placeholder="Last Name" required>
+      </div>
+      <input type="email" id="email" placeholder="Email Address" required>
+      <input type="password" id="password" placeholder="Password" required>
+
+      <div class="terms">
+        <label>
+          <input type="checkbox" required>
+          <span>I agree to the <a href="../terms.html">Terms & Conditions</a></span>
+        </label>
+      </div>
+
+      <button class="signup-btn" type="submit">Complete Registration</button>
+      <div class="status" id="statusMsg"></div>
+
+      <p class="login-link">
+        Already a member? <a href="../login.html">Login</a>
+      </p>
+    </form>
+  </div>
+</div>
+
+<script>
+document.getElementById("signupForm").addEventListener("submit", async (e)=>{
+  e.preventDefault();
+
+  const first_name = document.getElementById("first_name").value;
+  const last_name = document.getElementById("last_name").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  const statusMsg = document.getElementById("statusMsg");
+  statusMsg.style.display = "none";
+
+  try{
+    const res = await fetch("/api/signup",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({first_name,last_name,email,password})
+    });
+
+    const data = await res.json();
+    statusMsg.style.display = "block";
+    statusMsg.innerText = data.message;
+
+    if(data.success){
+      setTimeout(()=> window.location.href="../login.html", 1200);
+    }
+  }catch(err){
+    statusMsg.style.display = "block";
+    statusMsg.innerText = "Server error ❌ Backend not running";
+  }
+});
+</script>
+
+</body>
+</html>

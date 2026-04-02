@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Bids - CarRentalPro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #00c9a7;
+      --secondary: #7f5cff;
+      --accent: #9b7cff;
+      --dark: #0b0a12;
+      --dark-elevated: #151320;
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --success: #2ecc71;
+      --warning: #f1c40f;
+      --danger: #e74c3c;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+    body {
+      background: var(--dark);
+      color: white;
+      padding: 40px 8%;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      background: var(--dark-elevated);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+      padding: 40px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      border-bottom: 1px solid var(--glass-border);
+      padding-bottom: 25px;
+    }
+
+    h2 {
+      font-size: 28px;
+      font-weight: 700;
+      background: linear-gradient(to right, white, var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .btn-back {
+      padding: 10px 20px;
+      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-back:hover { background: rgba(255, 255, 255, 0.1); border-color: var(--primary); }
+
+    .bid-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(15px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: 0.3s;
+    }
+    .bid-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+
+    .bid-info p { font-size: 14px; color: #aaa; margin-bottom: 5px; }
+    .bid-info b { color: white; margin-right: 5px; }
+    .price-row { display: flex; gap: 20px; margin-top: 10px; }
+    .offer-price { font-size: 22px; font-weight: 700; color: var(--primary); }
+    .asking-price { font-size: 14px; color: #666; text-decoration: line-through; align-self: center; }
+
+    .status-badge {
+      padding: 6px 15px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 10px;
+      display: inline-block;
+    }
+
+    .status-pending { background: rgba(241, 196, 15, 0.1); color: var(--warning); border: 1px solid rgba(241, 196, 15, 0.2); }
+    .status-accepted { background: rgba(46, 204, 113, 0.1); color: var(--success); border: 1px solid rgba(46, 204, 113, 0.2); }
+    .status-rejected { background: rgba(231, 76, 60, 0.1); color: var(--danger); border: 1px solid rgba(231, 76, 60, 0.2); }
+    .status-paid { background: rgba(127, 92, 255, 0.1); color: var(--accent); border: 1px solid rgba(127, 92, 255, 0.2); }
+
+    .btn-pay {
+      padding: 12px 30px;
+      background: linear-gradient(135deg, var(--primary), #00e0b9);
+      color: var(--dark);
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 10px 20px rgba(0, 201, 167, 0.2);
+    }
+    .btn-pay:hover { transform: scale(1.05); box-shadow: 0 15px 30px rgba(0, 201, 167, 0.3); }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px;
+      color: #777;
+      font-size: 18px;
+    }
+  </style>
+    <link rel="stylesheet" href="../ai_assistant/roadmind.css">
+    <script src="../ai_assistant/roadmind.js" defer></script>
+</head>
+<body>
+
+  <div class="container">
+    <div class="topbar">
+      <h2>My Buying Bids</h2>
+      <a href="../home/home.html" class="btn-back"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+    </div>
+
+    <div id="bids">
+      <div class="empty-state"><i class="fas fa-spinner fa-spin"></i> Loading your bids...</div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = "/api";
+    const user = JSON.parse(localStorage.getItem("car_rental_user"));
+
+    if(!user){
+      alert("Please login first ❌");
+      window.location.href="../login/login.html";
+    }
+
+    const grid = document.getElementById("bids");
+
+    function getImage(imgData){
+      if(!imgData) return "https://via.placeholder.com/400x200?text=No+Image";
+      if(typeof imgData === 'string' && imgData.startsWith('data:image')) return imgData;
+      try {
+        const arr = typeof imgData === 'string' ? JSON.parse(imgData) : imgData;
+        if(Array.isArray(arr) && arr.length) return arr[0];
+        return "https://via.placeholder.com/400x200?text=No+Image";
+      } catch(e) {
+        return imgData || "https://via.placeholder.com/400x200?text=No+Image";
+      }
+    }
+
+    async function fetchBids(){
+      try {
+        const res = await fetch(`${API_BASE}/my-bids/${user.email}`);
+        const data = await res.json();
+
+        if(!data.bids || !data.bids.length){
+          grid.innerHTML = `<div class="empty-state">No bids placed yet. Browse cars and make an offer! 🚗</div>`;
+          return;
+        }
+
+        grid.innerHTML = "";
+        data.bids.forEach(bid => {
+          const statusClass = `status-${bid.status.toLowerCase()}`;
+          const img = getImage(bid.images);
+          grid.innerHTML += `
+            <div class="bid-card">
+              <img src="${img}" alt="${bid.company}" style="width:120px; height:80px; object-fit:cover; border-radius:12px; margin-right:20px;">
+              <div class="bid-info" style="flex:1;">
+                <p><b>Car:</b> ${bid.company} ${bid.model}</p>
+                <div class="price-row">
+                    <div class="offer-price">Your Bid: ₹${Number(bid.offered_price).toLocaleString()}</div>
+                    <div class="asking-price">Asking: ₹${Number(bid.asking_price).toLocaleString()}</div>
+                </div>
+                <span class="status-badge ${statusClass}">${bid.status}</span>
+              </div>
+
+              <div class="actions">
+                ${bid.status === 'Accepted' ? `
+                  <button class="btn-pay" onclick="proceedToPayment(${bid.id}, '${(bid.company + ' ' + bid.model).replace(/'/g, "\\'")}', ${bid.offered_price}, ${bid.car_id}, '${img}')">
+                    <i class="fas fa-credit-card"></i> Proceed to Pay
+                  </button>
+                ` : bid.status === 'Paid' ? `
+                   <span style="color:var(--primary); font-weight:600;"><i class="fas fa-check-circle"></i> Purchased</span>
+                ` : `
+                   <span style="color:#666">Waiting for Owner</span>
+                `}
+              </div>
+            </div>
+          `;
+        });
+      } catch (err) {
+        grid.innerHTML = `<div class="empty-state">Error loading bids ❌</div>`;
+      }
+    }
+
+    function proceedToPayment(requestId, carName, price, carId, carImg) {
+        const pendingBooking = {
+            requestId: requestId, 
+            carId: carId, 
+            carName: carName,
+            price: price,
+            carImg: carImg, // Match checkout.html key
+            flowType: 'buy',
+            type: 'Purchase',
+            description: "Final purchase of your negotiated car."
+        };
+
+        localStorage.setItem('pendingBooking', JSON.stringify(pendingBooking));
+        window.location.href = "../checkout/checkout.html";
+    }
+
+    fetchBids();
+  </script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #00c9a7;
+      --secondary: #7f5cff;
+      --accent: #9b7cff;
+      --dark: #0b0a12;
+      --dark-elevated: #151320;
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+    body {
+      min-height: 100vh;
+      background: var(--dark);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .box {
+      width: 500px;
+      max-width: 95%;
+      background: var(--dark-elevated);
+      padding: 50px 40px;
+      border-radius: 24px;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+      text-align: center;
+      backdrop-filter: blur(20px);
+      animation: fadeIn 0.8s ease;
+    }
+
+    h2 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      background: linear-gradient(to right, white, var(--primary));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p { font-size: 15px; color: #888; margin-bottom: 35px; }
+
+    button {
+      width: 100%;
+      padding: 16px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 700;
+      transition: 0.3s;
+      background: linear-gradient(135deg, var(--primary), #00e0b9);
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    button:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0, 201, 167, 0.3); }
+
+    .logout {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      color: white;
+      margin-top: 10px;
+    }
+
+    .logout:hover { background: rgba(255, 255, 255, 0.1); border-color: #ff6b6b; color: #ff6b6b; box-shadow: none; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+    <link rel="stylesheet" href="../ai_assistant/roadmind.css">
+    <script src="../ai_assistant/roadmind.js" defer></script>
+</head>
+
+<body>
+
+  <div class="box">
+    <h2>Admin Access 👋</h2>
+    <p>Secure portal for company authorized administrators only.</p>
+
+    <button onclick="window.location.href='admin_approval.html'">
+      <i class="fas fa-check-circle"></i>
+      <span>Review Pending Cars</span>
+    </button>
+
+    <button onclick="window.location.href='admin_drivers.html'" style="background: linear-gradient(135deg, #7f5cff, #9b7cff); color: white;">
+      <i class="fas fa-id-badge"></i>
+      <span>Driver Applications</span>
+    </button>
+
+    <button onclick="window.location.href='admin_assignments.html'" style="background: rgba(0,250,154,0.1); border: 1px solid rgba(0,250,154,0.3); color: #00fa9a;">
+      <i class="fas fa-user-check"></i>
+      <span>Assign Drivers to Cars</span>
+    </button>
+
+    <button onclick="window.location.href='live-monitoring.html'" style="background: rgba(127, 92, 255, 0.1); border: 1px solid var(--secondary); color: var(--secondary);">
+      <i class="fas fa-satellite"></i>
+      <span>Live Fleet Monitor</span>
+    </button>
+    
+    <button class="logout" onclick="logout()">
+      <i class="fas fa-sign-out-alt"></i>
+      <span>Secure Logout</span>
+    </button>
+  </div>
+
+<script>
+  const user = JSON.parse(localStorage.getItem("car_rental_user"));
+
+  if(!user || user.role !== "admin"){
+    alert("Access Denied ❌ Admins only");
+    window.location.href = "../login/login.html";
+  }
+
+  function logout(){
+    localStorage.removeItem("car_rental_user");
+    window.location.href = "../login/login.html";
+  }
+</script>
+
+</body>
+</html>

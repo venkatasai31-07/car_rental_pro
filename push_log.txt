@@ -1,0 +1,9 @@
+Pushing to https://github.com/venkatasai31-07/car_rental_pro.git
+POST git-receive-pack (72805753 bytes)
+remote: error: Trace: c0cd7e6b6f3925e9e88ab37593e19042808e8e7741ce456b649dea519b39a4c4        
+remote: error: See https://gh.io/lfs for more information.        
+remote: error: File backend/ui_price_model.pkl is 351.00 MB; this exceeds GitHub's file size limit of 100.00 MB        
+remote: error: GH001: Large files detected. You may want to try Git Large File Storage - https://git-lfs.github.com.        
+To https://github.com/venkatasai31-07/car_rental_pro.git
+ ! [remote rejected] main -> main (pre-receive hook declined)
+error: failed to push some refs to 'https://github.com/venkatasai31-07/car_rental_pro.git'

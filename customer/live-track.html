@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Tracking - CarRentalPro</title>
+  <link rel="stylesheet" href="../design_system.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    body {
+      background-color: var(--dark);
+      color: white;
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      font-family: 'Inter', sans-serif;
+    }
+
+    #trackMap {
+      flex: 1;
+      width: 100%;
+      z-index: 1;
+    }
+
+    .overlay-panel {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      right: 20px;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      pointer-events: none;
+    }
+
+    .glass-card {
+      background: rgba(21, 19, 32, 0.85);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      padding: 15px 20px;
+      border-radius: 16px;
+      pointer-events: auto;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .trip-info {
+      max-width: 300px;
+    }
+
+    .trip-info h2 {
+      margin: 0 0 5px 0;
+      font-size: 18px;
+    }
+
+    .trip-info p {
+      margin: 0;
+      font-size: 13px;
+      color: #aaa;
+    }
+
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      background: #888;
+      border-radius: 50%;
+    }
+
+    .dot.live {
+      background: var(--primary);
+      box-shadow: 0 0 10px var(--primary);
+      animation: blink 1.5s infinite;
+    }
+
+    @keyframes blink {
+      0% { opacity: 1; }
+      50% { opacity: 0.3; }
+      100% { opacity: 1; }
+    }
+
+    .bottom-panel {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      width: 90%;
+      max-width: 600px;
+    }
+
+    .driver-details {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .driver-img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--dark-elevated);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--primary);
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 15px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 15px;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-val {
+      display: block;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: #888;
+      text-transform: uppercase;
+    }
+    
+    .car-marker {
+      transition: all 0.5s linear;
+    }
+  </style>
+    <link rel="stylesheet" href="../ai_assistant/roadmind.css">
+    <script src="../ai_assistant/roadmind.js" defer></script>
+</head>
+<body>
+
+  <div class="overlay-panel">
+    <div class="glass-card trip-info">
+      <h2 id="carNameDisplay">Premium Sedan</h2>
+      <p id="bookingIdText">Booking #--</p>
+    </div>
+    
+    <div class="glass-card status-indicator">
+      <div id="statusDot" class="dot"></div>
+      <span id="statusText">Awaiting Driver Location...</span>
+    </div>
+  </div>
+
+  <div id="trackMap"></div>
+
+  <div class="bottom-panel">
+    <div class="glass-card">
+      <div class="driver-details">
+        <div class="driver-img">
+          <i class="fas fa-user-tie"></i>
+        </div>
+        <div>
+          <h3 style="margin:0; font-size:16px;" id="driverName">Driver Name</h3>
+          <p style="margin:0; font-size:12px; color:#888;">Live Location Shared via Mobile</p>
+        </div>
+        <a href="tel:0000000000" id="callDriver" class="btn-primary" style="margin-left:auto; padding: 10px 20px; font-size: 14px; border-radius: 30px; text-decoration: none;">
+          <i class="fas fa-phone"></i> Call
+        </a>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-item">
+          <span class="stat-val" id="speed">0 km/h</span>
+          <span class="stat-label">Current Speed</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-val" id="updated">-</span>
+          <span class="stat-label">Last Updated</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-val" id="accuracy">High</span>
+          <span class="stat-label">GPS Quality</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const API_BASE = "/api";
+    let map;
+    let marker;
+    let polyline;
+    let path = [];
+    let currentBookingId = new URLSearchParams(window.location.search).get('id');
+    
+    // Custom Car Icon
+    const carIcon = L.divIcon({
+      className: 'car-marker',
+      html: `<div style="color: var(--primary); transform: translate(-50%, -50%);">
+              <i class="fas fa-car fa-2x"></i>
+             </div>`,
+      iconSize: [30, 30],
+      iconAnchor: [15, 15]
+    });
+
+    function initMap() {
+      map = L.map('trackMap', {
+        zoomControl: false,
+        attributionControl: false
+      }).setView([20.5937, 78.9629], 5); // Default India view
+
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        maxZoom: 19
+      }).addTo(map);
+
+      polyline = L.polyline([], { color: 'var(--primary)', weight: 3, opacity: 0.6 }).addTo(map);
+    }
+
+    async function fetchLocation() {
+      if (!currentBookingId) return;
+
+      try {
+        const res = await fetch(`${API_BASE}/get-trip-location/${currentBookingId}`);
+        const data = await res.json();
+
+        if (data.success) {
+          const { latitude, longitude, last_updated, driver_name, car_name } = data.location;
+          const pos = [latitude, longitude];
+
+          updateUI(data.location);
+
+          if (!marker) {
+            marker = L.marker(pos, { icon: carIcon }).addTo(map);
+            map.setView(pos, 15);
+          } else {
+            marker.setLatLng(pos);
+            // Optional: smooth zoom follow
+            // map.panTo(pos); 
+          }
+
+          path.push(pos);
+          polyline.setLatLngs(path);
+
+          document.getElementById('statusDot').className = "dot live";
+          document.getElementById('statusText').innerText = "Live tracking active";
+        }
+      } catch (err) {
+        console.error("Tracking Error:", err);
+      }
+    }
+
+    function updateUI(loc) {
+      document.getElementById('carNameDisplay').innerText = loc.car_name;
+      document.getElementById('bookingIdText').innerText = `Booking #${currentBookingId}`;
+      document.getElementById('driverName').innerText = loc.driver_name;
+      
+      const lastUpdate = new Date(loc.last_updated);
+      document.getElementById('updated').innerText = lastUpdate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      
+      // Speed simulation (since standard GPS doesn't always provide it reliably to browser)
+      document.getElementById('speed').innerText = "Moving"; 
+    }
+
+    window.onload = () => {
+      initMap();
+      fetchLocation();
+      setInterval(fetchLocation, 5000); // Polling every 5 seconds
+    };
+  </script>
+</body>
+</html>

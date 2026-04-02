@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Operations - CarRentalPro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #00c9a7;
+      --secondary: #7f5cff;
+      --accent: #9b7cff;
+      --dark: #0b0a12;
+      --dark-elevated: #151320;
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --danger: #ff6b6b;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+    body {
+      min-height: 100vh;
+      background: var(--dark);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      background: var(--dark-elevated);
+      border-radius: 24px;
+      padding: 50px 40px;
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--glass-border);
+      text-align: center;
+      backdrop-filter: blur(20px);
+      animation: fadeIn 0.8s ease;
+    }
+
+    h2 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      background: linear-gradient(to right, white, var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .sub {
+      font-size: 15px;
+      color: #888;
+      margin-bottom: 40px;
+    }
+
+    .card-grid { display: flex; flex-direction: column; gap: 20px; }
+
+    .card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 30px;
+      display: flex;
+      align-items: center;
+      gap: 25px;
+      transition: 0.3s;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: var(--primary);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .icon-box {
+      width: 60px;
+      height: 60px;
+      background: rgba(0, 201, 167, 0.1);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: var(--primary);
+      transition: 0.3s;
+    }
+    .card:hover .icon-box { background: var(--primary); color: var(--dark); }
+
+    .card-content { flex: 1; }
+
+    .title { font-size: 18px; font-weight: 700; margin-bottom: 5px; }
+    .desc { font-size: 13px; color: #888; line-height: 1.6; }
+
+    .logout-btn {
+      margin-top: 40px;
+      width: 100%;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 107, 107, 0.2);
+      background: rgba(255, 107, 107, 0.05);
+      color: var(--danger);
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .logout-btn:hover { background: var(--danger); color: white; border-color: var(--danger); }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+    <link rel="stylesheet" href="../ai_assistant/roadmind.css">
+    <script src="../ai_assistant/roadmind.js" defer></script>
+</head>
+
+<body>
+
+  <div class="container">
+    <h2>Admin Panel</h2>
+    <div class="sub">Select a module to manage platform approvals</div>
+
+    <div class="card-grid">
+      <!-- Rental Approval -->
+      <div class="card" onclick="goRentalApproval()">
+        <div class="icon-box"><i class="fas fa-car-side"></i></div>
+        <div class="card-content">
+          <div class="title">Rental Approvals</div>
+          <div class="desc">Verify and approve cars listed for rental operations.</div>
+        </div>
+        <i class="fas fa-chevron-right" style="color: #444"></i>
+      </div>
+
+      <!-- Sell / Buy Approval -->
+      <div class="card" onclick="goSellBuyApproval()">
+        <div class="icon-box"><i class="fas fa-handshake"></i></div>
+        <div class="card-content">
+          <div class="title">Sell / Buy Queue</div>
+          <div class="desc">Process marketplace listings and ownership transfers.</div>
+        </div>
+        <i class="fas fa-chevron-right" style="color: #444"></i>
+      </div>
+
+      <!-- Driver Applications -->
+      <div class="card" onclick="window.location.href='admin_drivers.html'" style="border-color: rgba(127,92,255,0.2);">
+        <div class="icon-box" style="background: rgba(127,92,255,0.1); color: #7f5cff;"><i class="fas fa-id-badge"></i></div>
+        <div class="card-content">
+          <div class="title">Driver Applications</div>
+          <div class="desc">Review, approve or reject driver registration applications.</div>
+        </div>
+        <i class="fas fa-chevron-right" style="color: #444"></i>
+      </div>
+
+      <!-- Assign Drivers -->
+      <div class="card" onclick="window.location.href='admin_assignments.html'" style="border-color: rgba(0,201,167,0.2);">
+        <div class="icon-box" style="background: rgba(0,201,167,0.1); color: #00c9a7;"><i class="fas fa-user-check"></i></div>
+        <div class="card-content">
+          <div class="title">Assign Drivers to Bookings</div>
+          <div class="desc">Assign approved drivers to car bookings that requested a platform driver.</div>
+        </div>
+        <i class="fas fa-chevron-right" style="color: #444"></i>
+      </div>
+    </div>
+
+    <button class="logout-btn" onclick="logout()">
+      <i class="fas fa-sign-out-alt"></i>
+      <span>Exit Administration</span>
+    </button>
+  </div>
+
+  <script>
+    function goRentalApproval(){
+      window.location.href = "../admin/admin_approval.html";
+    }
+
+    function goSellBuyApproval(){
+      window.location.href = "../admin/admin_sell_buy_approval.html";
+    }
+
+    function logout(){
+      localStorage.clear();
+      window.location.href = "../login/login.html";
+    }
+  </script>
+
+</body>
+</html>

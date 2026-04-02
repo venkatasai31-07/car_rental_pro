@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booking Assistance | CarRentalPro</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #00c9a7;
+      --secondary: #7f5cff;
+      --accent: #9b7cff;
+      --dark: #0b0a12;
+      --dark-elevated: #151320;
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: var(--dark);
+      color: white;
+      min-height: 100vh;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    header {
+      background: rgba(11, 10, 18, 0.8);
+      backdrop-filter: blur(20px);
+      padding: 20px 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--glass-border);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    header h1 {
+      font-size: 24px;
+      font-weight: 800;
+      background: linear-gradient(to right, white, var(--primary));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    nav a {
+      color: #aaa;
+      text-decoration: none;
+      margin-left: 30px;
+      font-weight: 500;
+      font-size: 14px;
+      transition: var(--transition);
+    }
+
+    nav a:hover { color: var(--primary); }
+
+    /* Page Header */
+    .page-header {
+      padding: 120px 8% 60px;
+      text-align: center;
+      background: radial-gradient(circle at top right, rgba(0, 201, 167, 0.05), transparent);
+      position: relative;
+    }
+
+    .back-btn {
+      position: absolute;
+      top: 40px;
+      right: 8%;
+      background: var(--glass-bg);
+      color: white;
+      padding: 10px 24px;
+      border-radius: 12px;
+      text-decoration: none;
+      border: 1px solid var(--glass-border);
+      font-weight: 600;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: var(--transition);
+    }
+
+    .back-btn:hover {
+      background: var(--primary);
+      color: var(--dark);
+      border-color: var(--primary);
+      transform: translateX(-5px);
+    }
+
+    .page-header h2 {
+      font-size: 56px;
+      font-weight: 800;
+      margin-bottom: 20px;
+      background: linear-gradient(to right, white, #888);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .page-header p {
+      color: #888;
+      font-size: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* Content */
+    .content {
+      max-width: 1400px;
+      margin: 0 auto 100px;
+      padding: 0 8%;
+    }
+
+    .assist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+      margin-bottom: 80px;
+    }
+
+    .assist-card {
+      background: var(--dark-elevated);
+      padding: 50px 35px;
+      border-radius: 32px;
+      border: 1px solid var(--glass-border);
+      text-align: center;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .assist-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(0, 201, 167, 0.03), transparent);
+    }
+
+    .assist-card:hover {
+      transform: translateY(-10px);
+      border-color: var(--primary);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .assist-card i {
+      font-size: 56px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 25px;
+      display: inline-block;
+    }
+
+    .assist-card h4 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .assist-card p {
+      color: #888;
+      font-size: 16px;
+    }
+
+    /* Steps Section */
+    .steps {
+      background: var(--dark-elevated);
+      padding: 60px 50px;
+      border-radius: 40px;
+      border: 1px solid var(--glass-border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .steps::after {
+      content: '';
+      position: absolute;
+      bottom: -100px;
+      right: -100px;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(127, 92, 255, 0.05), transparent);
+      z-index: 0;
+    }
+
+    .steps h3 {
+      font-size: 32px;
+      font-weight: 800;
+      color: white;
+      margin-bottom: 40px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .steps ol {
+      color: #aaa;
+      font-size: 18px;
+      counter-reset: step-counter;
+      list-style: none;
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .steps ol li {
+      margin-bottom: 30px;
+      padding-left: 70px;
+      position: relative;
+    }
+
+    .steps ol li::before {
+      counter-increment: step-counter;
+      content: counter(step-counter);
+      position: absolute;
+      left: 0;
+      top: 0px;
+      width: 44px;
+      height: 44px;
+      background: var(--primary);
+      color: var(--dark);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 20px;
+      box-shadow: 0 10px 20px rgba(0, 201, 167, 0.2);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--dark-elevated);
+      padding: 60px 8% 40px;
+      text-align: center;
+      border-top: 1px solid var(--glass-border);
+      color: #666;
+    }
+
+    footer a { color: var(--primary); text-decoration: none; font-weight: 600; }
+
+    @media (max-width: 768px) {
+      .page-header h2 { font-size: 40px; }
+      .page-header { padding: 100px 8% 60px; }
+      .back-btn { top: 20px; position: relative; display: inline-flex; margin-bottom: 30px; }
+      .steps { padding: 40px 25px; }
+      .steps ol li { padding-left: 60px; font-size: 16px; }
+    }
+  </style>
+    <link rel="stylesheet" href="../../ai_assistant/roadmind.css">
+    <link rel="stylesheet" href="../../ai_assistant/terms_modal.css">
+    <script src="../../ai_assistant/roadmind.js" defer></script>
+    <script src="../../ai_assistant/terms_modal.js" defer></script>
+</head>
+
+<body>
+
+  <header>
+    <h1>CarRentalPro</h1>
+    <nav>
+      <a href="../../home/home.html">Home</a>
+      <a href="../../book_car/book_car.html">Book a Car</a>
+      <a href="../services.html">Services</a>
+      <a href="../contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <section class="page-header">
+    <a href="customer-support.html" class="back-btn">
+      <i class="fas fa-arrow-left"></i>
+      <span>Back</span>
+    </a>
+    <h2>Booking Assistance</h2>
+    <p>
+      Our expert advisors are here to help you navigate the fleet, select the ideal 
+      rental plan, and ensure your reservation is locked in seamlessly.
+    </p>
+  </section>
+
+  <section class="content">
+
+    <div class="assist-grid">
+
+      <div class="assist-card">
+        <i class="fas fa-car-side"></i>
+        <h4>Fleet Concierge</h4>
+        <p>Get personalized recommendations based on your group size, terrain requirements, and prestige level.</p>
+      </div>
+
+      <div class="assist-card">
+        <i class="fas fa-calendar-alt"></i>
+        <h4>Plan Optimization</h4>
+        <p>We analyze your schedule to suggest the most cost-effective daily, weekly, or monthly subscription plans.</p>
+      </div>
+
+      <div class="assist-card">
+        <i class="fas fa-file-signature"></i>
+        <h4>Protocol Guidance</h4>
+        <p>Avoid documentation hurdles with step-by-step walkthroughs for driver verification and insurance claims.</p>
+      </div>
+
+    </div>
+
+    <div class="steps">
+      <h3>The Elevation Process</h3>
+      <ol>
+        <li>Connect with our dedicated concierge via phone or priority email.</li>
+        <li>Share your destination details and specific vehicle preferences.</li>
+        <li>Receive a tailored logistics proposal with optimized rental terms.</li>
+        <li>Confirm your selection and receive instant digital credentials.</li>
+      </ol>
+    </div>
+
+  </section>
+
+  <footer>
+    <div class="footer-links">
+      <a href="../privacy.html">Privacy Policy</a>
+      <a href="../../login/terms.html">Terms & Conditions</a>
+      <a href="../contact.html">Support</a>
+    </div>
+    <p class="copyright">&copy; 2025 CarRentalPro. All Rights Reserved.</p>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily & Weekly Rental Plans - CarRentalPro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #00c9a7;
+      --secondary: #7f5cff;
+      --accent: #9b7cff;
+      --dark: #0b0a12;
+      --dark-elevated: #151320;
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+    body {
+      background: var(--dark);
+      color: white;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* Header */
+    header {
+      background: rgba(21, 19, 32, 0.8);
+      backdrop-filter: blur(20px);
+      padding: 20px 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--glass-border);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    header h1 {
+      font-size: 24px;
+      font-weight: 800;
+      background: linear-gradient(to right, white, var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    nav a {
+      color: #aaa;
+      text-decoration: none;
+      margin-left: 30px;
+      font-weight: 500;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    nav a:hover, nav a.active { color: var(--primary); }
+
+    /* Page UI */
+    .hero {
+      padding: 80px 8% 40px;
+      text-align: center;
+      background: radial-gradient(circle at top right, rgba(127, 92, 255, 0.05), transparent);
+    }
+
+    .page-title {
+      font-size: 48px;
+      font-weight: 800;
+      margin-bottom: 10px;
+      background: linear-gradient(to right, white, #888);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .page-subtitle { color: #888; font-size: 18px; margin-bottom: 40px; }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto 100px;
+      padding: 0 8%;
+      animation: fadeIn 0.8s ease;
+    }
+
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      padding: 40px;
+      border-radius: 24px;
+      border: 1px solid var(--glass-border);
+      margin-bottom: 30px;
+    }
+
+    .popular-plan {
+      background: linear-gradient(135deg, rgba(127, 92, 255, 0.1), rgba(0, 201, 167, 0.1));
+      border: 1px solid var(--primary);
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .popular-plan h3 { color: var(--primary); font-size: 20px; margin-bottom: 10px; }
+    .popular-plan p { font-size: 16px; color: #eee; }
+
+    h3 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 25px;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    ul, ol {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #aaa;
+      font-size: 15px;
+    }
+
+    li::before {
+      content: "\f058";
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      color: var(--primary);
+      font-size: 14px;
+    }
+
+    /* Calculator Styles */
+    .calculator {
+      background: var(--dark-elevated);
+      padding: 40px;
+      border-radius: 24px;
+      border: 1px solid var(--glass-border);
+      margin-top: 50px;
+    }
+
+    .calculator label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #888;
+      margin-bottom: 10px;
+    }
+
+    .calculator input, .calculator select {
+      width: 100%;
+      padding: 16px 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      color: white;
+      font-size: 14px;
+      margin-bottom: 25px;
+      transition: 0.3s;
+    }
+
+    .calculator input:focus, .calculator select:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .btn-calc {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, var(--primary), #00e0b9);
+      border: none;
+      border-radius: 12px;
+      color: var(--dark);
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .btn-calc:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0, 201, 167, 0.3); }
+
+    .result-box {
+      margin-top: 25px;
+      padding: 20px;
+      background: rgba(0, 201, 167, 0.1);
+      border-radius: 12px;
+      border: 1px solid rgba(0, 201, 167, 0.2);
+      text-align: center;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--dark-elevated);
+      padding: 60px 8% 40px;
+      text-align: center;
+      border-top: 1px solid var(--glass-border);
+    }
+
+    .footer-links {
+      margin-bottom: 25px;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+    }
+
+    .footer-links a { color: #666; text-decoration: none; font-size: 14px; transition: 0.3s; }
+    .footer-links a:hover { color: var(--primary); }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media(max-width: 768px) {
+      .page-title { font-size: 32px; }
+      header { padding: 20px 5%; }
+    }
+  </style>
+
+
+
+  </style>
+    <link rel="stylesheet" href="../ai_assistant/roadmind.css">
+    <link rel="stylesheet" href="../ai_assistant/terms_modal.css">
+    <script src="../ai_assistant/roadmind.js" defer></script>
+    <script src="../ai_assistant/terms_modal.js" defer></script>
+</head>
+<body>
+
+  <header>
+    <h1>CarRentalPro</h1>
+    <nav>
+      <a href="../home/home.html">Home</a>
+      <a href="../book_car/book_car.html">Book a Car</a>
+      <a href="../service/services.html">Services</a>
+      <a href="../service/rental_info.html" class="active">Rental Plans</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <a href="javascript:history.back()" class="back-btn">
+      <i class="fas fa-arrow-left"></i>
+      <span>Back</span>
+    </a>
+    <h2 class="page-title">Rental Plans & Pricing</h2>
+    <p class="page-subtitle">Flexible options tailored to your travel needs with transparent pricing.</p>
+  </section>
+
+  <div class="container">
+    <div class="glass-card popular-plan">
+      <h3><i class="fas fa-fire"></i> Most Popular Choice</h3>
+      <p><strong>7-Day Saver Plan:</strong> Save up to 10% + free basic insurance + priority support.</p>
+    </div>
+
+    <div class="glass-card">
+      <h3><i class="fas fa-receipt"></i> Pricing Transparency</h3>
+      <ul>
+        <li>No hidden service charges or surprise fees</li>
+        <li>Fuel charges based on your actual mileage usage</li>
+        <li>Late return fee only after a 1-hour grace period</li>
+        <li>GST and all applicable taxes included in the final bill</li>
+      </ul>
+    </div>
+
+    <div class="glass-card">
+      <h3><i class="fas fa-box-open"></i> What’s Included</h3>
+      <ul>
+        <li>Basic insurance coverage for peace of mind</li>
+        <li>24/7 Emergency roadside assistance anywhere</li>
+        <li>Dedicated premium customer support line</li>
+      </ul>
+    </div>
+
+    <div class="calculator">
+      <h3><i class="fas fa-calculator"></i> Price Estimator</h3>
+      <div class="calc-grid">
+        <div class="input-group">
+          <label for="carType">Select Car Model</label>
+          <select id="carType">
+            <option>Loading approved cars...</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label for="days">Booking Duration (Days)</label>
+          <input type="number" id="days" min="1" step="1" value="1">
+        </div>
+
+        <div class="input-group">
+          <label for="km">Estimated Kilometers</label>
+          <input type="number" id="km" min="0" step="1" value="0">
+        </div>
+      </div>
+
+      <button class="btn-calc" onclick="calculatePrice()">
+        <i class="fas fa-bolt"></i>
+        <span>Calculate Estimate</span>
+      </button>
+
+      <div class="result-box" id="priceResult">
+        Estimated Total: ₹0
+      </div>
+    </div>
+
+    <div class="glass-card" style="margin-top: 50px;">
+      <h3><i class="fas fa-info-circle"></i> Rental Terms</h3>
+      <ul>
+        <li>Minimum booking duration is 1 full day (24 hours)</li>
+        <li>Weekly discount: 10% auto-applied for bookings of 5+ days</li>
+        <li>Valid driving license and identity proof are mandatory</li>
+        <li>Advance payment of 25% required to confirm reservation</li>
+      </ul>
+    </div>
+
+    <div class="glass-card">
+      <h3><i class="fas fa-stream"></i> Our Booking Process</h3>
+      <ol>
+        <li>Search and select your preferred car from our fleet.</li>
+        <li>Upload your driving license and identity documents.</li>
+        <li>Complete the 25% booking advance payment securely.</li>
+        <li>Collect your car from our hub or opt for doorstep delivery.</li>
+      </ol>
+    </div>
+
+    <div class="glass-card">
+      <h3><i class="fas fa-shield-alt"></i> Cancellation Policy</h3>
+      <ul>
+        <li>100% refund for cancellations made 24+ hours before pickup.</li>
+        <li>Booking advance is non-refundable for late cancellations.</li>
+      </ul>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-links">
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="../login/terms.html">Terms & Conditions</a>
+      <a href="contact.html">Support</a>
+    </div>
+    <p class="copyright">&copy; 2025 CarRentalPro. All Rights Reserved.</p>
+  </footer>
+
+
+  <script>
+
+// ✅ PRICE CALCULATOR (SAFE)
+function calculatePrice() {
+
+    const dropdown = document.getElementById("carType");
+
+    if(!dropdown.value){
+        alert("Please select a car");
+        return;
+    }
+
+    const selectedOption = dropdown.selectedOptions[0];
+
+    const carRate = parseInt(selectedOption.dataset.price) || 0;
+    const days = parseInt(document.getElementById('days').value) || 1;
+    const km = parseInt(document.getElementById('km').value) || 0;
+
+    const perKmRate = 21;
+
+    let baseCost = carRate * days;
+
+    // weekly discount
+    if(days >= 5){
+        baseCost *= 0.9;
+    }
+
+    const total = baseCost + (km * perKmRate);
+
+    document.getElementById('priceResult').innerText =
+        `Total Price: ₹${total}`;
+}
+
+
+
+// ✅ LOAD PAGE
+window.addEventListener("DOMContentLoaded", loadApprovedCars);
+
+
+
+// ✅ FETCH APPROVED RENTAL CARS
+async function loadApprovedCars() {
+
+    const dropdown = document.getElementById("carType");
+
+    dropdown.innerHTML =
+        "<option>Loading approved cars...</option>";
+
+    try {
+
+        // ✅ Get email safely
+        let email = localStorage.getItem("email");
+
+        // ⭐ TEMP FIX — prevents crash if storage missing
+        if(!email){
+            console.warn("Email not found in storage.");
+
+            dropdown.innerHTML =
+            "<option>Unable to verify user. Please login again.</option>";
+
+            return;
+        }
+
+        const listingType = "Rental Only";
+
+        // ✅ CALL YOUR EXISTING BACKEND
+        const url =
+        `/api/approved-cars/${
+            encodeURIComponent(email)
+        }/${
+            encodeURIComponent(listingType)
+        }`;
+
+        console.log("Calling API:", url);
+
+        const response = await fetch(url);
+
+        if(!response.ok){
+            throw new Error("Server not responding");
+        }
+
+        const data = await response.json();
+
+        dropdown.innerHTML = "";
+
+        if(!data.cars || data.cars.length === 0){
+
+            dropdown.innerHTML =
+            "<option>No approved cars available</option>";
+
+            return;
+        }
+
+        // ✅ Populate dropdown
+        data.cars.forEach(car => {
+
+            const pricePerDay =
+                Math.round((car.price_month || 30000) / 30);
+
+            const option =
+                document.createElement("option");
+
+            option.value = car.id;
+            option.dataset.price = pricePerDay;
+
+            option.textContent =
+                `${car.company} ${car.model} - ₹${pricePerDay}/day`;
+
+            dropdown.appendChild(option);
+        });
+
+    } catch(error){
+
+        console.error("FETCH FAILED:", error);
+
+        dropdown.innerHTML =
+            "<option>Failed to load cars</option>";
+    }
+}
+
+
+</script>
+
+
+</body>
+</html>

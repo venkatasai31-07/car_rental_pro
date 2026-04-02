@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Profile - CarRentalPro</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #00c9a7;
+      --secondary: #7f5cff;
+      --accent: #9b7cff;
+      --dark: #0b0a12;
+      --dark-elevated: #151320;
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+    body {
+      min-height: 100vh;
+      background: var(--dark);
+      color: white;
+      padding-bottom: 50px;
+    }
+
+    /* Header */
+    header {
+      background: rgba(11, 10, 18, 0.8);
+      backdrop-filter: blur(15px);
+      padding: 20px 8%;
+      border-bottom: 1px solid var(--glass-border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    /* Profile Card */
+    .profile-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(25px);
+      padding: 40px;
+      border-radius: 24px;
+      display: flex;
+      gap: 40px;
+      align-items: center;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
+      animation: fadeInUp 0.8s ease;
+    }
+
+    .profile-img-wrap {
+      position: relative;
+      width: 130px;
+      height: 130px;
+    }
+
+    .profile-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 3px solid var(--primary);
+      padding: 5px;
+      background: var(--dark-elevated);
+      object-fit: cover;
+      box-shadow: 0 10px 30px rgba(0, 201, 167, 0.2);
+    }
+
+    .edit-icon {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      background: var(--primary);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      cursor: pointer;
+      color: var(--dark);
+      border: 3px solid var(--dark-elevated);
+      transition: 0.3s;
+    }
+    .edit-icon:hover { transform: scale(1.1); }
+
+    .user-info h2 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .edit-btn {
+      font-size: 14px;
+      margin-left: 15px;
+      color: var(--primary);
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .user-info p {
+      font-size: 15px;
+      color: #aaa;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .user-info p i { width: 20px; color: var(--primary); }
+
+    /* Stats Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 25px;
+      margin-top: 40px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(15px);
+      padding: 30px;
+      border-radius: 20px;
+      border: 1px solid var(--glass-border);
+      transition: 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      border-color: var(--primary);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .card h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #ccc;
+      margin-bottom: 15px;
+    }
+
+    .stat {
+      font-size: 36px;
+      font-weight: 700;
+      color: white;
+    }
+
+    .list { font-size: 13px; color: #888; margin-top: 5px; }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 15px;
+      border-radius: 99px;
+      font-size: 12px;
+      margin-top: 15px;
+      background: rgba(0, 201, 167, 0.1);
+      border: 1px solid rgba(0, 201, 167, 0.3);
+      color: var(--primary);
+    }
+
+    /* Buttons */
+    .dashboard-btn-wrap { text-align: center; margin-top: 60px; }
+    .dashboard-btn {
+      padding: 16px 36px;
+      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .dashboard-btn:hover {
+      background: white;
+      color: var(--dark);
+      transform: translateY(-3px);
+    }
+
+    /* Popup */
+    .popup {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .popup-box {
+      background: var(--dark-elevated);
+      padding: 40px;
+      border-radius: 24px;
+      width: 100%;
+      max-width: 400px;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+    }
+
+    .popup-box h3 { margin-bottom: 25px; font-size: 24px; text-align: center; }
+
+    .popup-box input {
+      width: 100%;
+      padding: 14px 18px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      color: white;
+      margin-bottom: 15px;
+      outline: none;
+      transition: 0.3s;
+    }
+    .popup-box input:focus { border-color: var(--primary); background: rgba(255, 255, 255, 0.08); }
+
+    .popup-actions { display: flex; gap: 12px; margin-top: 10px; }
+    .popup-actions button {
+      flex: 1;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .save-btn { background: var(--primary); color: var(--dark); }
+    .cancel-btn { background: rgba(255, 255, 255, 0.05); color: white; border: 1px solid var(--glass-border); }
+    .save-btn:hover { opacity: 0.9; transform: scale(1.02); }
+    .cancel-btn:hover { background: rgba(255, 255, 255, 0.1); }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+
+    <link rel="stylesheet" href="../ai_assistant/roadmind.css">
+    <script src="../ai_assistant/roadmind.js" defer></script>
+</head>
+<body>
+
+<header>
+  <div class="logo">CarRentalPro</div>
+</header>
+
+<div class="container">
+
+<!-- PROFILE CARD -->
+<div class="profile-card">
+
+  <!-- IMAGE -->
+  <div class="profile-img-wrap">
+
+    <img id="profileImg"
+         src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+         class="profile-img">
+
+    <div class="edit-icon"
+         onclick="editProfilePic()">✏️</div>
+
+    <input type="file"
+           id="profileUpload"
+           accept="image/*"
+           hidden>
+
+  </div>
+
+  <!-- USER INFO -->
+   <div class="user-info">
+
+  <h2 id="userName">
+  User Name
+  <span class="edit-btn" onclick="openEditProfile()">
+    ✏️ Edit
+  </span>
+</h2>
+
+  <p id="userEmail">user@email.com</p>
+
+  <p id="userPhone">📞 Phone: —</p>
+  <p id="accountId">🆔 Account ID: —</p>
+  <p id="memberSince">📅 Member since —</p>
+
+</div>
+
+<!-- ================= EDIT POPUP ================= -->
+
+<div id="editPopup" class="popup">
+
+  <div class="popup-box">
+
+    <h3>Edit Profile</h3>
+
+    <input id="editFirstName" placeholder="First Name">
+    <input id="editLastName" placeholder="Last Name">
+    <input id="editPhone" placeholder="Phone Number">
+
+    <div class="popup-actions">
+      <button onclick="saveProfile()">Save</button>
+      <button onclick="closeEditProfile()">Cancel</button>
+    </div>
+
+  </div>
+
+</div>
+
+</div>
+
+<!-- GRID -->
+  <div class="grid">
+
+    <!-- BOOKINGS -->
+    <div class="card" onclick="window.location.href='../customer/bookings.html'" style="cursor: pointer;">
+      <h3>My Bookings</h3>
+      <div class="stat" id="bookingCount">0</div>
+      <div class="list">View your trip history & tracking →</div>
+    </div>
+
+    <!-- RENTALS -->
+    <div class="card">
+      <h3>Rental Listings</h3>
+      <div class="stat" id="rentalCount">0</div>
+      <div class="list">Cars listed for rent</div>
+    </div>
+
+    <!-- SELLING -->
+    <div class="card">
+      <h3>Selling Listings</h3>
+      <div class="stat" id="sellingCount">0</div>
+      <div class="list">Cars listed for sale</div>
+    </div>
+
+    <!-- ACCOUNT -->
+    <div class="card">
+      <h3>Account Status</h3>
+      <div class="stat">Active</div>
+      <div class="badge" id="verifyBadge">Profile Verified</div>
+    </div>
+
+    <!-- DRIVER -->
+    <div class="card" id="driverCard" style="display:none;">
+      <h3>Driver Application</h3>
+      <div class="stat" id="driverStatus">Pending</div>
+      <div class="list">Verification status</div>
+    </div>
+
+    <!-- PAYMENTS -->
+    <div class="card">
+      <h3>Total Spending</h3>
+      <div class="stat" id="totalSpent">₹0</div>
+      <div class="list">Across all bookings</div>
+    </div>
+
+  </div>
+
+
+  <!-- BACK BUTTON -->
+  <div class="dashboard-btn-wrap">
+    <button class="dashboard-btn"
+      onclick="goDashboard()">
+      ⬅ Back to Dashboard
+    </button>
+  </div>
+
+</div>
+
+
+<script>
+
+const API_BASE = "/api";
+
+// USER DATA
+const user =
+ JSON.parse(localStorage.getItem("car_rental_user"));
+
+if(!user){
+ alert("Login required ❌");
+ window.location.href="../login/login.html";
+}
+
+
+// BASIC INFO
+document.getElementById("userName").innerText =
+ user.full_name || user.name || "CarRental User";
+
+document.getElementById("userEmail").innerText =
+ user.email;
+
+
+// LOAD PROFILE DATA
+async function loadProfile(){
+
+ try{
+
+  const b =
+   await fetch(`${API_BASE}/my-bookings/${user.email}`)
+   .then(r=>r.json());
+
+  document.getElementById("bookingCount")
+   .innerText = b.count || 0;
+
+
+  const r =
+   await fetch(`${API_BASE}/my-car-status/${user.email}`)
+   .then(r=>r.json());
+
+  document.getElementById("rentalCount")
+   .innerText = r.cars?.length || 0;
+
+
+  const s =
+   await fetch(`${API_BASE}/my-selling-status/${user.email}`)
+   .then(r=>r.json());
+
+  document.getElementById("sellingCount")
+   .innerText = s.cars?.length || 0;
+
+
+  const d =
+   await fetch(`${API_BASE}/driver-status/${user.email}`)
+   .then(r=>r.json());
+
+  if(d.applied){
+
+    document.getElementById("driverCard")
+      .style.display="block";
+
+    document.getElementById("driverStatus")
+      .innerText=d.status;
+
+  }
+
+ }
+ catch(err){
+  console.error(err);
+ }
+
+}
+
+loadProfile();
+
+
+// DASHBOARD NAV
+function goDashboard(){
+ window.location.href="../home/home.html";
+}
+
+// -------------------------------
+// OPEN FILE PICKER
+// -------------------------------
+function editProfilePic(){
+ document
+  .getElementById("profileUpload")
+  .click();
+}
+
+
+// -------------------------------
+// UPLOAD IMAGE
+// -------------------------------
+document
+.getElementById("profileUpload")
+.addEventListener("change", async function(){
+
+ const file = this.files[0];
+ if(!file) return;
+
+ const reader = new FileReader();
+
+ reader.onload = async function(e){
+
+   const base64 = e.target.result;
+
+   // Preview instantly
+   document
+    .getElementById("profileImg")
+    .src = base64;
+
+   try{
+
+     const res = await fetch(
+       "/api/upload-profile-image",
+       {
+         method:"POST",
+         headers:{
+           "Content-Type":"application/json"
+         },
+         body:JSON.stringify({
+           email:user.email,
+           image:base64
+         })
+       }
+     );
+
+     const data = await res.json();
+
+     if(data.success){
+       alert("Profile image saved ✅");
+     }else{
+       alert("Upload failed ❌");
+     }
+
+   }catch(err){
+     console.error(err);
+     alert("Server error ❌");
+   }
+
+ };
+
+ reader.readAsDataURL(file);
+
+});
+
+
+// -------------------------------
+// LOAD SAVED IMAGE
+// -------------------------------
+async function loadProfileImage(){
+
+ try{
+
+   const res = await fetch(
+     `/api/get-profile-image/${user.email}`
+   );
+
+   const data = await res.json();
+
+   if(data.success && data.image){
+
+     document
+      .getElementById("profileImg")
+      .src = data.image;
+
+   }
+
+ }catch(err){
+   console.error("Image load error:", err);
+ }
+
+}
+// ===============================
+// LOAD ACCOUNT CREATED DATE
+// ===============================
+async function loadAccountDate(){
+
+ try{
+
+   const res = await fetch(
+     `${API_BASE}/get-profile/${user.email}`
+   );
+
+   const data = await res.json();
+
+   if(data.success){
+
+     document.getElementById("memberSince")
+       .innerText =
+       "Member since " + data.created_at;
+
+   }
+
+ }catch(err){
+   console.error("Date load error:", err);
+ }
+
+}
+// ===============================
+// LOAD FULL PROFILE
+// ===============================
+async function loadFullProfile(){
+
+ try{
+
+   const res = await fetch(
+     `${API_BASE}/get-profile/${user.email}`
+   );
+
+   const data = await res.json();
+
+   if(!data.success){
+     console.log("Profile not found");
+     return;
+   }
+
+   const p = data.profile;   // 🔥 IMPORTANT
+
+   // -------------------------
+   // NAME
+   // -------------------------
+   document.getElementById("userName").innerText =
+     (p.first_name || "") + " " + (p.last_name || "");
+
+   // -------------------------
+   // EMAIL
+   // -------------------------
+   document.getElementById("userEmail").innerText =
+     p.email || "—";
+
+   // -------------------------
+   // PHONE
+   // -------------------------
+   document.getElementById("userPhone").innerText =
+     "Phone: " + (p.phone || "Not added");
+
+   // -------------------------
+   // ACCOUNT ID
+   // -------------------------
+   document.getElementById("accountId").innerText =
+     "Account ID: " + (p.account_id || "—");
+
+   // -------------------------
+   // MEMBER SINCE
+   // -------------------------
+   document.getElementById("memberSince").innerText =
+     "Member since " + (p.created_at || "—");
+
+   // -------------------------
+   // PROFILE IMAGE
+   // -------------------------
+   if(p.profile_img){
+     document.getElementById("profileImg").src =
+       p.profile_img;
+   }
+
+ }catch(err){
+   console.error("Profile load error:", err);
+ }
+
+}
+// open edit profile
+function openEditProfile(){
+
+ document.getElementById("editPopup").style.display="flex";
+
+ // Prefill existing data
+ document.getElementById("editFirstName").value =
+   document.getElementById("userName").innerText.split(" ")[0];
+
+ document.getElementById("editLastName").value =
+   document.getElementById("userName").innerText.split(" ")[1] || "";
+
+}
+
+function closeEditProfile(){
+ document.getElementById("editPopup").style.display="none";
+}
+
+
+// ===============================
+// RUN ON PAGE LOAD
+// ===============================
+loadProfile();
+loadAccountDate();
+loadProfileImage();
+loadFullProfile();
+
+</script>
+
+</body>
+</html>

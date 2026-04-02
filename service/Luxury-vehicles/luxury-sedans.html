@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luxury Sedans | CarRentalPro</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #00c9a7;
+      --secondary: #7f5cff;
+      --accent: #9b7cff;
+      --dark: #0b0a12;
+      --dark-elevated: #151320;
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: var(--dark);
+      color: white;
+      min-height: 100vh;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    header {
+      background: rgba(11, 10, 18, 0.8);
+      backdrop-filter: blur(20px);
+      padding: 20px 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--glass-border);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    header h1 {
+      font-size: 24px;
+      font-weight: 800;
+      background: linear-gradient(to right, white, var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    nav a {
+      color: #aaa;
+      text-decoration: none;
+      margin-left: 30px;
+      font-weight: 500;
+      font-size: 14px;
+      transition: var(--transition);
+    }
+
+    nav a:hover { color: var(--primary); }
+
+    /* Page Header */
+    .page-header {
+      padding: 120px 8% 60px;
+      text-align: center;
+      background: radial-gradient(circle at top right, rgba(0, 201, 167, 0.05), transparent);
+      position: relative;
+    }
+
+    .page-header h2 {
+      font-size: 56px;
+      font-weight: 800;
+      margin-bottom: 15px;
+      background: linear-gradient(to right, white, #888);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .page-header p {
+      color: #888;
+      font-size: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* BACK BUTTON */
+    .back-btn {
+      position: absolute;
+      top: 40px;
+      right: 8%;
+      background: var(--glass-bg);
+      color: white;
+      padding: 10px 24px;
+      border-radius: 12px;
+      text-decoration: none;
+      border: 1px solid var(--glass-border);
+      font-weight: 600;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: var(--transition);
+    }
+
+    .back-btn:hover {
+      background: var(--primary);
+      color: var(--dark);
+      border-color: var(--primary);
+      transform: translateX(-5px);
+    }
+
+    /* SECTION */
+    .section {
+      max-width: 1400px;
+      margin: 0 auto 100px;
+      padding: 0 8%;
+    }
+
+    .section h3 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 50px;
+      text-align: center;
+      color: var(--primary);
+    }
+
+    /* CARS GRID */
+    .cars-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 40px;
+    }
+
+    .car-card {
+      position: relative;
+      background: var(--dark-elevated);
+      border-radius: 32px;
+      border: 1px solid var(--glass-border);
+      overflow: hidden;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .car-card:hover {
+      transform: translateY(-10px);
+      border-color: var(--primary);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+    }
+
+    .car-card.selected {
+      border: 2px solid var(--primary);
+      box-shadow: 0 0 40px rgba(0, 201, 167, 0.2);
+    }
+
+    /* TICK */
+    .tick {
+      position: absolute;
+      top: 25px;
+      right: 25px;
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      color: var(--dark);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      z-index: 10;
+      opacity: 0;
+      transform: scale(0.5);
+      transition: var(--transition);
+    }
+
+    .car-card.selected .tick {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .car-img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      transition: var(--transition);
+      filter: grayscale(20%);
+    }
+
+    .car-card:hover .car-img {
+      filter: grayscale(0%);
+      transform: scale(1.05);
+    }
+
+    .car-info {
+      padding: 30px;
+    }
+
+    .car-card h4 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: white;
+    }
+
+    .car-card ul {
+      list-style: none;
+      color: #777;
+      font-size: 14px;
+      margin-bottom: 25px;
+    }
+
+    .car-card ul li {
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      padding-bottom: 8px;
+    }
+
+    .car-card ul li strong {
+      color: #999;
+    }
+
+    .price-tag {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--primary);
+      display: block;
+      margin-top: 15px;
+    }
+
+    .price-tag span {
+      font-size: 14px;
+      color: #666;
+      font-weight: 500;
+    }
+
+    /* SELECTED INFO */
+    .selected-info {
+      margin-top: 60px;
+      text-align: center;
+      font-size: 18px;
+      padding: 25px;
+      background: var(--glass-bg);
+      border-radius: 20px;
+      border: 1px solid var(--glass-border);
+      color: #888;
+    }
+
+    .selected-info span {
+      color: var(--primary);
+      font-weight: 700;
+      margin-left: 10px;
+    }
+
+    /* CTA */
+    .cta {
+      text-align: center;
+      margin-bottom: 120px;
+    }
+
+    .btn-proceed {
+      background: linear-gradient(135deg, var(--primary), #00e0b9);
+      color: var(--dark);
+      padding: 20px 60px;
+      border-radius: 16px;
+      border: none;
+      font-weight: 800;
+      font-size: 18px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 15px;
+      transition: var(--transition);
+      box-shadow: 0 20px 40px rgba(0, 201, 167, 0.2);
+    }
+
+    .btn-proceed:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 30px 60px rgba(0, 201, 167, 0.4);
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--dark-elevated);
+      padding: 60px 8% 40px;
+      text-align: center;
+      border-top: 1px solid var(--glass-border);
+      color: #666;
+    }
+
+    footer a { color: var(--primary); text-decoration: none; font-weight: 600; }
+
+    @media (max-width: 768px) {
+      .page-header h2 { font-size: 40px; }
+      .back-btn { top: 20px; position: relative; display: inline-flex; margin-bottom: 30px; }
+    }
+  </style>
+    <link rel="stylesheet" href="../../ai_assistant/roadmind.css">
+    <link rel="stylesheet" href="../../ai_assistant/terms_modal.css">
+    <script src="../../ai_assistant/roadmind.js" defer></script>
+    <script src="../../ai_assistant/terms_modal.js" defer></script>
+</head>
+
+<body>
+
+  <header>
+    <h1>CarRentalPro</h1>
+    <nav>
+      <a href="../home.html">Home</a>
+      <a href="../book_car.html">Book a Car</a>
+      <a href="../services.html">Services</a>
+      <a href="../contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <section class="page-header">
+    <a href="luxury-vehicles.html" class="back-btn">
+      <i class="fas fa-arrow-left"></i>
+      <span>Back</span>
+    </a>
+    <h2>Luxury Sedans</h2>
+    <p>Ideal for business travel and premium comfort. Experience the ultimate in refinement.</p>
+  </section>
+
+  <section class="section">
+    <h3>Select Your Luxury Sedan</h3>
+
+    <div class="cars-grid">
+
+      <div class="car-card" data-car="Range Rover" data-price="9000">
+        <i class="fas fa-check tick"></i>
+        <img src="cars/Range Rover.jpg" class="car-img" alt="Range Rover">
+        <div class="car-info">
+          <h4>Range Rover</h4>
+          <ul>
+            <li><strong>Seating:</strong> 5 Capacity</li>
+            <li><strong>Fuel:</strong> Petrol / Diesel</li>
+            <li><strong>Transmission:</strong> Automatic</li>
+            <li><strong>Luxury:</strong> Ultra Premium</li>
+          </ul>
+          <div class="price-tag">₹9000 <span>/ day</span></div>
+        </div>
+      </div>
+
+      <div class="car-card" data-car="Jeep Grand Cherokee" data-price="7500">
+        <i class="fas fa-check tick"></i>
+        <img src="cars/Jeep Grand Cherokee.jpg" class="car-img" alt="Jeep Grand Cherokee">
+        <div class="car-info">
+          <h4>Jeep Grand Cherokee</h4>
+          <ul>
+            <li><strong>Seating:</strong> 5 Capacity</li>
+            <li><strong>Fuel:</strong> Petrol</li>
+            <li><strong>Transmission:</strong> Automatic</li>
+            <li><strong>Luxury:</strong> Premium</li>
+          </ul>
+          <div class="price-tag">₹7500 <span>/ day</span></div>
+        </div>
+      </div>
+
+      <div class="car-card" data-car="Jeep Wrangler" data-price="8000">
+        <i class="fas fa-check tick"></i>
+        <img src="cars/Jeep Wrangler.avif" class="car-img" alt="Jeep Wrangler">
+        <div class="car-info">
+          <h4>Jeep Wrangler</h4>
+          <ul>
+            <li><strong>Seating:</strong> 5 Capacity</li>
+            <li><strong>Fuel:</strong> Petrol</li>
+            <li><strong>Transmission:</strong> Automatic</li>
+            <li><strong>Use:</strong> Off-road Elite</li>
+          </ul>
+          <div class="price-tag">₹8000 <span>/ day</span></div>
+        </div>
+      </div>
+
+      <div class="car-card" data-car="Land Rover Defender" data-price="8500">
+        <i class="fas fa-check tick"></i>
+        <img src="cars/defender.jpg" class="car-img" alt="Land Rover Defender">
+        <div class="car-info">
+          <h4>Land Rover Defender</h4>
+          <ul>
+            <li><strong>Seating:</strong> 5 Capacity</li>
+            <li><strong>Fuel:</strong> Diesel</li>
+            <li><strong>Transmission:</strong> Automatic</li>
+            <li><strong>Luxury:</strong> Premium SUV</li>
+          </ul>
+          <div class="price-tag">₹8500 <span>/ day</span></div>
+        </div>
+      </div>
+
+      <div class="car-card" data-car="Mercedes-Benz GLC" data-price="7000">
+        <i class="fas fa-check tick"></i>
+        <img src="cars/Mercedes-Benz GLC.avif" class="car-img" alt="Mercedes-Benz GLC">
+        <div class="car-info">
+          <h4>Mercedes-Benz GLC</h4>
+          <ul>
+            <li><strong>Seating:</strong> 5 Capacity</li>
+            <li><strong>Fuel:</strong> Petrol / Diesel</li>
+            <li><strong>Transmission:</strong> Automatic</li>
+            <li><strong>Luxury:</strong> Business Class</li>
+          </ul>
+          <div class="price-tag">₹7000 <span>/ day</span></div>
+        </div>
+      </div>
+
+      <div class="car-card" data-car="Toyota Fortuner Legender" data-price="6500">
+        <i class="fas fa-check tick"></i>
+        <img src="cars/Toyota Fortuner Legender.avif" class="car-img" alt="Toyota Fortuner Legender">
+        <div class="car-info">
+          <h4>Toyota Fortuner Legender</h4>
+          <ul>
+            <li><strong>Seating:</strong> 7 Capacity</li>
+            <li><strong>Fuel:</strong> Diesel</li>
+            <li><strong>Transmission:</strong> Automatic</li>
+            <li><strong>Use:</strong> Family Trips</li>
+          </ul>
+          <div class="price-tag">₹6500 <span>/ day</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="selected-info" id="selectedInfo">
+      Selected Car: <span>None</span>
+    </div>
+
+    <div class="cta">
+      <button class="btn-proceed" onclick="proceedBooking()">
+        <span>Confirm & Proceed</span>
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-links">
+      <a href="../privacy.html">Privacy Policy</a>
+      <a href="../../login/terms.html">Terms & Conditions</a>
+      <a href="../contact.html">Support</a>
+    </div>
+    <p class="copyright">&copy; 2025 CarRentalPro. All Rights Reserved.</p>
+  </footer>
+
+<script src="luxury-sedans.js"></script>
+
+</body>
+</html>

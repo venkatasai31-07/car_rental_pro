@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sell / Buy Car Approvals</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #00c9a7;
+      --secondary: #7f5cff;
+      --accent: #9b7cff;
+      --dark: #0b0a12;
+      --dark-elevated: #151320;
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --success: #2ecc71;
+      --danger: #ff6b6b;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+    body {
+      min-height: 100vh;
+      background: var(--dark);
+      color: white;
+      padding: 40px 8%;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: auto;
+      background: var(--dark-elevated);
+      border-radius: 24px;
+      padding: 40px;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+      animation: fadeIn 0.8s ease;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 35px;
+      padding-bottom: 25px;
+      border-bottom: 1px solid var(--glass-border);
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    h2 {
+      font-size: 28px;
+      font-weight: 700;
+      background: linear-gradient(to right, white, var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .btn:hover { background: rgba(255, 255, 255, 0.1); border-color: var(--primary); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 25px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      transition: 0.3s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card:hover { transform: translateY(-5px); border-color: var(--primary); }
+
+    .card-img { width: 100%; height: 200px; object-fit: cover; }
+
+    .card-body {
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      flex: 1;
+    }
+
+    .title { font-size: 20px; font-weight: 700; color: white; }
+
+    .tag {
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .sell { background: rgba(255, 107, 107, 0.1); color: var(--danger); border: 1px solid rgba(255, 107, 107, 0.2); }
+    .buy { background: rgba(46, 204, 113, 0.1); color: var(--success); border: 1px solid rgba(46, 204, 113, 0.2); }
+
+    .details { font-size: 14px; color: #aaa; line-height: 1.8; }
+    .details b { color: #ccc; }
+
+    .price { font-weight: 700; color: var(--primary); font-size: 20px; margin-top: 5px; }
+
+    .actions { display: flex; gap: 12px; margin-top: auto; padding-top: 20px; }
+
+    .approve, .reject {
+      flex: 1;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .approve { background: rgba(46, 204, 113, 0.1); color: var(--success); border: 1px solid rgba(46, 204, 113, 0.2); }
+    .approve:hover { background: var(--success); color: var(--dark); }
+
+    .reject { background: rgba(255, 107, 107, 0.1); color: var(--danger); border: 1px solid rgba(255, 107, 107, 0.2); }
+    .reject:hover { background: var(--danger); color: white; }
+
+    .empty {
+      text-align: center;
+      color: #777;
+      padding: 60px;
+      border: 2px dashed var(--glass-border);
+      border-radius: 20px;
+      margin-top: 20px;
+      font-size: 16px;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+  </style>
+    <link rel="stylesheet" href="../ai_assistant/roadmind.css">
+    <script src="../ai_assistant/roadmind.js" defer></script>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="topbar">
+      <h2>Sell / Buy Car Approvals</h2>
+      <button class="btn" onclick="goBack()">← Back</button>
+    </div>
+
+    <div id="list" class="grid"></div>
+    <div id="empty" class="empty" style="display:none;">
+      No pending Sell / Buy cars 🚫
+    </div>
+
+  </div>
+
+<script>
+
+const API = "/api";
+const list = document.getElementById("list");
+const empty = document.getElementById("empty");
+
+function goBack(){
+  window.location.href = "admin_choice.html";
+}
+
+
+// ✅ Safe Image Parser
+function getImage(imagesStr){
+  try{
+    const arr = JSON.parse(imagesStr || "[]");
+    return arr.length
+      ? arr[0]
+      : "https://via.placeholder.com/400x200?text=No+Image";
+  }catch{
+    return "https://via.placeholder.com/400x200?text=No+Image";
+  }
+}
+
+
+
+// 🔥 LOAD SELLING CARS
+async function loadCars(){
+
+  list.innerHTML = ""; // VERY IMPORTANT
+
+  try{
+
+    const res = await fetch(`${API}/admin/pending-selling`);
+
+    if(!res.ok){
+      throw new Error("API Failed");
+    }
+
+    const data = await res.json();
+
+    if(!data.success || data.cars.length === 0){
+      empty.style.display = "block";
+      empty.innerText = "No Pending Selling Cars ✅";
+      return;
+    }
+
+    empty.style.display = "none";
+
+    data.cars.forEach(car => {
+
+      const img = getImage(car.images);
+
+      list.innerHTML += `
+        <div class="card">
+
+          <img src="${img}" style="width:100%;height:180px;object-fit:cover;border-radius:10px;">
+
+          <div class="card-body">
+
+            <span class="tag sell">SELL</span>
+
+            <div class="title">
+              ${car.company} ${car.model}
+            </div>
+
+            <div class="details">
+
+  <div><b>Company:</b> ${car.company}</div>
+  <div><b>Model:</b> ${car.model}</div>
+  <div><b>Year:</b> ${car.year || "-"}</div>
+  <div><b>Fuel:</b> ${car.fuel || "-"}</div>
+  <div><b>Transmission:</b> ${car.transmission || "-"}</div>
+  <div><b>KM:</b> ${car.km || "-"}</div>
+  <div><b>Owner Type:</b> ${car.owner_type || "-"}</div>
+  <div><b>Location:</b> ${car.location || "-"}</div>
+  <div><b>Price:</b> ₹${car.selling_price || 0}</div>
+  <div><b>Description:</b> ${car.description || "-"}</div>
+  <div><b>Owner Email:</b> ${car.owner_email}</div>
+
+</div>
+
+
+            <div class="actions">
+
+              <button class="approve"
+                onclick="approve(${car.id})">
+                Approve
+              </button>
+
+              <button class="reject"
+                onclick="reject(${car.id})">
+                Reject
+              </button>
+
+            </div>
+
+          </div>
+        </div>
+      `;
+    });
+
+  }catch(err){
+
+    console.error("FETCH ERROR:", err);
+
+    empty.style.display = "block";
+    empty.innerText = "API Error ❌ Check console";
+  }
+}
+
+
+
+// 🔥 APPROVE (No Redirect — Reload Data)
+async function approve(id){
+
+  if(!confirm("Approve this car?")) return;
+
+  try{
+
+    const res = await fetch(`${API}/admin/approve-sell/${id}`,{
+      method:"POST"
+    });
+
+    if(!res.ok){
+      throw new Error("Approval failed");
+    }
+
+    alert("Car Approved ✅");
+
+    loadCars(); // reload instead of redirect
+
+  }catch(err){
+    console.error(err);
+    alert("Approval failed ❌");
+  }
+}
+
+
+
+// 🔥 REJECT
+async function reject(id){
+
+  if(!confirm("Reject this car?")) return;
+
+  try{
+
+    const res = await fetch(`${API}/admin/reject-sell/${id}`,{
+      method:"POST"
+    });
+
+    if(!res.ok){
+      throw new Error("Rejection failed");
+    }
+
+    alert("Car Rejected ❌");
+
+    loadCars();
+
+  }catch(err){
+    console.error(err);
+    alert("Rejection failed ❌");
+  }
+}
+
+
+
+loadCars();
+
+</script>
+
+
+</body>
+</html>

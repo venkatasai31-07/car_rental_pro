@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Select Rental Type</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #00c9a7;
+      --secondary: #7f5cff;
+      --accent: #9b7cff;
+      --dark: #0b0a12;
+      --dark-elevated: #151320;
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+    body {
+      height: 100vh;
+      background: var(--dark);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      padding: 20px;
+    }
+
+    .container {
+      width: 900px;
+      max-width: 1000px;
+      background: var(--dark-elevated);
+      padding: 60px 40px;
+      border-radius: 30px;
+      text-align: center;
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--glass-border);
+      animation: fadeInUp 0.8s ease;
+    }
+
+    h1 {
+      font-size: 42px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      background: linear-gradient(to right, white, var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p {
+      color: #aaa;
+      margin-bottom: 50px;
+      font-size: 16px;
+    }
+
+    .options {
+      display: flex;
+      gap: 30px;
+    }
+
+    .card {
+      flex: 1;
+      padding: 50px 30px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      cursor: pointer;
+      transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+    }
+
+    .card:hover {
+      transform: translateY(-15px);
+      border-color: var(--primary);
+      background: rgba(0, 201, 167, 0.05);
+      box-shadow: 0 20px 50px rgba(0, 201, 167, 0.2);
+    }
+
+    .icon {
+      font-size: 60px;
+      margin-bottom: 25px;
+      display: block;
+      transition: 0.3s;
+    }
+
+    .card:hover .icon {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    .title {
+      font-size: 24px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 10px;
+    }
+
+    .desc {
+      color: #aaa;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      .options { flex-direction: column; }
+      .container { padding: 40px 20px; }
+    }
+  </style>
+    <link rel="stylesheet" href="../ai_assistant/roadmind.css">
+    <script src="../ai_assistant/roadmind.js" defer></script>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Select Rental Type 🚗</h1>
+<p>Choose how you want to travel</p>
+
+<div class="options">
+
+    <!-- SELF DRIVE -->
+    <div class="card" onclick="selectType('Rental Only')">
+        <div class="icon">🔑</div>
+        <div class="title">Self Drive</div>
+        <div class="desc">
+            Drive the car yourself.<br>
+            Full freedom and privacy.
+        </div>
+    </div>
+
+
+    <!-- WITH DRIVER -->
+    <div class="card" onclick="selectType('With Driver')">
+        <div class="icon">🧑‍✈️</div>
+        <div class="title">With Driver</div>
+        <div class="desc">
+            Sit back and relax.<br>
+            Professional driver included.
+        </div>
+    </div>
+
+</div>
+
+</div>
+
+
+<script>
+
+function selectType(type){
+
+    // store selection
+    localStorage.setItem("rentalType", type);
+
+    // redirect to booking page
+    window.location.href = "../book_car/book_car.html"; 
+    // adjust path based on your folder
+}
+
+</script>
+
+</body>
+</html>

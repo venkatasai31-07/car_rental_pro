@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Car Options - CarRentalPro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #00c9a7;
+      --secondary: #7f5cff;
+      --accent: #9b7cff;
+      --dark: #0b0a12;
+      --dark-elevated: #151320;
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+    body {
+      height: 100vh;
+      background: var(--dark);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      padding: 20px;
+    }
+
+    .box {
+      width: 550px;
+      max-width: 100%;
+      background: var(--dark-elevated);
+      padding: 50px 40px;
+      border-radius: 24px;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+      text-align: center;
+      animation: fadeIn 0.8s ease;
+      backdrop-filter: blur(20px);
+    }
+
+    h2 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 15px;
+      background: linear-gradient(to right, white, var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p {
+      font-size: 15px;
+      color: #888;
+      margin-bottom: 35px;
+      line-height: 1.6;
+    }
+
+    .options { display: flex; flex-direction: column; gap: 20px; }
+
+    .btn {
+      width: 100%;
+      padding: 20px;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 700;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .primary {
+      background: linear-gradient(135deg, var(--primary), #00e0b9);
+      color: var(--dark);
+    }
+
+    .secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      color: white;
+    }
+
+    .secondary:hover {
+      border-color: var(--primary);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .back-link {
+      margin-top: 30px;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .back-link a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+    .back-link a:hover { color: white; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+    <link rel="stylesheet" href="../ai_assistant/roadmind.css">
+    <script src="../ai_assistant/roadmind.js" defer></script>
+</head>
+
+<body>
+
+  <div class="box">
+    <h2>List Your Vehicle</h2>
+    <p>Choose your preferred listing model to start earning with us.</p>
+
+    <div class="options">
+      <button class="btn primary" onclick="goRentalOnly()">
+        <i class="fas fa-car"></i>
+        <span>Rental (Professional Service)</span>
+      </button>
+
+      <button class="btn secondary" onclick="goWithDriver()">
+        <i class="fas fa-user-tie"></i>
+        <span>Self Rent (Personal Listing)</span>
+      </button>
+    </div>
+
+    <div class="back-link">
+      <i class="fas fa-arrow-left"></i> Back to <a href="../home/home.html">Dashboard</a>
+    </div>
+  </div>
+
+  <script>
+    function goRentalOnly(){
+      window.location.href = "add_car_rental_only.html";
+    }
+
+    function goWithDriver(){
+      window.location.href = "add_car_with_driver.html";
+    }
+  </script>
+
+</body>
+</html>

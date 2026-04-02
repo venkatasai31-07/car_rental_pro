@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book Your Car</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet"
+href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css"/>
+
+<script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+  <style>
+    :root {
+      --primary: #00c9a7;
+      --secondary: #7f5cff;
+      --accent: #9b7cff;
+      --dark: #0b0a12;
+      --dark-elevated: #151320;
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+    body {
+      background: var(--dark);
+      color: white;
+      padding: 40px 8%;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: auto;
+      background: var(--dark-elevated);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+      padding: 30px;
+      animation: fadeIn 0.8s ease;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 25px;
+      border-bottom: 1px solid var(--glass-border);
+      margin-bottom: 30px;
+      gap: 20px;
+    }
+
+    h2 {
+      font-size: 28px;
+      font-weight: 700;
+      background: linear-gradient(to right, white, var(--primary));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .sub { color: #888; font-size: 14px; margin-top: 5px; }
+
+    .btn {
+      padding: 12px 24px;
+      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--primary);
+    }
+
+    /* Search Bar */
+    .bar {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+      background: rgba(255, 255, 255, 0.02);
+      padding: 20px;
+      border-radius: 18px;
+      border: 1px solid var(--glass-border);
+    }
+
+    input[type="text"], select {
+      flex: 1;
+      min-width: 200px;
+      padding: 14px 18px;
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      outline: none;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    input:focus, select:focus { border-color: var(--primary); background: rgba(255, 255, 255, 0.08); }
+
+    .search-btn {
+      padding: 14px 30px;
+      background: linear-gradient(135deg, var(--primary), #00e0b9);
+      color: var(--dark);
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .search-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0, 201, 167, 0.3); }
+
+    /* Results */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 25px;
+    }
+
+    .car-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: 0.4s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .car-card:hover { transform: translateY(-10px); border-color: var(--primary); }
+
+    .car-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background: #2a2545;
+    }
+
+    .card-body { padding: 25px; flex: 1; display: flex; flex-direction: column; }
+
+    .car-title { font-size: 20px; font-weight: 700; margin-bottom: 15px; }
+
+    .details { font-size: 14px; color: #aaa; line-height: 1.8; margin-bottom: 20px; }
+    .details b { color: #ccc; }
+
+    .price { font-size: 20px; font-weight: 700; color: var(--primary); margin-top: auto; }
+
+    .book-btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, var(--primary), #00e0b9);
+      color: var(--dark);
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      margin-top: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .book-btn:hover { transform: scale(1.02); box-shadow: 0 10px 20px rgba(0, 201, 167, 0.3); }
+
+    .no-results {
+      padding: 60px;
+      border-radius: 20px;
+      border: 2px dashed var(--glass-border);
+      background: rgba(255, 255, 255, 0.01);
+      color: #666;
+      text-align: center;
+      font-size: 18px;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(15px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .modal-content {
+      width: 500px;
+      max-width: 100%;
+      background: var(--dark-elevated);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 40px;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .modal-content h3 { text-align: center; margin-bottom: 30px; color: var(--primary); font-size: 24px; font-weight: 700; }
+
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; margin-bottom: 8px; font-size: 13px; color: #888; font-weight: 500; }
+    .form-group input {
+      width: 100%;
+      padding: 14px 18px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      color: white;
+      outline: none;
+    }
+
+    .price-summary {
+      background: rgba(0, 201, 167, 0.05);
+      padding: 20px;
+      border-radius: 16px;
+      border: 1px solid rgba(0, 201, 167, 0.2);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary);
+      text-align: center;
+      margin: 30px 0;
+    }
+
+    .modal-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--primary);
+      color: var(--dark);
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-bottom: 12px;
+    }
+
+    .close-btn { background: rgba(255, 255, 255, 0.05); color: #ff6b6b; border: 1px solid rgba(255, 107, 107, 0.2); }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes popIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+  </style>
+    <link rel="stylesheet" href="../ai_assistant/roadmind.css">
+    <script src="../ai_assistant/roadmind.js" defer></script>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="topbar">
+      <div>
+        <h2>Find Your Perfect Car 🚗</h2>
+        <div class="sub">Only approved cars will be shown here ✅</div>
+      </div>
+      <button class="btn" onclick="window.location.href='../home/home.html'">← Back Home</button>
+    </div>
+
+    <div class="bar">
+      <input type="text" id="searchInput" placeholder="Search by car model or company..." />
+
+      <select id="fuelFilter">
+        <option value="">Fuel Type</option>
+        <option value="Petrol">Petrol</option>
+        <option value="Diesel">Diesel</option>
+        <option value="Electric">Electric</option>
+        <option value="CNG">CNG</option>
+      </select>
+
+      <select id="transmissionFilter">
+        <option value="">Transmission</option>
+        <option value="Manual">Manual</option>
+        <option value="Automatic">Automatic</option>
+      </select>
+
+      <button class="search-btn" onclick="applyFilters()">Search</button>
+    </div>
+
+    <div id="results" class="grid"></div>
+    <div id="noResults" class="no-results">No cars found ❌</div>
+
+  </div>
+
+  <!-- Booking Modal for Map -->
+  <div id="bookingModal" class="modal">
+    <div class="modal-content">
+      <h3 id="modalTitle">Book Car</h3>
+      
+      <div id="driverFields" style="display:none;">
+        <div class="form-group">
+          <label>Pickup Location</label>
+          <input type="text" id="pickupLocation" placeholder="Enter pickup location (e.g. Hyderabad)">
+        </div>
+        <div class="form-group">
+          <label>Drop Location</label>
+          <input type="text" id="dropLocation" placeholder="Enter drop location (e.g. Bangalore)">
+        </div>
+        
+        <button class="modal-btn" type="button" onclick="showRoute()">Calculate Route & Fare</button>
+        
+        <div id="map" style="height:250px; width:100%; border-radius:12px; margin-top:20px; display:none; background:#2a2545;"></div>
+        <div id="distanceInfo" style="margin-top:20px; font-size:14px; color:#aaa; display:none;"></div>
+      </div>
+
+      <!-- Need a Driver option for Rental Only -->
+      <div id="needDriverSection" style="display:none; margin-top:20px; background:rgba(127,92,255,0.1); border:1px solid rgba(127,92,255,0.3); border-radius:12px; padding:15px;">
+        <label style="display:flex; align-items:center; gap:12px; cursor:pointer; font-size:14px;">
+          <input type="checkbox" id="needDriverCheck" style="width:18px; height:18px; accent-color:#7f5cff;" onchange="updateDriverNote()">
+          <span><b>Need a Platform Driver?</b> — Admin will assign an approved driver <span style="color:#7f5cff;">(+₹500/day)</span></span>
+        </label>
+        <p id="driverNote" style="font-size:12px; color:#94a3b8; margin-top:8px; padding-left:30px;">Your booking will be confirmed once a driver is assigned by our team.</p>
+      </div>
+      
+      <div id="priceSummary" class="price-summary">Total Cost: ₹0</div>
+      
+      <button class="modal-btn" id="confirmBookBtn" onclick="proceedToCheckout()">Proceed to Checkout</button>
+      <button class="modal-btn close-btn" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+
+
+<script>
+
+const API_BASE = "/api";
+
+let cars = [];
+let distanceFare = 0;
+let selectedCarPrice = 0;
+let selectedCarName = "";
+let selectedCarId = null;
+let selectedDriverMobile = null;
+let selectedDriverName = null;
+const PRICE_PER_KM = 15;
+
+const resultContainer = document.getElementById("results");
+const noResult = document.getElementById("noResults");
+const modal = document.getElementById("bookingModal");
+
+
+// ⭐⭐⭐ GOOGLE MAP VARIABLES (ADDED)
+
+
+
+// 🔥 LOGIN PROTECTION
+const user = JSON.parse(localStorage.getItem("car_rental_user"));
+
+if(!user || !user.email){
+  alert("Please login first ❌");
+  window.location.href = "../login/login.html";
+}
+
+
+// GET RENTAL TYPE
+const type = localStorage.getItem("rentalType");
+
+if(!type){
+  alert("Please select rental type first 🚗");
+  window.location.href = "../book_choice.html";
+}
+
+
+
+window.addEventListener("DOMContentLoaded",()=>{
+
+  if(type === "Rental Only"){
+    document.getElementById("driverFields").style.display="none";
+  }
+
+  // ⭐⭐⭐ GOOGLE AUTOCOMPLETE (ADDED)
+  
+
+});
+
+
+
+// SAFE IMAGE
+function safeImages(imagesStr){
+  try{
+    const arr = JSON.parse(imagesStr || "[]");
+    return (arr.length > 0) ? arr[0] : "";
+  }catch(e){
+    return "";
+  }
+}
+
+
+
+// FETCH APPROVED CARS
+async function fetchApprovedCars(type){
+
+  try{
+
+    const res = await fetch(`${API_BASE}/approved-cars/${user.email}/${type}`);
+
+    if(!res.ok){
+      throw new Error("API failed");
+    }
+
+    const data = await res.json();
+
+    if(data.success){
+      cars = data.cars || [];
+      displayCars(cars);
+    }else{
+      noResult.style.display = "block";
+      noResult.innerText = "No approved cars available ❌";
+    }
+
+  }catch(err){
+
+    console.error("FETCH ERROR:", err);
+
+    noResult.style.display = "block";
+    noResult.innerText = "Cannot connect to server ❌";
+  }
+}
+
+
+
+
+function displayCars(filteredCars){
+  resultContainer.innerHTML = "";
+
+  if(filteredCars.length === 0){
+    noResult.style.display = "block";
+    return;
+  }
+
+  noResult.style.display = "none";
+
+  filteredCars.forEach(car => {
+
+    const img = safeImages(car.images) || "https://via.placeholder.com/400x200?text=Car+Image";
+
+    resultContainer.innerHTML += `
+      <div class="car-card">
+        <img src="${img}" alt="${car.company}">
+        <div class="card-body">
+
+          <div class="car-title">${car.company} ${car.model}</div>
+
+          <div class="details">
+            <div><b>Fuel:</b> ${car.fuel || "-"}</div>
+            <div><b>Transmission:</b> ${car.transmission || "-"}</div>
+            <div><b>Seats:</b> ${car.seats || "-"}</div>
+            <div><b>Location:</b> ${car.location}</div>
+            <div class="price">₹${car.price_month} / month</div>
+          </div>
+
+          <button class="book-btn"
+            onclick="openModal(${car.id}, '${car.company} ${car.model}', ${car.price_month}, '${img}', '${car.driver_name}', '${car.driver_mobile}')">
+            Book Now
+          </button>
+
+        </div>
+      </div>
+    `;
+  });
+}
+
+
+
+
+function applyFilters(){
+
+  const search = document.getElementById("searchInput").value.toLowerCase();
+  const fuel = document.getElementById("fuelFilter").value;
+  const transmission = document.getElementById("transmissionFilter").value;
+
+  const filtered = cars.filter(car => {
+
+    const nameMatch = `${car.company} ${car.model}`.toLowerCase().includes(search);
+    const fuelMatch = fuel === "" || car.fuel === fuel;
+    const transMatch = transmission === "" || car.transmission === transmission;
+
+    return nameMatch && fuelMatch && transMatch;
+  });
+
+  displayCars(filtered);
+}
+
+
+
+// MASK PHONE
+function maskPhone(phone){
+
+  if(!phone) return "Not available";
+
+  phone = phone.toString();
+
+  if(phone.length < 4) return phone;
+
+  const hidden = "X".repeat(phone.length - 4);
+
+  return phone.slice(0,2) + hidden + phone.slice(-2);
+}
+
+
+
+
+// ⭐⭐⭐ ROUTE + DISTANCE FUNCTION (ADDED)
+
+// ✅ FREE MAP ROUTE (Leaflet)
+let leafletMap;
+let routingControl;
+
+function showRoute(){
+
+  const pickup = document.getElementById("pickupLocation")?.value;
+  const drop = document.getElementById("dropLocation")?.value;
+
+  if(!pickup || !drop) return;
+
+  document.getElementById("map").style.display="block";
+  document.getElementById("distanceInfo").style.display="block";
+
+  // Convert location to coordinates
+  fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${pickup}`)
+  .then(res=>res.json())
+  .then(pickData=>{
+
+    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${drop}`)
+    .then(res=>res.json())
+    .then(dropData=>{
+
+        if(!pickData.length || !dropData.length){
+            alert("Location not found ❌");
+            return;
+        }
+
+        const start = [pickData[0].lat, pickData[0].lon];
+        const end = [dropData[0].lat, dropData[0].lon];
+
+        if(routingControl){
+    routingControl.remove();
+}
+        // Remove old map
+        if(leafletMap){
+            leafletMap.remove();
+        }
+
+        leafletMap = L.map('map').setView(start,7);
+        setTimeout(()=>{
+    leafletMap.invalidateSize();
+},300);
+
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+          maxZoom:19
+        }).addTo(leafletMap);
+
+        routingControl = L.Routing.control({
+          waypoints:[
+            L.latLng(start),
+            L.latLng(end)
+          ],
+          routeWhileDragging:false
+        }).addTo(leafletMap);
+
+        // Distance calculation
+        routingControl.on('routesfound', function(e){
+
+    const route = e.routes[0];
+
+    const distanceKm = route.summary.totalDistance / 1000;
+    const km = distanceKm.toFixed(1);
+
+    // ⭐ CALCULATE FARE
+    const fare = Math.round(distanceKm * PRICE_PER_KM);
+    distanceFare = fare;
+
+    document.getElementById("distanceInfo").innerHTML =
+    `<b>Distance:</b> ${km} km <br>
+     <b>Estimated Time:</b> ${(route.summary.totalTime / 60).toFixed(0)} mins
+     <br><br>
+     <b style="color:#00ff9d;font-size:18px;">
+     Estimated Fare: ₹${fare}
+     </b>`;
+
+     // ✅⭐⭐⭐ ADD THIS (MOST IMPORTANT LINE)
+    document.getElementById("priceSummary").innerText =
+    `Total Cost: ₹${fare}`;
+});
+
+
+    });
+
+  });
+
+}
+
+
+
+
+
+function openModal(carId, carName, price, carImg, driverName, driverMobile) {
+    selectedCarId = carId;
+    selectedCarName = carName;
+    selectedCarPrice = price; // standard monthly price
+    selectedImg = carImg;
+    selectedDriverName = driverName;
+    selectedDriverMobile = driverMobile;
+    
+    document.getElementById("modalTitle").innerText = `Book ${carName}`;
+    
+    if(type === "Rental Only") {
+        document.getElementById("driverFields").style.display = "none";
+        document.getElementById("needDriverSection").style.display = "block";
+        document.getElementById("needDriverCheck").checked = false;
+        document.getElementById("priceSummary").innerText = `Base Price: ₹${price} / month (calculated later)`;
+    } else {
+        document.getElementById("driverFields").style.display = "block";
+        document.getElementById("needDriverSection").style.display = "none";
+        document.getElementById("priceSummary").innerText = "Enter locations to calculate fare";
+        distanceFare = 0;
+    }
+    
+    modal.style.display = "flex";
+}
+
+function closeModal() {
+    modal.style.display = "none";
+}
+
+function updateDriverNote() {
+    const checked = document.getElementById('needDriverCheck').checked;
+    document.getElementById('driverNote').innerText = checked
+        ? 'Your booking will be confirmed once an admin assigns a driver. You will be notified.'
+        : 'Your booking will be confirmed once a driver is assigned by our team.';
+}
+
+function proceedToCheckout() {
+    if(type === "With Driver" && distanceFare === 0) {
+        alert("Please calculate the route first ❌");
+        return;
+    }
+    
+    let finalPrice = (type === "With Driver") ? distanceFare : selectedCarPrice;
+    const needsDriver = type === "Rental Only" && document.getElementById('needDriverCheck')?.checked;
+    
+    const pendingBooking = {
+        carId: selectedCarId,
+        carName: selectedCarName,
+        carImg: selectedImg,
+        price: finalPrice,
+        type: type,
+        flowType: 'rent',
+        needsDriver: needsDriver,
+        driverName: selectedDriverName,
+        driverMobile: selectedDriverMobile,
+        pickupLocMap: document.getElementById("pickupLocation")?.value || "",
+        dropLocMap: document.getElementById("dropLocation")?.value || ""
+    };
+
+    localStorage.setItem('pendingBooking', JSON.stringify(pendingBooking));
+    window.location.href = "../checkout/checkout.html";
+}
+
+let selectedImg = "";
+
+function initiateCheckout(carId, carName, price, carImg) {
+    const car = cars.find(c => Number(c.id) === Number(carId));
+    
+    const pendingBooking = {
+        carId: carId,
+        carName: carName,
+        carImg: carImg,
+        price: price,
+        type: type,
+        flowType: 'rent',
+        driverName: car ? car.driver_name : null,
+        driverMobile: car ? car.driver_mobile : null
+    };
+
+    localStorage.setItem('pendingBooking', JSON.stringify(pendingBooking));
+    window.location.href = "../checkout/checkout.html";
+}
+
+
+// FETCH
+fetchApprovedCars(type);
+
+</script>
+
+
+
+<!-- ⭐ IMPORTANT: REMOVE async defer -->
+
+
+
+</body>
+</html>
+

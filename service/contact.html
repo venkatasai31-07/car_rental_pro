@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us | CarRentalPro</title>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #00c9a7;
+      --secondary: #7f5cff;
+      --accent: #9b7cff;
+      --dark: #0b0a12;
+      --dark-elevated: #151320;
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+    body {
+      background: var(--dark);
+      color: white;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* Header */
+    header {
+      background: rgba(21, 19, 32, 0.8);
+      backdrop-filter: blur(20px);
+      padding: 20px 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--glass-border);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    header h1 {
+      font-size: 24px;
+      font-weight: 800;
+      background: linear-gradient(to right, white, var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    nav a {
+      color: #aaa;
+      text-decoration: none;
+      margin-left: 30px;
+      font-weight: 500;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    nav a:hover, nav a.active { color: var(--primary); }
+
+    /* Page Header */
+    .page-header {
+      position: relative;
+      text-align: center;
+      padding: 100px 8% 60px;
+      background: radial-gradient(circle at top right, rgba(127, 92, 255, 0.05), transparent);
+    }
+
+    .page-header h2 {
+      font-size: 48px;
+      font-weight: 800;
+      margin-bottom: 15px;
+      background: linear-gradient(to right, white, #888);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .page-header p {
+      max-width: 650px;
+      margin: auto;
+      color: #888;
+      font-size: 16px;
+    }
+
+    .back-btn {
+      position: absolute;
+      top: 40px;
+      right: 8%;
+      padding: 12px 24px;
+      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .back-btn:hover { background: rgba(255, 255, 255, 0.1); border-color: var(--primary); }
+
+    /* Content */
+    .container {
+      max-width: 1300px;
+      margin: 0 auto 100px;
+      padding: 0 8%;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 40px;
+      animation: fadeIn 0.8s ease;
+    }
+
+    /* Info Box */
+    .info-box {
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      padding: 50px;
+      border-radius: 24px;
+      border: 1px solid var(--glass-border);
+    }
+
+    .info-box h3 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 35px;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 35px;
+      gap: 20px;
+    }
+
+    .info-item i {
+      width: 50px;
+      height: 50px;
+      background: rgba(0, 201, 167, 0.1);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: var(--primary);
+    }
+
+    .info-item .text h4 { font-size: 16px; font-weight: 700; margin-bottom: 5px; color: #eee; }
+    .info-item .text span { color: #888; font-size: 14px; line-height: 1.6; }
+
+    /* Form Box */
+    .form-box {
+      background: var(--dark-elevated);
+      padding: 50px;
+      border-radius: 24px;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.4);
+    }
+
+    .form-box h3 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 35px;
+      color: white;
+    }
+
+    label { font-size: 13px; font-weight: 600; color: #888; margin-bottom: 8px; display: block; }
+
+    input, textarea {
+      width: 100%;
+      margin-bottom: 25px;
+      padding: 16px 20px;
+      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    input:focus, textarea:focus { outline: none; border-color: var(--primary); background: rgba(255, 255, 255, 0.08); }
+
+    button {
+      width: 100%;
+      padding: 18px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), #00e0b9);
+      color: var(--dark);
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    button:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0, 201, 167, 0.3); }
+
+    /* Footer */
+    footer {
+      background: var(--dark-elevated);
+      padding: 40px 8%;
+      text-align: center;
+      border-top: 1px solid var(--glass-border);
+      color: #555;
+      font-size: 13px;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media(max-width: 950px) {
+      .grid { grid-template-columns: 1fr; }
+      .page-header h2 { font-size: 36px; }
+      .back-btn { display: none; }
+    }
+    /* FOOTER */
+    footer {
+      background: #1c1830;
+      text-align: center;
+      padding: 16px;
+      font-size: 14px;
+      color: #aaa;
+      border-top: 1px solid #2a2545;
+      margin-top: 80px;
+    }
+
+    /* RESPONSIVE */
+    @media(max-width:900px){
+      .grid{
+        grid-template-columns:1fr;
+      }
+
+      .back-btn{
+        top:15px;
+        right:15px;
+      }
+    }
+  </style>
+    <link rel="stylesheet" href="../ai_assistant/roadmind.css">
+    <link rel="stylesheet" href="../ai_assistant/terms_modal.css">
+    <script src="../ai_assistant/roadmind.js" defer></script>
+    <script src="../ai_assistant/terms_modal.js" defer></script>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header>
+  <h1>CarRentalPro</h1>
+  <nav>
+    <a href="../home/home.html">Home</a>
+    <a href="../book_car/book_car.html">Book a Car</a>
+    <a href="services.html">Services</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<!-- PAGE HEADER -->
+<section class="page-header">
+  <a href="javascript:history.back()" class="back-btn">← Back</a>
+  <h2>Contact Us</h2>
+  <p>
+    Have questions or need assistance?  
+    Our support team is here to help you 24/7.
+  </p>
+</section>
+
+<!-- CONTENT -->
+<section class="container">
+  <div class="grid">
+
+    <!-- CONTACT INFO -->
+    <div class="info-box">
+      <h3>Get in Touch</h3>
+
+      <div class="info-item">
+        <i class="fas fa-phone-alt"></i>
+        <span>+91 90000 12345</span>
+      </div>
+
+      <div class="info-item">
+        <i class="fas fa-envelope"></i>
+        <span>support@carrentalpro.com</span>
+      </div>
+
+      <div class="info-item">
+        <i class="fas fa-map-marker-alt"></i>
+        <span>
+          CarRentalPro HQ<br>
+          Hyderabad, Telangana, India
+        </span>
+      </div>
+
+      <div class="info-item">
+        <i class="fas fa-clock"></i>
+        <span>Available 24/7 for Support</span>
+      </div>
+    </div>
+
+    <!-- CONTACT FORM -->
+    <div class="form-box">
+      <h3>Send Us a Message</h3>
+
+      <form>
+        <label>Full Name</label>
+        <input type="text" placeholder="Enter your name" required>
+
+        <label>Email Address</label>
+        <input type="email" placeholder="Enter your email" required>
+
+        <label>Subject</label>
+        <input type="text" placeholder="Subject" required>
+
+        <label>Message</label>
+        <textarea rows="4" placeholder="Type your message..." required></textarea>
+
+        <button type="submit">Submit Message</button>
+      </form>
+    </div>
+
+  </div>
+</section>
+
+  <footer>
+    <div class="footer-links" style="margin-bottom: 25px; display: flex; justify-content: center; gap: 30px;">
+      <a href="privacy.html" style="color: #666; text-decoration: none; font-size: 14px;">Privacy Policy</a>
+      <a href="../login/terms.html" style="color: #666; text-decoration: none; font-size: 14px;">Terms & Conditions</a>
+      <a href="contact.html" style="color: #666; text-decoration: none; font-size: 14px;">Support</a>
+    </div>
+    &copy; 2025 CarRentalPro. All Rights Reserved.
+  </footer>
+
+</body>
+</html>

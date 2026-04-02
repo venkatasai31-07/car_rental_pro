@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Bookings - CarRentalPro</title>
+  <link rel="stylesheet" href="../design_system.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    body {
+      background-color: var(--dark);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 0 20px;
+      flex: 1;
+    }
+
+    .header-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+
+    .header-section h1 {
+      font-size: 32px;
+      font-weight: 700;
+      background: linear-gradient(to right, white, var(--primary));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .booking-grid {
+      display: grid;
+      gap: 25px;
+    }
+
+    .booking-card {
+      background: var(--dark-elevated);
+      padding: 30px;
+      border-radius: 24px;
+      border: 1px solid var(--glass-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: 0.3s;
+      animation: fadeInUp 0.5s ease backwards;
+    }
+
+    .booking-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--primary);
+      background: rgba(255,255,255,0.05);
+    }
+
+    .booking-main {
+      display: flex;
+      gap: 25px;
+      align-items: center;
+    }
+
+    .car-icon-wrap {
+      width: 60px;
+      height: 60px;
+      background: rgba(0, 201, 167, 0.1);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 24px;
+    }
+
+    .booking-details h3 {
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+
+    .booking-details p {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 5px;
+    }
+
+    .status-badge {
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .status-confirmed { background: rgba(0, 201, 167, 0.2); color: var(--primary); }
+    .status-ongoing { background: rgba(127, 92, 255, 0.2); color: var(--secondary); border: 1px solid var(--secondary); }
+    .status-completed { background: rgba(255, 255, 255, 0.1); color: #888; }
+
+    .track-btn {
+      padding: 12px 24px;
+      border-radius: 12px;
+      background: var(--primary);
+      color: var(--dark);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: 0.3s;
+    }
+
+    .track-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 20px rgba(0, 201, 167, 0.3);
+    }
+
+    .no-bookings {
+      text-align: center;
+      padding: 100px 0;
+      color: #555;
+    }
+
+    .no-bookings i { font-size: 64px; margin-bottom: 20px; }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+    <link rel="stylesheet" href="../ai_assistant/roadmind.css">
+    <script src="../ai_assistant/roadmind.js" defer></script>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header-section">
+      <h1>My Bookings</h1>
+      <button class="btn-outline" onclick="window.location.href='../home/home.html'" style="padding: 10px 20px; border-radius: 10px; font-size: 14px;">
+        <i class="fas fa-arrow-left"></i> Home
+      </button>
+    </div>
+
+    <div id="bookingList" class="booking-grid">
+      <!-- Loading State -->
+      <div style="text-align: center; padding: 50px; color: #666;">
+        <i class="fas fa-spinner fa-spin fa-2x"></i>
+        <p style="margin-top: 15px;">Loading your trip history...</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = "/api";
+    const user = JSON.parse(localStorage.getItem("car_rental_user"));
+
+    if (!user) {
+      window.location.href = "../login/login.html";
+    }
+
+    async function loadBookings() {
+      try {
+        const res = await fetch(`${API_BASE}/my-bookings/${user.email}`);
+        const data = await res.json();
+
+        if (data.success) {
+          renderBookings(data.bookings);
+        } else {
+          showError("Failed to load bookings");
+        }
+      } catch (err) {
+        showError("Server Connection Failed");
+      }
+    }
+
+    function renderBookings(bookings) {
+      const container = document.getElementById('bookingList');
+      
+      if (bookings.length === 0) {
+        container.innerHTML = `
+          <div class="no-bookings">
+            <i class="fas fa-car-crash"></i>
+            <h3>No trips found</h3>
+            <p>Ready for your first adventure? Book a car today!</p>
+            <button class="btn-primary" onclick="window.location.href='../book_car/book_choice.html'" style="margin-top: 20px; padding: 12px 30px;">Browse Cars</button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = bookings.map((b, index) => {
+        const isOngoing = b.booking_status === 'Ongoing';
+        const isWithDriver = b.rental_type === 'With Driver';
+        const canTrack = isOngoing && isWithDriver;
+
+        return `
+          <div class="booking-card" style="animation-delay: ${index * 0.1}s">
+            <div class="booking-main">
+              <div class="car-icon-wrap">
+                <i class="fas fa-car"></i>
+              </div>
+              <div class="booking-details">
+                <h3>${b.car_name}</h3>
+                <p><i class="far fa-calendar-alt"></i> ${new Date(b.pickup_datetime).toLocaleDateString()} - ${new Date(b.drop_datetime).toLocaleDateString()}</p>
+                <p><i class="fas fa-map-marker-alt"></i> ${b.pickup_location}</p>
+                <span class="status-badge status-${b.booking_status.toLowerCase()}">${b.booking_status}</span>
+              </div>
+            </div>
+            
+            ${canTrack ? `
+              <a href="live-track.html?id=${b.id}" class="track-btn">
+                <i class="fas fa-satellite"></i>
+                Track Live
+              </a>
+            ` : `
+              <div style="text-align: right;">
+                <p style="font-weight: 700; font-size: 18px; margin: 0;">₹${b.total_cost.toLocaleString()}</p>
+                <p style="font-size: 10px; color: #555; margin-top: 5px;">CAR ID: #${b.car_id}</p>
+              </div>
+            `}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function showError(msg) {
+      document.getElementById('bookingList').innerHTML = `<div style="text-align:center; padding:50px; color:#ff4757;">${msg}</div>`;
+    }
+
+    window.onload = loadBookings;
+  </script>
+</body>
+</html>

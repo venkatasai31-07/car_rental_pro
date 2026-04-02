@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Successful | CarRentalPro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #00c9a7;
+            --secondary: #7f5cff;
+            --dark: #0b0a12;
+            --dark-elevated: #151320;
+            --glass-border: rgba(255, 255, 255, 0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+        body {
+            background: var(--dark);
+            color: white;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .success-card {
+            background: var(--dark-elevated);
+            padding: 60px;
+            border-radius: 40px;
+            border: 1px solid var(--glass-border);
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+            animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .icon-circle {
+            width: 100px;
+            height: 100px;
+            background: rgba(0, 201, 167, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+
+        .icon-circle i {
+            font-size: 48px;
+            color: var(--primary);
+            animation: checkScale 0.5s 0.5s both;
+        }
+
+        h1 { font-size: 32px; font-weight: 800; margin-bottom: 15px; }
+        p { color: #888; margin-bottom: 40px; line-height: 1.6; }
+
+        .booking-info {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            margin-bottom: 40px;
+            text-align: left;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .label { color: #666; }
+        .value { color: white; font-weight: 600; }
+
+        .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 16px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--dark);
+        }
+
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0, 201, 167, 0.3); }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.1); }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.9) translateY(40px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        @keyframes checkScale {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+    </style>
+    <link rel="stylesheet" href="../ai_assistant/roadmind.css">
+    <script src="../ai_assistant/roadmind.js" defer></script>
+</head>
+<body>
+
+    <div class="success-card">
+        <div class="icon-circle">
+            <i class="fas fa-check"></i>
+        </div>
+        <h1>Payment Successful!</h1>
+        <p>Your transaction has been confirmed. We've sent the booking confirmation and digital receipt to your registered email address.</p>
+
+        <div class="booking-info">
+            <div class="info-row">
+                <span class="label">Payment ID</span>
+                <span class="value" id="paymentId">...</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Vehicle</span>
+                <span class="value" id="carName">...</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Date</span>
+                <span class="value" id="date">...</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Status</span>
+                <span class="value" style="color: var(--primary);">Verified Secured</span>
+            </div>
+        </div>
+
+        <div id="nextStepsBuy" style="display:none; text-align: left; background: rgba(127, 92, 255, 0.05); padding: 25px; border-radius: 20px; border: 1px solid rgba(127, 92, 255, 0.1); margin-bottom: 30px;">
+            <h4 style="color: var(--secondary); margin-bottom: 15px;"><i class="fas fa-clipboard-list"></i> Next Steps for Handover</h4>
+            <ul style="list-style: none; font-size: 13px; color: #ccc;">
+                <li style="margin-bottom: 10px;"><i class="fas fa-envelope" style="color: var(--primary); margin-right: 10px;"></i> Check your email for the seller's contact details.</li>
+                <li style="margin-bottom: 10px;"><i class="fas fa-file-contract" style="color: var(--primary); margin-right: 10px;"></i> Coordinate for RC transfer and insurance update.</li>
+                <li style="margin-bottom: 10px;"><i class="fas fa-key" style="color: var(--primary); margin-right: 10px;"></i> Arrange a date for physical inspection and handover.</li>
+            </ul>
+        </div>
+
+        <div id="trackSection" style="display:none; margin: 20px 0; padding: 25px; background: rgba(0, 201, 167, 0.05); border: 1px dashed var(--primary); border-radius: 20px;">
+            <h4 style="margin-bottom: 10px; color: var(--primary);">Real-time Tracking Available</h4>
+            <p style="font-size: 13px; color: #888; margin-bottom: 20px;">Your trip includes a driver. You can track the car's live location once the ride starts.</p>
+            <a id="trackBtn" href="#" class="btn btn-primary" style="width: 100%; text-decoration: none; border-radius:30px;">
+                <i class="fas fa-satellite"></i>
+                Track Live Location
+            </a>
+        </div>
+
+        <div class="btn-group">
+            <a href="../home/home.html" class="btn btn-primary">
+                <i class="fas fa-home"></i>
+                <span>Back Home</span>
+            </a>
+            <button class="btn btn-secondary" onclick="window.print()">
+                <i class="fas fa-print"></i>
+                <span>Print Receipt</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const paymentId = urlParams.get('id') || 'N/A';
+        const flowType = urlParams.get('type');
+        const carName = urlParams.get('car') || 'Vehicle';
+
+        document.getElementById('paymentId').innerText = paymentId;
+        document.getElementById('carName').innerText = carName;
+        document.getElementById('date').innerText = new Date().toLocaleDateString('en-GB', {
+            day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+        });
+
+        if (flowType === 'buy') {
+            document.getElementById('nextStepsBuy').style.display = 'block';
+        }
+
+        const bookingId = urlParams.get('booking_id');
+        if (bookingId) {
+            document.getElementById('trackSection').style.display = 'block';
+            document.getElementById('trackBtn').href = `../customer/live-track.html?id=${bookingId}`;
+        }
+    </script>
+</body>
+</html>

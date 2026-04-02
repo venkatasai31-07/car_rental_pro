@@ -43,6 +43,15 @@ CORS(app)
 
 bcrypt = Bcrypt(app)
 
+# Allow Vercel to route /api traffic implicitly to the root app
+from werkzeug.middleware.dispatcher import DispatcherMiddleware
+from werkzeug.wrappers import Response
+app.wsgi_app = DispatcherMiddleware(
+    Response('Not Found', status=404),
+    {'/api': app.wsgi_app}
+)
+
+
 
 # ============================================
 # 📦 LOAD ML MODEL + ENCODERS + METADATA

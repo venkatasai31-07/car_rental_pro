@@ -11,27 +11,34 @@
 """
 
 import os
-import chromadb
 import google.generativeai as genai
-from chromadb.utils import embedding_functions
+
+HAS_CHROMA = False
+try:
+    import chromadb
+    from chromadb.utils import embedding_functions
+    HAS_CHROMA = True
+except ImportError:
+    print("⚠️ chromadb not installed. RAG will be disabled (fits within Vercel's small size limits).")
 
 CHROMA_STORE_PATH = os.path.join(os.path.dirname(__file__), "chroma_store")
 COLLECTION_NAME   = "roadmind_knowledge"
 
 # Must configure API key before calling — done in app.py via genai.configure(api_key=...)
 
-# ── Embedding function (must match build_index.py) ─────────────────────────
-class GeminiEmbeddingFunction(embedding_functions.EmbeddingFunction):
-    def __call__(self, texts):
-        embeddings = []
-        for text in texts:
-            result = genai.embed_content(
-                model="models/gemini-embedding-001",
-                content=text,
-                task_type="retrieval_query"
-            )
-            embeddings.append(result["embedding"])
-        return embeddings
+if HAS_CHROMA:
+    # ── Embedding function (must match build_index.py) ─────────────────────────
+    class GeminiEmbeddingFunction(embedding_functions.EmbeddingFunction):
+        def __call__(self, texts):
+            embeddings = []
+            for text in texts:
+                result = genai.embed_content(
+                    model="models/gemini-embedding-001",
+                    content=text,
+                    task_type="retrieval_query"
+                )
+                embeddings.append(result["embedding"])
+            return embeddings
 
 # ── Initialize client once at module load ──────────────────────────────────
 _client     = None
@@ -39,13 +46,18 @@ _collection = None
 
 def get_collection():
     global _client, _collection
+    if not HAS_CHROMA:
+        return None
     if _collection is None:
-        _client     = chromadb.PersistentClient(path=CHROMA_STORE_PATH)
-        embed_func  = GeminiEmbeddingFunction()
-        _collection = _client.get_collection(
-            name=COLLECTION_NAME,
-            embedding_function=embed_func
-        )
+        try:
+            _client     = chromadb.PersistentClient(path=CHROMA_STORE_PATH)
+            embed_func  = GeminiEmbeddingFunction()
+            _collection = _client.get_collection(
+                name=COLLECTION_NAME,
+                embedding_function=embed_func
+            )
+        except Exception:
+            return None
     return _collection
 
 # ── Main search function ───────────────────────────────────────────────────
@@ -55,14 +67,18 @@ def search_knowledge(query: str, top_k: int = 4) -> str:
     Returns formatted string of top matching chunks.
     Returns empty string if nothing relevant found or if index is missing.
     """
+    if not HAS_CHROMA:
+        return ""
     try:
         collection = get_collection()
+        if not collection: return ""
+        
         results    = collection.query(
             query_texts=[query],
             n_results=min(top_k, collection.count())
         )
 
-        if not results or not results["documents"] or not results["documents"][0]:
+        if not results or not results.get("documents") or not results["documents"][0]:
             return ""
 
         # Filter by relevance (distance < 0.75 means reasonably relevant)

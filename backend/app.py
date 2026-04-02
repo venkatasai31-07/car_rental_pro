@@ -20,8 +20,17 @@ from email.message import EmailMessage
 import razorpay
 import json
 import os
-import joblib
-import numpy as np
+try:
+    import joblib
+    HAS_JOBLIB = True
+except ImportError:
+    HAS_JOBLIB = False
+    print("⚠️ joblib/scikit-learn not installed. ML features will be disabled (fits within Vercel's small size limits).")
+try:
+    import numpy as np
+    HAS_NUMPY = True
+except ImportError:
+    HAS_NUMPY = False
 from dotenv import load_dotenv
 
 import google.generativeai as genai
@@ -73,6 +82,10 @@ except Exception as e:
 def load_ml_model_lazy():
     """Lazily loads the model and encoders only when needed to save RAM during startup."""
     global ml_model, ml_encoders
+    if not HAS_JOBLIB:
+        print("⚠️ Skipping ML model loading, joblib is not available in Vercel bundle.")
+        return None, None
+        
     if ml_model is None:
         print("📥 Lazily loading ML Model and Encoders (RAM spike expected)...")
         try:

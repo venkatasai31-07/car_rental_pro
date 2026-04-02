@@ -7,8 +7,3 @@ google-generativeai
 python-dotenv
 gunicorn
 psycopg2-binary
-chromadb
-pysqlite3-binary
-numpy
-scikit-learn
-joblib
